@@ -1,0 +1,24 @@
+:root{
+  --secondary-color: #ff0050;
+  --primary-color: #56e4f7;
+  --text-color: #1A1A1A;
+  --background-color: #fefefe;
+  --font-family: 'Inter', sans-serif;
+  --font-weight-semibold: 600;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 90px;
+}
