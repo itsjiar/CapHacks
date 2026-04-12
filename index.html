@@ -17,84 +17,137 @@
       <div class="left-section">
         <img class="logo-image" src="images/caphacks-logo.svg" alt="CapHacks Logo">
       </div>
+
+      <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">
+      <label for="nav-toggle" class="nav-toggle-label">
+        <span></span>
+      </label>
+
       <div class="middle-section">
-        <ul>
-        <li><a href="#home">Home</a></li>
-        <li><a href="#tips-tricks">Tips & Tricks</a></li>
-        <li><a href="#about">About Us</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
+        <ul class="nav-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="dashboard.html">Tips & Tricks</a></li>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
       </div>
+
       <div class="right-section">
         <button class="login-btn">Log In</button>
         <button class="signup-btn">Sign Up</button>
+      </div>
+
+      <div class="mobile-menu">
+        <ul class="mobile-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="dashboard.html">Tips & Tricks</a></li>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="mobile-actions">
+          <button class="login-btn">Log In</button>
+          <button class="signup-btn">Sign Up</button>
+        </div>
       </div>
     </nav>
   </header>
 
   <main>
-      <section class="hero-section">
-        <div class="hero-content">
-          <h1 class="hero-title">Make Your <span class="lowlight">Raw Footage</span>
-  into <span class="highlight">Viral Hits</span> in Minutes</h1>
-          <p class="hero-description">Learn essential tricks and hidden hacks to make your videos viral-ready using the CapCut editor.</p>
-        </div>
-        <div class="cta-buttons">
-        <button class="start-btn">Get Started Now!</button>
-        <button class="download-btn">Download App</button>
+      <div class="background-im">
+        <section class="hero-section">
+          <div class="hero-content">
+            <h1 class="hero-title">Make Your <span class="lowlight">Raw Footage</span>
+              into <span class="highlight">Viral Hits</span> in Minutes</h1>
+            <p class="hero-description">Learn essential tricks and hidden hacks to make your videos viral-ready using the CapCut editor.</p>
+          </div>
+          <div class="cta-buttons">
+            <a href="dashboard.html">
+              <button class="colored-btn">Get Started Now!</button>
+            </a>
+            <a href="https://www.capcut.com/activity/download_pc" target="_blank" rel="noopener noreferrer">
+              <button class="noBg-btn">Download App</button>
+            </a>
+          </div>
+        </section>
       </div>
-      </section>
 
-      <section class="capcut-features"> <!-- about capcut and its features -->
-          <div class="capcut-feature-container"> <!--with right picture-->
-            <div class="feature-container">
-              <h2 class="feature-title">What is CapCut?</h2>
-              <p class="feature-description">CapCut is a powerful video editing app that offers a wide range of features to help you create stunning videos. With its user-friendly interface and extensive library of effects, transitions, and filters, CapCut allows you to unleash your creativity and produce professional-quality videos right from your mobile device.</p>
-            </div>
-            <div class="feature-image"><img src="images/sample-image.png" alt="sample image"></div>
+      <section class="capcut-features-container"> <!-- about capcut and its features -->
+        <div class="section-title-container">
+          <h2 class="features-title">Powerful AI Tools</h2>
+          <p class="features-description">CapCut's AI tools are designed to make your video editing process faster and more efficient.</p>
+        </div>
+        <div class="features-row">
+          <div class="text-content">
+            <h2>What is CapCut?</h2>
+            <p>CapCut is a powerful video editing app... [your content]</p>
           </div>
-          <div class="capcut-feature-container"> <!--with left picture-->
-            <div class="feature-image" style="justify-content: start;"><img src="images/sample-image.png" alt="sample image"></div>
-            <div class="feature-container">
-              <h2 class="feature-title">OmniHuman AI Avatars</h2>
-              <p class="feature-description">Users can turn a simple portrait into a realistic digital presenter. Unlike basic lip-syncing tools, these avatars simulate natural breathing, blinking, and body language to deliver scripts realistically.</p>
-            </div>
+          <div class="image-content">
+            <img src="images/sample-image.png" alt="CapCut Interface">
           </div>
-
-          <div class="capcut-feature-container"> <!--with right picture-->
-            <div class="feature-container">
-              <h2 class="feature-title">Seedance-Powered Video Generation</h2>
-              <p class="feature-description">With the integration of the Seedance 2.0 engine, CapCut now supports high-end text-to-video and image-to-video generation. This allows users to create cinematic clips from scratch with improved lighting, physics, and visual consistency.</p>
-            </div>
-            <div class="feature-image"><img src="images/sample-image.png" alt="sample image"></div>
+        </div>
+        <div class="features-row-reverse">
+          <div class="text-content">
+            <h2>What is CapCut?</h2>
+            <p>CapCut is a powerful video editing app... [your content]</p>
           </div>
-          <div class="capcut-feature-container"> <!--with left picture-->
-            <div class="feature-image" style="justify-content: start;"><img src="images/sample-image.png" alt="sample image"></div>
-            <div class="feature-container">
-              <h2 class="feature-title">AI Clipper (Long Video to Shorts)</h2>
-              <p class="feature-description">Perfect for social media managers, this tool scans long-form content (like podcasts or interviews) to find the most viral-worthy moments. It automatically reframes the footage for vertical viewing and generates synchronized captions.</p>
-            </div>
+          <div class="image-content">
+            <img src="images/sample-image.png" alt="CapCut Interface">
           </div>
-
-          <div class="capcut-feature-container"> <!--with right picture-->
-            <div class="feature-container">
-              <h2 class="feature-title">AI Inpainting & Object Removal</h2>
-              <p class="feature-description">This feature brings high-level retouching to moving images. Users can simply "paint" over distractions—like a stranger in the background or a stray object—and the AI intelligently replaces those pixels across the entire video sequence.</p>
-            </div>
-            <div class="feature-image"><img src="images/sample-image.png" alt="sample image"></div>
+        </div>
+        <div class="features-row">
+          <div class="text-content">
+            <h2>What is CapCut?</h2>
+            <p>CapCut is a powerful video editing app... [your content]</p>
           </div>
-          <div class="capcut-feature-container"> <!--with left picture-->
-            <div class="feature-image" style="justify-content: start;"><img src="images/sample-image.png" alt="sample image"></div>
-            <div class="feature-container">
-              <h2 class="feature-title">Voice Cloning & Advanced TTS</h2>
-              <p class="feature-description">CapCut’s text-to-speech has evolved into personalized voice synthesis. By analyzing a brief 30-second clip of a user’s voice, the app can generate narration that sounds exactly like them, eliminating the need for constant re-recording.</p>
-            </div>
+          <div class="image-content">
+            <img src="images/sample-image.png" alt="CapCut Interface">
           </div>
+        </div>
+        <div class="features-row-reverse">
+          <div class="text-content">
+            <h2>What is CapCut?</h2>
+            <p>CapCut is a powerful video editing app... [your content]</p>
+          </div>
+          <div class="image-content">
+            <img src="images/sample-image.png" alt="CapCut Interface">
+          </div>
+        </div>
+        <div class="features-row">
+          <div class="text-content">
+            <h2>What is CapCut?</h2>
+            <p>CapCut is a powerful video editing app... [your content]</p>
+          </div>
+          <div class="image-content">
+            <img src="images/sample-image.png" alt="CapCut Interface">
+          </div>
+        </div>
+        <div class="features-row-reverse">
+          <div class="text-content">
+            <h2>What is CapCut?</h2>
+            <p>CapCut is a powerful video editing app... [your content]</p>
+          </div>
+          <div class="image-content">
+            <img src="images/sample-image.png" alt="CapCut Interface">
+          </div>
+        </div>
       </section>
 
       <!--about us section-->
-      <section id="about">
-        ABOUT SECTION
+      <section class="about-us-section">
+        <div class="about-us-container">
+          <div class="about-us-info" id="about">
+              <h2 class="about-us-title">About Us</h2>
+              <p class="about-us-description">High-quality video shouldn't require expensive software or a film degree. As students ourselves, we know you have ideas but might not have the time to learn complex tools. 
+              <br><br>CapHacks was built to bridge that gap. We deconstruct popular editing trends and turn them into simple, repeatable hacks for the CapCut community. We’re here to help you stop struggling with the interface and start expressing your creativity.</p>
+              <div class="about-us-button">
+                <button class="colored-btn">Get Started Now!</button>
+                <button class="noBg-btn">Visit Our Youtube</button>
+              </div>
+            </div>
+          <div class="about-us-image">
+            <img src="images/about-us-image.png" alt="About Us">
+          </div>
+        </div>
       </section>
   </main>
 </body>

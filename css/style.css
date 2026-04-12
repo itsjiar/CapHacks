@@ -1,9 +1,33 @@
+.background-img {
+  background-image: url('../images/caphacks-bg.png');
+  background-size: 191vh;      /* Use the image's real/native size */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevent tiling */
+  background-attachment:scroll; /* Allows image to scroll with the section */
+  min-width: 100vh;
+  min-height: 100vh;
+  margin-top: -70px;
+  position: relative;
+}
+
+.background-img::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30%;
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.274), transparent);
+  pointer-events: none;
+}
+
 .hero-section{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 70vh;
+  height: 90vh;
+  margin-bottom: 100px;
 }
 
 .hero-title{
@@ -16,7 +40,7 @@
 }
 
 .lowlight {
-  color: #888;
+  color: #888  ;
   font-style: italic;
   font-weight: 400;
 }
@@ -42,9 +66,10 @@
   display: flex;
   gap: 10px;
   margin-top: 50px;
+  flex-direction: row;
 }
 
-.start-btn{
+.colored-btn{
   background-color: var(--secondary-color);
   color: var(--background-color);
   border: 2px solid var(--secondary-color);
@@ -52,9 +77,16 @@
   border-radius: 10px;
   font-size: 16px;
   font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: background-color 0.25s, border-color 0.25s;
 }
 
-.download-btn{
+.colored-btn:hover {
+  background-color: #e9004a;
+  border-color: #e9004a;
+}
+
+.noBg-btn{
   background-color: transparent;
   color: var(--text-color);
   border: 2px solid var(--text-color);
@@ -62,53 +94,130 @@
   border-radius: 10px;
   font-size: 16px;
   font-weight: var(--font-weight-semibold);
-} /*end of hero section*/
+  cursor: pointer;
+  transition: background-color 0.25s, color 0.25s;
+} 
 
-.capcut-features{
-  padding-top: 150px;
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  justify-content: center;
-  align-items: center;
-  gap: 50px;
-  width: 100;
+.noBg-btn:hover {
+  background-color: var(--text-color);
+  color: var(--background-color);
 }
 
-.capcut-feature-container{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 10px;
-  justify-content: space-around;
-}
+/*end of hero section*/
 
-.feature-container{
+/*CAPCUT FEATURES CONTAINER SECTION*/
+
+.capcut-features-container {
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  row-gap: 20px;
+  align-items: center;
   justify-content: center;
 }
 
-.feature-title{
-  color: var(--text-color);
-  font-size: 36px;
-  letter-spacing: -3%;
+.section-title-container {
+  display: flex;
+  flex-direction: column;
+  /* position: sticky;
+  top: 80px;
+  left: 0px; */
+  padding-top: 20px;
+  padding-left: 100px;
+  width: 80%;
+  background-color: var(--background-color);
+  border-radius: 100px;
+  background: var(--background-color);
+  box-shadow: 1px 1px 10px rgba(0,0,0,0.10);
+  
 }
 
-.feature-description{
+.features-title {
+  color: var(--text-color);
+  font-size: 42px;
+  letter-spacing: -3%;
+  text-align: justify;
+  margin-bottom: 8px;
+}
+
+.features-description {
+  font-size: 16px;
+  line-height: 120%;
+  width: 500px;
+  text-align: justify;
+  margin-bottom: 30px;
+}
+
+.features-row{
+  margin-top: 50px;
+}
+
+.features-row,
+.features-row-reverse {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+  margin-bottom: 100px;
+}
+
+.features-row-reverse {
+  flex-direction: row-reverse;
+}
+
+.text-content {
+  width: 600px;
+}
+
+.image-content img {
+  width: 450px;
+  border-radius: 15px;
+  display: block;
+  animation: scrolling linear;
+  animation-timeline: view();
+  animation-range: entry 0% cover 40%;
+}
+
+@keyframes scrolling {
+  from {
+    opacity: 0;
+    scale: 0.5;
+  }
+  to{
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+/*about us section*/
+
+
+.about-us-container{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  margin-left: 200px;
+}
+
+.about-us-title{
+  color: var(--text-color);
+  font-size: 42px;
+  letter-spacing: -3%;
+  text-align: justify;
+}
+
+.about-us-description{
   color: var(--text-color);
   font-size: 18px;
   line-height: 120%;
   width: 600px;
   text-align: justify;
+  margin-bottom: 50px;
 }
+  
 
-.feature-image{
-  display: flex;
-  justify-content: end;
-  align-items: center;
-}
-
-.feature-image img{
-  width: 430px;
-  border-radius: 24px;
+.about-us-image img{
+  width: 900px;
 }

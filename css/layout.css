@@ -11,6 +11,7 @@ header {
   width: 100%;
   background: var(--background-color);
   box-shadow: 1px 1px 4px rgba(0,0,0,0.06);
+  z-index: 1000;
 }
 
 .navbar{
@@ -71,6 +72,14 @@ header {
   border-radius: 4px;
   font-size: 14px;
   font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: background-color 0.25s, color 0.25s;
+
+}
+
+.login-btn:hover {
+  background-color: var(--text-color);
+  color: var(--background-color);
 }
 
 .signup-btn{
@@ -82,4 +91,159 @@ header {
   border-radius: 4px;
   font-size: 14px;
   font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: background-color 0.25s, border-color 0.25s;
+}
+
+.signup-btn:hover {
+  background-color: #2ecfe4;
+  border-color: #2ecfe4;
+}
+
+/* Responsive navbar + hamburger menu */
+.nav-toggle {
+  display: none;
+}
+
+.nav-toggle-label {
+  display: none;
+  width: 30px;
+  height: 24px;
+  position: relative;
+  cursor: pointer;
+}
+
+.nav-toggle-label span,
+.nav-toggle-label span::before,
+.nav-toggle-label span::after {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 3px;
+  background: var(--text-color);
+  border-radius: 2px;
+  transition: transform 0.25s ease, top 0.25s ease, opacity 0.25s ease;
+}
+
+.nav-toggle-label span {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.nav-toggle-label span::before {
+  content: '';
+  top: -9px;
+}
+
+.nav-toggle-label span::after {
+  content: '';
+  top: 9px;
+}
+
+.mobile-menu {
+  display: none;
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  left: 20px;
+  background: var(--background-color);
+  border-radius: 16px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+  padding: 18px 20px;
+  z-index: 999;
+}
+
+.mobile-links,
+.mobile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.mobile-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mobile-links li a {
+  display: inline-block;
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 12px 20px;
+}
+
+.mobile-actions {
+  margin-top: 8px;
+}
+
+#nav-toggle:checked + .nav-toggle-label span {
+  transform: translateY(-50%) rotate(45deg);
+}
+
+#nav-toggle:checked + .nav-toggle-label span::before {
+  top: 0;
+  transform: rotate(90deg);
+}
+
+#nav-toggle:checked + .nav-toggle-label span::after {
+  opacity: 0;
+}
+
+#nav-toggle:checked ~ .mobile-menu {
+  display: flex;
+}
+
+@media (max-width: 1024px) {
+  .middle-section {
+    display: none;
+  }
+
+  .right-section {
+    display: none;
+  }
+
+  .nav-toggle-label {
+    display: block;
+  }
+
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 16px;
+  }
+
+  .nav-toggle-label {
+    margin-left: auto;
+  }
+
+  .mobile-menu {
+    top: 64px;
+    right: 12px;
+    left: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mobile-links li a {
+    font-size: 16px;
+  }
+
+  .login-btn,
+  .signup-btn {
+    width: 100%;
+  }
+}
+
+@media (min-width: 1025px) {
+  .mobile-menu {
+    display: none !important;
+  }
+
+  .nav-toggle-label {
+    display: none !important;
+  }
 }
