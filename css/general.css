@@ -25,4 +25,180 @@ body {
   align-items: center;
   justify-content: center;
   padding-top: 60px;
+  flex-direction: column;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 2000;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-content {
+  width: min(520px, 100%);
+  background: var(--background-color);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.18);
+  position: relative;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  animation: popout 0.32s ease-out;
+}
+
+.modal-content h2 {
+  margin-bottom: 10px;
+  font-size: 28px;
+}
+
+.forgot-password {
+  float: right;
+  font-size: 13px;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  margin: 24px 0 18px;
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #ddd;
+}
+
+.login-divider span {
+  color: #777;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.third-party-btn {
+  width: 100%;
+  border-radius: 14px;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #111;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.small-text {
+  font-size: 13px;
+  color: #666;
+  margin-top: 18px;
+  line-height: 1.5;
+}
+
+.signup-link,
+.link-button {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 700;
+  background: none;
+  border: none;
+  padding: 0;
+  appearance: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.link-button:hover,
+.signup-link:hover {
+  text-decoration: underline;
+}
+
+.login-error {
+  color: #b00020;
+  font-size: 14px;
+  margin-top: 14px;
+  min-height: 20px;
+}
+
+@keyframes popout {
+  from {
+    opacity: 0;
+    transform: scale(0.88) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal-content p {
+  margin-bottom: 20px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.login-form label {
+  display: block;
+  margin-bottom: 16px;
+  color: #333;
+  font-weight: 600;
+}
+
+.login-form label span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  font-size: 15px;
+  color: #1a1a1a;
+}
+
+.login-form button.colored-btn {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.06);
+  color: #1a1a1a;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+body.modal-open {
+  overflow: hidden;
 }

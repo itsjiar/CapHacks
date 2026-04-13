@@ -247,3 +247,17 @@ header {
     display: none !important;
   }
 }
+
+/*FOOTER SECTION*/
+.footer-content{
+  background-color: red;
+  
+}
+
+.left-footer{
+  background-color: rgb(19, 201, 207);
+}
+
+.right-footer{
+  background-color: rgb(50, 207, 19);
+}
