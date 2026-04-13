@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/general.css">
   <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body id="home">
   <header>
@@ -146,6 +147,23 @@
               <div class="about-us-button">
                 <button class="colored-btn">Get Started Now!</button>
                 <button class="noBg-btn">Visit Our Youtube</button>
+                <div class="social-links">
+                  <a href="https://facebook.com" class="social-icon facebook">
+                      <i class="fa-brands fa-facebook"></i>
+                  </a>
+
+                  <a href="https://instagram.com" class="social-icon instagram">
+                      <i class="fa-brands fa-instagram"></i>
+                  </a>
+
+                  <a href="https://youtube.com" class="social-icon youtube">
+                      <i class="fa-brands fa-youtube"></i>
+                  </a>
+
+                  <a href="https://tiktok.com" class="social-icon tiktok">
+                      <i class="fa-brands fa-tiktok"></i>
+                  </a>
+                </div>  
               </div>
             </div>
           <div class="about-us-image">
@@ -155,11 +173,67 @@
       </section>
   </main>
 
-  <footer>
+  <footer id="contact">
     <div class="footer-content">
-      <div class="left-footer"></div>
-      <div class="right-footer"></div>
-    </div>
+      <div class="left-footer">
+        <div class="footer-info">
+          <h2>Contact CapHacks</h2>
+          <p class="footer-subtitle">Direct Support & Feedback</p>
+          <div class="footer-contact-item">
+            <i class="fa-regular fa-envelope"></i>
+            <a href="mailto:support@caphacks.com">support@caphacks.com</a>
+          </div>
+          <div class="footer-contact-item">
+            <i class="fa-solid fa-phone"></i>
+            <a href="tel:+639171234567">+63 917 1234567</a>
+          </div>
+          <div class="social-links">
+                  <a href="https://facebook.com" class="social-icon facebook">
+                      <i class="fa-brands fa-facebook"></i>
+                  </a>
+
+                  <a href="https://instagram.com" class="social-icon instagram">
+                      <i class="fa-brands fa-instagram"></i>
+                  </a>
+
+                  <a href="https://youtube.com" class="social-icon youtube">
+                      <i class="fa-brands fa-youtube"></i>
+                  </a>
+
+                  <a href="https://tiktok.com" class="social-icon tiktok">
+                      <i class="fa-brands fa-tiktok"></i>
+                  </a>
+                  <div>
+                    <p>&copy; 2026 CapHacks. All rights reserved.</p>
+                  </div>
+          </div>
+        </div>
+      </div>
+      <div class="right-footer">
+        <div class="contact-card">
+          <h2>Send Us a Message</h2>
+          <form class="contact-form" id="contactForm">
+            <div class="contact-row">
+              <label>
+                <span>Name</span>
+                <input type="text" name="name" placeholder="Your name" required>
+              </label>
+              <label>
+                <span>Email address</span>
+                <input type="email" name="email" placeholder="you@example.com" required>
+              </label>
+            </div>
+
+            <label class="message-field">
+              <textarea name="message" rows="6" placeholder="Message" required></textarea>
+            </label>
+
+            <div class="contact-actions">
+              <button type="submit" class="colored-btn">Send</button>
+            </div>
+          </form>
+        </div>
+      </div>
   </footer>
 </body>
 </html>

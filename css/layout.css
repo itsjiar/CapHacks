@@ -248,16 +248,205 @@ header {
   }
 }
 
+.social-links {
+    display: flex;
+    gap: 20px;
+    justify-content: start;
+    padding: 20px;
+    margin-left: -20px;
+}
+
+.social-icon {
+    font-size: 24px;
+    transition: transform 0.3s ease, color 0.3s ease;
+    text-decoration: none;
+    color: #555; /* Default gray color */
+}
+
+/* Brand Colors on Hover */
+.facebook:hover { color: #1877F2; transform: translateY(-5px); }
+.instagram:hover { color: #E4405F; transform: translateY(-5px); }
+.youtube:hover { color: #FF0000; transform: translateY(-5px); }
+.tiktok:hover { color: #000000; transform: translateY(-5px); }
+
 /*FOOTER SECTION*/
-.footer-content{
-  background-color: red;
-  
+footer {
+  background-color: var(--text-color);
+  padding: 24px 10px;
+  width: 100%;
 }
 
-.left-footer{
-  background-color: rgb(19, 201, 207);
+.footer-content {
+  display: flex;
+  gap: 40px;
+  max-width: 1200px;
+  align-items: flex-start;
+  margin: 0 auto;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
-.right-footer{
-  background-color: rgb(50, 207, 19);
+.left-footer {
+  flex: 1;
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
+
+.right-footer {
+  flex: 1;
+  min-width: 320px;
+  display: flex;
+  justify-content: center;
+}
+
+.footer-info {
+  max-width: 440px;
+}
+
+.footer-info h2 {
+  margin-bottom: 10px;
+  font-size: 34px;
+  line-height: 1.05;
+  color: var(--background-color);
+}
+
+.footer-subtitle {
+  margin-bottom: 24px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.footer-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.footer-contact-item i {
+  color: var(--secondary-color);
+  font-size: 20px;
+  width: 24px;
+}
+
+.footer-contact-item a {
+  color: var(--background-color);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.footer-contact-item a:hover {
+  text-decoration: underline;
+}
+
+.contact-card {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  padding: 20px;
+  color: var(--background-color);
+  width: 100%;
+  max-width: 350px;
+}
+
+.contact-card h2 {
+  margin-bottom: 12px;
+  font-size: 18px;
+  color: var(--background-color);
+}
+
+.contact-form .contact-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.contact-form label {
+  display: block;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+}
+
+.contact-form label span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+
+.contact-form .message-field {
+  margin-bottom: 4px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 10px 10px;
+  font-size: 12px;
+  color: #111;
+  background: #fff;
+}
+
+.contact-form textarea {
+  resize: none;
+  min-height: 100px;
+}
+
+.contact-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.captcha-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  color: var(--background-color);
+  min-width: 170px;
+}
+
+.captcha-box span {
+  font-weight: 700;
+  color: var(--background-color);
+}
+
+.captcha-box input {
+  width: 72px;
+  min-width: 72px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 10px 12px;
+  font-size: 15px;
+  color: #111;
+  background: #fff;
+}
+
+.contact-form button.colored-btn {
+  margin-top: 0;
+  min-width: 150px;
+  border-radius: 14px;
+  background-color: var(--primary-color);
+  color: var(--background-color);
+  border: 1px solid var(--primary-color);
+  padding: 12px 18px;
+}
+
+.contact-form button.colored-btn:hover {
+  background-color: #3bb2eb;
+  border-color: #3bb2eb;
+}
+
