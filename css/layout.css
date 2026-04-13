@@ -263,6 +263,16 @@ header {
     color: #555; /* Default gray color */
 }
 
+.copy-caphacks {
+    margin-top: 16px;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 14px;
+}
+
+.copy-caphacks p {
+    margin: 0;
+}
+
 /* Brand Colors on Hover */
 .facebook:hover { color: #1877F2; transform: translateY(-5px); }
 .instagram:hover { color: #E4405F; transform: translateY(-5px); }
