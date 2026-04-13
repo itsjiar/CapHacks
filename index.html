@@ -34,8 +34,8 @@
       </div>
 
       <div class="right-section">
-        <button class="login-btn">Log In</button>
-        <button class="signup-btn">Sign Up</button>
+        <button class="login-btn" id="loginOpenBtn">Log In</button>
+        <button class="signup-btn" id="signupOpenBtn">Sign Up</button>
       </div>
 
       <div class="mobile-menu">
@@ -46,8 +46,8 @@
           <li><a href="#contact">Contact</a></li>
         </ul>
         <div class="mobile-actions">
-          <button class="login-btn">Log In</button>
-          <button class="signup-btn">Sign Up</button>
+          <button class="login-btn" id="loginOpenMobileBtn">Log In</button>
+          <button class="signup-btn" id="signupOpenMobileBtn">Sign Up</button>
         </div>
       </div>
     </nav>
@@ -88,8 +88,8 @@
         </div>
         <div class="features-row-reverse">
           <div class="text-content">
-            <h2>What is CapCut?</h2>
-            <p>CapCut is a powerful video editing app... [your content]</p>
+            <h2>OmniHuman AI Avatars</h2>
+            <p>Turn a single photo into a talking digital human that uses full-body gestures and realistic expressions.</p>
           </div>
           <div class="image-content">
             <img src="images/sample-image.png" alt="CapCut Interface">
@@ -97,8 +97,8 @@
         </div>
         <div class="features-row">
           <div class="text-content">
-            <h2>What is CapCut?</h2>
-            <p>CapCut is a powerful video editing app... [your content]</p>
+            <h2>Seedance 2.0 Video Generation</h2>
+            <p>Advanced "Text-to-Video" that creates cinematic clips from a simple written prompt with realistic lighting and physics.</p>
           </div>
           <div class="image-content">
             <img src="images/sample-image.png" alt="CapCut Interface">
@@ -106,8 +106,8 @@
         </div>
         <div class="features-row-reverse">
           <div class="text-content">
-            <h2>What is CapCut?</h2>
-            <p>CapCut is a powerful video editing app... [your content]</p>
+            <h2>AI Clipper (Long-to-Shorts)</h2>
+            <p>Automatically scans a long video (like a 20-minute vlog) and extracts the "viral hooks" into 30-second vertical clips.</p>
           </div>
           <div class="image-content">
             <img src="images/sample-image.png" alt="CapCut Interface">
@@ -115,8 +115,8 @@
         </div>
         <div class="features-row">
           <div class="text-content">
-            <h2>What is CapCut?</h2>
-            <p>CapCut is a powerful video editing app... [your content]</p>
+            <h2>Auto-Captions with Scene Detection</h2>
+            <p>Not just subtitles, but dynamic captions that change style based on the mood of the scene.</p>
           </div>
           <div class="image-content">
             <img src="images/sample-image.png" alt="CapCut Interface">
@@ -134,8 +134,8 @@
       </section>
 
       <!--about us section-->
-      <section id="about" class="about-us-section">
-        <div class="section-title-container">
+      <section class="about-us-section">
+        <div id="about" class="section-title-container">
           <h2 class="section-title">About Us</h2>
           <p class="section-description">Who we are and what we stand for.</p>
         </div>
@@ -172,6 +172,40 @@
         </div>
       </section>
   </main>
+
+  <div class="modal-overlay" id="authModal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+      <button class="modal-close" type="button" id="authCloseBtn" aria-label="Close">&times;</button>
+      <h2 id="authTitle">Sign In to CapHacks</h2>
+      <p>Welcome back! Sign in or create a new account.</p>
+      <form class="login-form" id="authForm" data-mode="login">
+        <label>
+          <span>Email address</span>
+          <input type="email" name="email" placeholder="you@example.com" required>
+        </label>
+
+        <label>
+          <span>Password</span>
+          <input type="password" name="password" placeholder="Enter your password" required>
+        </label>
+
+        <div class="confirm-password-row" id="confirmPasswordRow" style="display:none;">
+          <label>
+            <span>Confirm password</span>
+            <input type="password" name="confirmPassword" placeholder="Confirm your password">
+          </label>
+        </div>
+
+        <button class="colored-btn" type="submit" id="submitAuthBtn">Sign In</button>
+
+        <div class="login-divider"><span>Or sign in with</span></div>
+        <button type="button" class="third-party-btn google-btn" id="googleAuthBtn">Continue with Google</button>
+
+        <p class="small-text">Don't have an account? <button type="button" class="link-button" id="switchModeBtn" data-target-mode="signup">Sign Up</button></p>
+        <div class="login-error" id="authError" role="alert" aria-live="assertive"></div>
+      </form>
+    </div>
+  </div>
 
   <footer id="contact">
     <div class="footer-content">
@@ -241,8 +275,6 @@
 <!-- JavaScript files -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.js"></script>
 <script src="js/supabase.js"></script>
-
-
-
+<script src="js/auth.js" defer></script>
 </body>
 </html>
