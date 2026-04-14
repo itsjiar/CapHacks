@@ -148,6 +148,10 @@
   width: 600px;
 }
 
+.text-content-title {
+  margin-bottom: 20px;
+}
+
 .image-content img {
   width: 450px;
   border-radius: 15px;
