@@ -432,3 +432,37 @@ footer {
   border-color: #3bb2eb;
 }
 
+.search-bar{
+  flex: 1;
+  height: 38px;
+  width: 400px;
+  font-size: 16px;
+  padding-left: 14px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: var(--text-color);
+  border-radius: 100px;
+  box-shadow: inset 1px 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.search-bar::placeholder{
+  font-size: 16px;
+  color: var(--text-color);
+}
+
+.search-button{
+  margin-left: 5px;
+  height: 38px;
+  width: 38px;
+  background-color: var(--background-color);
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 50px;
+  border-color: rgb(230, 224, 224);
+  cursor: pointer;
+}
+
+.fas.fa-search {
+  color: var(--text-color);
+  font-size: 18px;
+}

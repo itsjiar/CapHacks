@@ -16,7 +16,7 @@
   <header>
     <nav class="navbar">
       <div class="left-section">
-        <img class="logo-image" src="images/caphacks-logo.svg" alt="CapHacks Logo">
+        <a href="index.html"><img class="logo-image" src="images/caphacks-logo.svg" alt="CapHacks Logo"></a>
       </div>
 
       <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">
@@ -25,12 +25,8 @@
       </label>
 
       <div class="middle-section">
-        <ul class="nav-links">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="dashboard.html">Tips & Tricks</a></li>
-          <li><a href="#about">About Us</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
+        <input class="search-bar" type="search" placeholder="Search" id="search-input">
+        <button class="search-button"><i class="fas fa-search"></i></button>
       </div>
 
       <div class="right-section">
@@ -39,12 +35,6 @@
       </div>
 
       <div class="mobile-menu">
-        <ul class="mobile-links">
-          <li><a href="#home">Home</a></li>
-          <li><a href="dashboard.html">Tips & Tricks</a></li>
-          <li><a href="#about">About Us</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
         <div class="mobile-actions">
           <button class="login-btn">Log In</button>
           <button class="signup-btn">Sign Up</button>
@@ -53,140 +43,10 @@
     </nav>
   </header>
 
-  <main class="dashboard-main">
-    <section class="videos-grid">
-      <div class="video-card">
-        <div class="video-card-inner">
-          <div class="video-preview">
-            <div class="video-frame">
-              <video class="video-player" controls muted preload="metadata">
-                <!-- Replace src with your portrait video file -->
-                <source src="caphacks-tutorial/01-smooth-velocity.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-            </div>
-            <div class="video-caption">
-              <span class="video-caption-title">01 // Smooth Velocity</span>
-              <span class="video-caption-desc">Learn how to create smooth velocity animations in CapCut.</span>
-            </div>
-          </div>
-
-          <div class="video-actions-panel">
-            <div class="video-action-item">
-              <i class="fa-solid fa-star"></i>
-              <span>5.0</span>
-            </div>
-            <div class="video-action-item">
-              <i class="fa-solid fa-comment"></i>
-              <span>Comment</span>
-            </div>
-            <div class="video-action-item">
-              <i class="fa-solid fa-bookmark"></i>
-              <span>Save</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="video-card">
-        <div class="video-card-inner">
-          <div class="video-preview">
-
-            <div class="video-frame">
-              <video class="video-player" controls muted preload="metadata">
-                <!-- Replace src with your portrait video file -->
-                <source src="caphacks-tutorial/01-smooth-velocity.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-            </div>
-            <div class="video-caption">
-              <span class="video-caption-title">01 // Smooth Velocity</span>
-              <span class="video-caption-desc">Learn how to create smooth velocity animations in CapCut.</span>
-            </div>
-          </div>
-
-          <div class="video-actions-panel">
-            <div class="video-action-item">
-              <i class="fa-solid fa-star"></i>
-              <span>5.0</span>
-            </div>
-            <div class="video-action-item">
-              <i class="fa-solid fa-comment"></i>
-              <span>Comment</span>
-            </div>
-            <div class="video-action-item">
-              <i class="fa-solid fa-bookmark"></i>
-              <span>Save</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="video-card">
-        <div class="video-card-inner">
-          <div class="video-preview">
-            <div class="video-frame">
-              <video class="video-player" controls muted preload="metadata">
-                <!-- Replace src with your portrait video file -->
-                <source src="caphacks-tutorial/01-smooth-velocity.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-            </div>
-            <div class="video-caption">
-              <span class="video-caption-title">01 // Smooth Velocity</span>
-              <span class="video-caption-desc">Learn how to create smooth velocity animations in CapCut.</span>
-            </div>
-          </div>
-
-          <div class="video-actions-panel">
-            <div class="video-action-item">
-              <i class="fa-solid fa-star"></i>
-              <span>5.0</span>
-            </div>
-            <div class="video-action-item">
-              <i class="fa-solid fa-comment"></i>
-              <span>Comment</span>
-            </div>
-            <div class="video-action-item">
-              <i class="fa-solid fa-bookmark"></i>
-              <span>Save</span>
-            </div>
-          </div>
-        </div>
-      </div>
+  <main>
+    <section>
+        
     </section>
   </main>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const cards = Array.from(document.querySelectorAll('.video-card'));
-
-      cards.forEach((card, index) => {
-        const controls = document.createElement('div');
-        controls.className = 'video-nav-controls';
-
-        const prevButton = document.createElement('button');
-        prevButton.type = 'button';
-        prevButton.className = 'video-nav-btn video-prev-btn';
-        prevButton.innerHTML = '<i class="fa-solid fa-chevron-up"></i>';
-        prevButton.addEventListener('click', () => {
-          const target = cards[index - 1] || cards[cards.length - 1];
-          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        });
-
-        const nextButton = document.createElement('button');
-        nextButton.type = 'button';
-        nextButton.className = 'video-nav-btn video-next-btn';
-        nextButton.innerHTML = '<i class="fa-solid fa-chevron-down"></i>';
-        nextButton.addEventListener('click', () => {
-          const target = cards[index + 1] || cards[0];
-          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        });
-
-        controls.appendChild(prevButton);
-        controls.appendChild(nextButton);
-        card.prepend(controls);
-      });
-    });
-  </script>
 </body>
 </html>
