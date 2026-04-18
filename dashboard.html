@@ -156,5 +156,37 @@
       </div>
     </section>
   </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const cards = Array.from(document.querySelectorAll('.video-card'));
+
+      cards.forEach((card, index) => {
+        const controls = document.createElement('div');
+        controls.className = 'video-nav-controls';
+
+        const prevButton = document.createElement('button');
+        prevButton.type = 'button';
+        prevButton.className = 'video-nav-btn video-prev-btn';
+        prevButton.innerHTML = '<i class="fa-solid fa-chevron-up"></i>';
+        prevButton.addEventListener('click', () => {
+          const target = cards[index - 1] || cards[cards.length - 1];
+          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+        const nextButton = document.createElement('button');
+        nextButton.type = 'button';
+        nextButton.className = 'video-nav-btn video-next-btn';
+        nextButton.innerHTML = '<i class="fa-solid fa-chevron-down"></i>';
+        nextButton.addEventListener('click', () => {
+          const target = cards[index + 1] || cards[0];
+          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+        controls.appendChild(prevButton);
+        controls.appendChild(nextButton);
+        card.prepend(controls);
+      });
+    });
+  </script>
 </body>
 </html>
