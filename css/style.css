@@ -95,15 +95,11 @@
 }
 
 .section-title-container {
-  display: flex;
   flex-direction: column;
-  /* position: sticky;
-  top: 80px;
-  left: 0px; */
   padding-top: 20px;
   padding-bottom: 15px;
   padding-left: 100px;
-  width: 120%;
+  min-width:1400px;
   background-color: var(--background-color);
   border-radius: 100px;
   background: var(--background-color);

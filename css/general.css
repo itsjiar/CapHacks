@@ -22,9 +22,9 @@ body {
   color: var(--text-color);
   font-family: var(--font-family);
   display: flex;
-  align-items: center;
+  align-content: center;
   justify-content: center;
-  padding-top: 60px;
+  padding-top: 70px;
   flex-direction: column;
 }
 
