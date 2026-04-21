@@ -1,6 +1,6 @@
 .video-grid{
   display: grid;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
   row-gap: 50px;
 }
 
@@ -24,9 +24,9 @@
 }
 
 .video-info{
-  background-color: #88888867;
+  background-color: #2b2a2a;
   border-radius: 5px;
-  padding: 6px 24px 6px 3px;
+  padding: 6px 24px 6px 6px;
   margin-bottom: 50px;
 }
 
@@ -61,11 +61,11 @@
 .rate-button,
 .comment-button{
   padding: 12px 12px;
-  background-color: transparent;
+  background-color: #2b2a2a;
+  border-color: #2b2a2a;
   border-width: 2px;
   border-style: solid;
-  color: #88888867;
-  border-color: #88888867;
+  color: var(--background-color);
   border-radius: 100%;
   align-items: center;
   cursor: pointer;
@@ -73,11 +73,11 @@
 
 .save-button{
   padding: 12px 14px;
-  background-color: transparent;
+  background-color: #2b2a2a;
+  border-color: #2b2a2a;
   border-width: 2px;
   border-style: solid;
-  color: #88888867;
-  border-color: #88888867;
+  color: var(--background-color);
   border-radius: 100%;
   align-items: center;
   cursor: pointer;
@@ -85,4 +85,20 @@
 
 i{
   font-size: 16px;
+}
+
+.rate-button:hover,
+.comment-button:hover,
+.save-button:hover{
+  background-color: #ffffff31;
+  border-color: #ffffff00;
+}
+
+.rate-button i.rated {
+    color: var(--secondary-color);
+}
+
+/* Saved State (Green) */
+.save-button i.saved {
+    color: var(--secondary-color);
 }
