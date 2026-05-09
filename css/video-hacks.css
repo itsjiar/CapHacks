@@ -44,7 +44,7 @@
   place-items: center;
   margin: 0 auto;
   min-height: 880px; 
-  width: 70%;
+  width: 85%;
 }
 
 .video-left-position{
@@ -74,8 +74,9 @@
 
 .video-player{
   border-radius: 20px;
-  height: 690px;
-  width: 388px;
+  height: 800px;
+  width: 488px;
+  object-fit: cover;/* to fit the video*/
 }
 
 .video-right-position{

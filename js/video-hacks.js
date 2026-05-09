@@ -7,10 +7,21 @@ document.addEventListener('DOMContentLoaded', function() {
       icon.classList.toggle('rated');
     });
   });
-  const containers = document.querySelectorAll('.video-hacks-container');
+
+  // Handle save button clicks
+  const saveButtons = document.querySelectorAll('.save-button');
+  saveButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const icon = this.querySelector('i');
+      icon.classList.toggle('saved');
+    });
+  });
+
+  const containers = Array.from(document.querySelectorAll('.video-hacks-container'));
   const prevButton = document.querySelector('.video-prev-button');
   const nextButton = document.querySelector('.video-next-button');
   let activeIndex = 0;
+  let isJumping = false;
 
   function updateNavButtons() {
     if (!prevButton || !nextButton) return;
@@ -19,10 +30,12 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function jumpToVideo(index) {
-    if (index < 0 || index >= containers.length) return;
+    if (index < 0 || index >= containers.length || index === activeIndex) return;
     activeIndex = index;
-    containers[activeIndex].scrollIntoView({ behavior: 'auto', block: 'start' });
+    isJumping = true;
+    containers[activeIndex].scrollIntoView({ behavior: 'auto', block: 'center' });
     updateNavButtons();
+    window.setTimeout(() => { isJumping = false; }, 400);
   }
 
   if (prevButton) {
@@ -37,15 +50,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  updateNavButtons();});
+  function handleWheel(event) {
+    if (isJumping) return;
+    event.preventDefault();
+    if (event.deltaY > 0) {
+      jumpToVideo(activeIndex + 1);
+    } else if (event.deltaY < 0) {
+      jumpToVideo(activeIndex - 1);
+    }
+  }
 
-document.addEventListener('DOMContentLoaded', function() {
-  // Handle save button clicks
-  const saveButtons = document.querySelectorAll('.save-button');
-  saveButtons.forEach(button => {
-    button.addEventListener('click', function() {
-      const icon = this.querySelector('i');
-      icon.classList.toggle('saved');
-    });
-  });
+  window.addEventListener('wheel', handleWheel, { passive: false });
+  updateNavButtons();
 }); 
