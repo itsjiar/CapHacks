@@ -42,6 +42,7 @@
   border-radius: 20px;
   height: 690px;
   width: 388px;
+  object-fit: cover;
 }
 
 .video-right-position{
