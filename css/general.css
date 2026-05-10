@@ -109,6 +109,17 @@ body {
   gap: 10px;
 }
 
+.guest-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: 1px solid transparent;
+  margin-top: 12px;
+}
+
+.guest-btn:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+}
+
 .small-text {
   font-size: 13px;
   color: #666;

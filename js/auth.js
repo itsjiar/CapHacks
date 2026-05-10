@@ -66,16 +66,26 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   googleAuthBtn?.addEventListener('click', async () => {
+    console.log('Google login button clicked');
     if (!authError) return;
     authError.textContent = '';
-    if (!window.supabase || !window.supabase.createClient) {
+    console.log('Checking Supabase availability:', !!window.supabase);
+    if (!window.supabase || !window.supabase.auth) {
       authError.textContent = 'Unable to initialize auth service.';
+      console.error('Supabase client not available');
       return;
     }
 
-    const { error } = await window.supabase.auth.signInWithOAuth({ provider: 'google' });
+    console.log('Attempting Google OAuth...');
+    const { error } = await window.supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin }
+    });
     if (error) {
+      console.error('Google OAuth error:', error);
       authError.textContent = error.message;
+    } else {
+      console.log('Google OAuth initiated successfully');
     }
   });
 
@@ -118,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (data?.user) {
         closeAuthModal();
-        window.location.href = 'dashboard.html';
+        window.location.href = 'video-hacks.html';
         return;
       }
 
@@ -135,7 +145,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (data?.user) {
       closeAuthModal();
-      window.location.href = 'dashboard.html';
+      window.location.href = 'video-hacks.html';
     }
   });
 });
+

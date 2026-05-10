@@ -63,3 +63,4 @@ document.addEventListener('DOMContentLoaded', function() {
   window.addEventListener('wheel', handleWheel, { passive: false });
   updateNavButtons();
 }); 
+
