@@ -12,6 +12,88 @@ document.addEventListener('DOMContentLoaded', () => {
   const confirmPasswordRow = document.getElementById('confirmPasswordRow');
   const googleAuthBtn = document.getElementById('googleAuthBtn');
   const authTitle = document.getElementById('authTitle');
+  const authButtonsGroup = document.getElementById('authButtons');
+  const userBadge = document.getElementById('userBadge');
+  const profileBtn = document.getElementById('profileBtn');
+  const profileAvatar = document.getElementById('profileAvatar');
+  const profileName = document.getElementById('profileName');
+  const profileDropdown = document.getElementById('profileDropdown');
+  const dropdownSignOutBtn = document.getElementById('dropdownSignOutBtn');
+  const mobileUserBadge = document.getElementById('mobileUserBadge');
+  const mobileProfileAvatar = document.getElementById('mobileProfileAvatar');
+  const mobileProfileName = document.getElementById('mobileProfileName');
+  const mobileProfileDropdown = document.getElementById('mobileProfileDropdown');
+  const mobileDropdownSignOutBtn = document.getElementById('mobileDropdownSignOutBtn');
+
+  function getDisplayName(user, isGuest) {
+    if (isGuest) return 'Guest';
+    return user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
+  }
+
+  function getAvatarHtml(user, isGuest) {
+    if (isGuest) {
+      return '<i class="fa-solid fa-user-ghost"></i>';
+    }
+
+    const avatarUrl = user.user_metadata?.avatar_url || user.user_metadata?.picture;
+    if (avatarUrl) {
+      return `<img src="${avatarUrl}" alt="${getDisplayName(user, false)} avatar" />`;
+    }
+    return '<i class="fa-solid fa-user"></i>';
+  }
+
+  function showUserHeader(user, isGuest = false) {
+    if (authButtonsGroup) authButtonsGroup.hidden = true;
+    if (userBadge) userBadge.hidden = false;
+    if (mobileUserBadge) mobileUserBadge.hidden = false;
+    if (profileAvatar) profileAvatar.innerHTML = getAvatarHtml(user, isGuest);
+    if (mobileProfileAvatar) mobileProfileAvatar.innerHTML = getAvatarHtml(user, isGuest);
+    if (profileName) profileName.textContent = getDisplayName(user, isGuest);
+    if (mobileProfileName) mobileProfileName.textContent = getDisplayName(user, isGuest);
+  }
+
+  function hideUserHeader() {
+    if (authButtonsGroup) authButtonsGroup.hidden = false;
+    if (userBadge) userBadge.hidden = true;
+    if (mobileUserBadge) mobileUserBadge.hidden = true;
+    if (profileAvatar) profileAvatar.innerHTML = '<i class="fa-solid fa-user"></i>';
+    if (mobileProfileAvatar) mobileProfileAvatar.innerHTML = '<i class="fa-solid fa-user"></i>';
+    if (profileName) profileName.textContent = '';
+    if (mobileProfileName) mobileProfileName.textContent = '';
+    if (profileDropdown) profileDropdown.hidden = true;
+    if (mobileProfileDropdown) mobileProfileDropdown.hidden = true;
+  }
+
+  function toggleDropdown(dropdown) {
+    if (!dropdown) return;
+    dropdown.hidden = !dropdown.hidden;
+  }
+
+  function closeDropdowns() {
+    if (profileDropdown) profileDropdown.hidden = true;
+    if (mobileProfileDropdown) mobileProfileDropdown.hidden = true;
+  }
+
+  async function refreshAuthHeader() {
+    if (!window.supabase || !window.supabase.auth) return;
+    const { data } = await window.supabase.auth.getSession();
+    const user = data?.session?.user;
+    if (user) {
+      const isGuest = user.email === null;
+      showUserHeader(user, isGuest);
+    } else {
+      hideUserHeader();
+    }
+  }
+
+  function handleSignOut() {
+    return async () => {
+      if (!window.supabase || !window.supabase.auth) return;
+      await window.supabase.auth.signOut();
+      hideUserHeader();
+      window.location.reload();
+    };
+  }
 
   function setAuthMode(mode) {
     if (!authForm || !submitAuthBtn || !confirmPasswordRow || !authTitle || !switchModeBtn) return;
@@ -65,6 +147,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  profileBtn?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    toggleDropdown(profileDropdown);
+    if (mobileProfileDropdown) mobileProfileDropdown.hidden = true;
+  });
+
+  mobileUserBadge?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    toggleDropdown(mobileProfileDropdown);
+    if (profileDropdown) profileDropdown.hidden = true;
+  });
+
+  profileDropdown?.addEventListener('click', (event) => event.stopPropagation());
+  mobileProfileDropdown?.addEventListener('click', (event) => event.stopPropagation());
+
+  document.addEventListener('click', closeDropdowns);
+
+  dropdownSignOutBtn?.addEventListener('click', handleSignOut());
+  mobileDropdownSignOutBtn?.addEventListener('click', handleSignOut());
+
   googleAuthBtn?.addEventListener('click', async () => {
     console.log('Google login button clicked');
     if (!authError) return;
@@ -103,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    if (!window.supabase || !window.supabase.createClient) {
+    if (!window.supabase || !window.supabase.auth) {
       authError.textContent = 'Unable to initialize auth service.';
       return;
     }
@@ -145,8 +247,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (data?.user) {
       closeAuthModal();
+      await refreshAuthHeader();
       window.location.href = 'video-hacks.html';
     }
   });
+
+  if (window.supabase?.auth?.onAuthStateChange) {
+    window.supabase.auth.onAuthStateChange((_event, session) => {
+      const user = session?.user;
+      if (user) {
+        showUserHeader(user, user.email === null);
+      } else {
+        hideUserHeader();
+      }
+    });
+  }
+
+  refreshAuthHeader();
 });
 

@@ -31,14 +31,36 @@
       </div>
 
       <div class="right-section">
-        <button class="login-btn">Log In</button>
-        <button class="signup-btn">Sign Up</button>
+        <div class="auth-buttons" id="authButtons">
+          <button class="login-btn" id="loginOpenBtn">Log In</button>
+          <button class="signup-btn" id="signupOpenBtn">Sign Up</button>
+        </div>
+        <div class="user-badge" id="userBadge" hidden>
+          <button type="button" class="avatar-btn" id="profileBtn">
+            <span class="avatar-ring" id="profileAvatar"><i class="fa-solid fa-user"></i></span>
+            <span class="profile-name" id="profileName">User</span>
+          </button>
+          <div class="profile-dropdown" id="profileDropdown" hidden>
+            <a href="#" class="dropdown-item">My Profile</a>
+            <a href="video-hacks.html" class="dropdown-item">My Videos</a>
+            <button type="button" class="dropdown-item dropdown-signout" id="dropdownSignOutBtn">Sign Out</button>
+          </div>
+        </div>
       </div>
 
       <div class="mobile-menu">
         <div class="mobile-actions">
-          <button class="login-btn">Log In</button>
-          <button class="signup-btn">Sign Up</button>
+          <button class="login-btn" id="loginOpenMobileBtn">Log In</button>
+          <button class="signup-btn" id="signupOpenMobileBtn">Sign Up</button>
+          <div class="mobile-user-badge" id="mobileUserBadge" hidden>
+            <span class="avatar-ring mobile-avatar" id="mobileProfileAvatar"><i class="fa-solid fa-user"></i></span>
+            <span class="profile-name" id="mobileProfileName">User</span>
+            <div class="profile-dropdown mobile-dropdown" id="mobileProfileDropdown" hidden>
+              <a href="#" class="dropdown-item">My Profile</a>
+              <a href="video-hacks.html" class="dropdown-item">My Videos</a>
+              <button type="button" class="dropdown-item dropdown-signout" id="mobileDropdownSignOutBtn">Sign Out</button>
+            </div>
+          </div>
         </div>
       </div>
     </nav>
@@ -143,6 +165,9 @@
     <button class="video-nav-button video-prev-button" aria-label="Previous video"><i class="fas fa-chevron-up"></i></button>
     <button class="video-nav-button video-next-button" aria-label="Next video"><i class="fas fa-chevron-down"></i></button>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.js"></script>
+  <script src="js/supabase.js" defer></script>
+  <script src="js/auth.js" defer></script>
   <script src="js/video-hacks.js"></script>
 </body>
 </html>
