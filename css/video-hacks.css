@@ -74,7 +74,7 @@
 
 .video-player{
   border-radius: 20px;
-  height: 800px;
+  height: 850px;
   width: 488px;
   object-fit: cover;/* to fit the video*/
 }
