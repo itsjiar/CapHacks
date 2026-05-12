@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const mobileDropdownSignOutBtn = document.getElementById('mobileDropdownSignOutBtn');
 
   function getDisplayName(user, isGuest) {
-    if (isGuest) return 'Guest';
+    if (isGuest) return '';
     return user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
   }
 
@@ -48,8 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mobileUserBadge) mobileUserBadge.hidden = false;
     if (profileAvatar) profileAvatar.innerHTML = getAvatarHtml(user, isGuest);
     if (mobileProfileAvatar) mobileProfileAvatar.innerHTML = getAvatarHtml(user, isGuest);
-    if (profileName) profileName.textContent = getDisplayName(user, isGuest);
-    if (mobileProfileName) mobileProfileName.textContent = getDisplayName(user, isGuest);
+    if (profileName) profileName.textContent = isGuest ? '' : getDisplayName(user, isGuest);
+    if (mobileProfileName) mobileProfileName.textContent = isGuest ? '' : getDisplayName(user, isGuest);
   }
 
   function hideUserHeader() {

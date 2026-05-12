@@ -18,9 +18,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (index < 0 || index >= containers.length || index === activeIndex) return;
     activeIndex = index;
     isJumping = true;
-    containers[activeIndex].scrollIntoView({ behavior: 'auto', block: 'center' });
+    containers[activeIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
     updateNavButtons();
-    window.setTimeout(() => { isJumping = false; }, 400);
+    window.setTimeout(() => { isJumping = false; }, 600);
   }
 
   if (prevButton) prevButton.addEventListener('click', () => jumpToVideo(activeIndex - 1));
@@ -122,11 +122,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     session_id: window.guestSessionId, 
                     is_completed: true 
                 });
-                if (!error) showToast("Saved to your bookmarks! 🔖");
+                if (!error) showToast("Saved.");
             } else {
                 await window.supabase.from('progress').delete()
                     .match({ tutorial_id: tutorialId, session_id: window.guestSessionId });
-                showToast("Removed from bookmarks.");
+                showToast("Removed.");
             }
         });
     }
