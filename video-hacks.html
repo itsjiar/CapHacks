@@ -43,8 +43,8 @@
             <span class="profile-name" id="profileName">User</span>
           </button>
           <div class="profile-dropdown" id="profileDropdown" hidden>
-            <a href="#" class="dropdown-item">My Profile</a>
-            <a href="video-hacks.html" class="dropdown-item">My Videos</a>
+            <a href="#" class="dropdown-item" id="myProfileBtn">My Profile</a>
+            <a href="#" class="dropdown-item" id="myVideosBtn">My Videos</a>
             <button type="button" class="dropdown-item dropdown-signout" id="dropdownSignOutBtn">Sign Out</button>
           </div>
         </div>
@@ -58,8 +58,8 @@
             <span class="avatar-ring mobile-avatar" id="mobileProfileAvatar"><i class="fa-solid fa-user"></i></span>
             <span class="profile-name" id="mobileProfileName">User</span>
             <div class="profile-dropdown mobile-dropdown" id="mobileProfileDropdown" hidden>
-              <a href="#" class="dropdown-item">My Profile</a>
-              <a href="video-hacks.html" class="dropdown-item">My Videos</a>
+              <a href="#" class="dropdown-item" id="myProfileMobileBtn">My Profile</a>
+              <a href="#" class="dropdown-item" id="myVideosMobileBtn">My Videos</a>
               <button type="button" class="dropdown-item dropdown-signout" id="mobileDropdownSignOutBtn">Sign Out</button>
             </div>
           </div>
@@ -156,11 +156,65 @@
   </div>
 </div>
 
+<!-- Profile Modal -->
+<div class="modal-overlay" id="profileModal" aria-hidden="true">
+  <div class="modal-content profile-modal-content" role="dialog" aria-modal="true">
+    <button class="modal-close" type="button" id="profileCloseBtn">&times;</button>
+    <div class="profile-modal-header">
+      <div class="profile-modal-avatar" id="profileModalAvatar">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <div class="profile-modal-info">
+        <h3 id="profileModalName">User</h3>
+        <p id="profileModalEmail"></p>
+        <span class="profile-modal-badge" id="profileModalBadge">Guest</span>
+      </div>
+    </div>
+    <hr class="profile-divider">
+    <div class="profile-modal-stats">
+      <div class="profile-stat">
+        <span class="profile-stat-count" id="statSaved">0</span>
+        <span class="profile-stat-label">Saved</span>
+      </div>
+      <div class="profile-stat">
+        <span class="profile-stat-count" id="statLiked">0</span>
+        <span class="profile-stat-label">Liked</span>
+      </div>
+      <div class="profile-stat">
+        <span class="profile-stat-count" id="statJoined">—</span>
+        <span class="profile-stat-label">Joined</span>
+      </div>
+    </div>
+    <hr class="profile-divider">
+    <div class="profile-modal-actions" id="profileModalActions"></div>
+    <button class="profile-delete-btn" id="profileDeleteBtn">
+      <i class="fas fa-trash-alt"></i> Delete Account Permanently
+    </button>
+  </div>
+</div>
+
+<!-- My Videos Modal -->
+<div class="modal-overlay" id="myVideosModal" aria-hidden="true">
+  <div class="modal-content my-videos-modal-content" role="dialog" aria-modal="true">
+    <button class="modal-close" type="button" id="myVideosCloseBtn">&times;</button>
+    <div class="my-videos-header">
+      <div class="profile-modal-avatar" id="myVideosAvatar">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <h3 id="myVideosName">User</h3>
+    </div>
+    <h2 class="my-videos-title">My Videos</h2>
+    <div class="my-videos-grid" id="myVideosGrid">
+      <!-- dynamic -->
+    </div>
+  </div>
+</div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase.js" defer></script>
-  <script src="js/video-hacks.js"></script>
-  <script src="js/auth.js" defer></script>
-  <script src="js/cookies.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/cookies.js"></script>
+<script src="js/supabase.js" defer></script>
+<script src="js/auth.js" defer></script>
+<script src="js/video-hacks.js" defer></script>
 </body>
 </html>
