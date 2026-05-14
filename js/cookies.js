@@ -7,27 +7,28 @@ function getOrCreateSessionId() {
   return sessionId;
 }
 
+// Default muna — guest session
+window.guestSessionId = getOrCreateSessionId();
+console.log('Session ID:', window.guestSessionId);
+
+// I-update pag ready na ang Supabase + may logged-in user
 async function initSessionId() {
-  // Hintayin muna ang Supabase
-  if (!window.supabase) {
+  if (!window.supabase || !window.supabase.auth) {
     setTimeout(initSessionId, 100);
     return;
   }
 
-  const { data } = await window.supabase.auth.getSession();
-  const user = data?.session?.user;
+  try {
+    const { data } = await window.supabase.auth.getSession();
+    const user = data?.session?.user;
 
-  if (user && user.email !== null) {
-    // Logged-in user — gamitin yung user.id
-    window.guestSessionId = user.id;
-  } else {
-    // Guest — gamitin yung localStorage session
-    window.guestSessionId = getOrCreateSessionId();
+    if (user && user.email !== null) {
+      window.guestSessionId = user.id;
+      console.log('Session updated to user ID:', user.id);
+    }
+  } catch (err) {
+    console.warn('Session check failed:', err);
   }
-
-  console.log('Session ID:', window.guestSessionId);
 }
 
-// Initialize
-window.guestSessionId = getOrCreateSessionId(); // default muna
-initSessionId(); // then update pag ready ang Supabase
+initSessionId();
