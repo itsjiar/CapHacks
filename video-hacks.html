@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CapHacks</title>
+  <link rel="icon" type="image/x-icon" href="images/icons/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
@@ -12,6 +13,7 @@
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/video-hacks.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 </head>
 <body id="home" style="background-color: rgba(0, 0, 0, 0.959);">
   <header>
@@ -67,100 +69,10 @@
   </header>
 
   <main>
-    <div class="video-grid">
-      <div class="video-hacks-container">
-        <div class="video-left-position">
-          <div class="video-info">
-            <h3 class="video-title">Video Title Video Title</h3>
-            <p class="video-description">video desc video desc video desc</p>
-          </div>
-        </div>
-        <div class="video-mid-position">
-          <video class="video-player" controls>
-            <source src="caphacks-tutorial/01-smooth-velocity.mp4" type="video/mp4">
-            <source src="caphacks-tutorial/01-smooth-velocity.ogg" type="video/ogg">
-            Your browser does not support the video tag.
-          </video>
-        </div>
-        <div class="video-right-position">
-          <div class="action-buttons">
-            <button class="rate-button"><i class="fas fa-star"></i></button>
-            <button class="comment-button"><i class="fas fa-comment"></i></button>
-            <button class="save-button"><i class="fas fa-bookmark"></i></button>
-          </div>
-        </div>
-      </div>
-
-      <div class="video-hacks-container">
-        <div class="video-left-position">
-          <div class="video-info">
-            <h3 class="video-title">Video Title Video Title</h3>
-            <p class="video-description">video desc video desc video desc</p>
-          </div>
-        </div>
-        <div class="video-mid-position">
-          <video class="video-player" controls>
-            <source src="caphacks-tutorial/01-smooth-velocity.mp4" type="video/mp4">
-            <source src="caphacks-tutorial/01-smooth-velocity.ogg" type="video/ogg">
-            Your browser does not support the video tag.
-          </video>
-        </div>
-        <div class="video-right-position">
-          <div class="action-buttons">
-            <button class="rate-button"><i class="fas fa-star"></i></button>
-            <button class="comment-button"><i class="fas fa-comment"></i></button>
-            <button class="save-button"><i class="fas fa-bookmark"></i></button>
-          </div>
-        </div>
-      </div>
-
-      <div class="video-hacks-container">
-        <div class="video-left-position">
-          <div class="video-info">
-            <h3 class="video-title">Video Title Video Title</h3>
-            <p class="video-description">video desc video desc video desc</p>
-          </div>
-        </div>
-        <div class="video-mid-position">
-          <video class="video-player" controls>
-            <source src="caphacks-tutorial/01-smooth-velocity.mp4" type="video/mp4">
-            <source src="caphacks-tutorial/01-smooth-velocity.ogg" type="video/ogg">
-            Your browser does not support the video tag.
-          </video>
-        </div>
-        <div class="video-right-position">
-          <div class="action-buttons">
-            <button class="rate-button"><i class="fas fa-star"></i></button>
-            <button class="comment-button"><i class="fas fa-comment"></i></button>
-            <button class="save-button"><i class="fas fa-bookmark"></i></button>
-          </div>
-        </div>
-      </div>
-
-      <div class="video-hacks-container">
-        <div class="video-left-position">
-          <div class="video-info">
-            <h3 class="video-title">Video Title Video Title</h3>
-            <p class="video-description">video desc video desc video desc</p>
-          </div>
-        </div>
-        <div class="video-mid-position">
-          <video class="video-player" controls>
-            <source src="caphacks-tutorial/01-smooth-velocity.mp4" type="video/mp4">
-            <source src="caphacks-tutorial/01-smooth-velocity.ogg" type="video/ogg">
-            Your browser does not support the video tag.
-          </video>
-        </div>
-        <div class="video-right-position">
-          <div class="action-buttons">
-            <button class="rate-button"><i class="fas fa-star"></i></button>
-            <button class="comment-button"><i class="fas fa-comment"></i></button>
-            <button class="save-button"><i class="fas fa-bookmark"></i></button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
+  <div class="video-grid" id="videoGrid">
+    <!-- dito na papasok ang video cards -->
+  </div>
+</main>
 
   <div class="modal-overlay" id="authModal" aria-hidden="true">
     <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="authTitle">
@@ -201,12 +113,54 @@
     <button class="video-nav-button video-prev-button" aria-label="Previous video"><i class="fas fa-chevron-up"></i></button>
     <button class="video-nav-button video-next-button" aria-label="Next video"><i class="fas fa-chevron-down"></i></button>
   </div>
+
+  <!-- Admin Upload Modal -->
+<div class="modal-overlay" id="uploadModal" aria-hidden="true">
+  <div class="modal-content" role="dialog">
+    <button class="modal-close" type="button" id="uploadCloseBtn">&times;</button>
+    <h2>Upload Tutorial</h2>
+
+    <div class="upload-form">
+      <label>
+        <span>Title</span>
+        <input type="text" id="uploadTitle" placeholder="e.g. 01 // Smooth Velocity" required>
+      </label>
+
+      <label>
+        <span>Description</span>
+        <textarea id="uploadDescription" placeholder="Short description ng tutorial..." rows="3"></textarea>
+      </label>
+
+      <label>
+        <span>Category</span>
+        <select id="uploadCategory">
+          <option value="Basic">Basic</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="Advance">Advance</option>
+        </select>
+      </label>
+
+      <label>
+        <span>Video File</span>
+        <input type="file" id="uploadFile" accept="video/mp4,video/mov">
+      </label>
+
+      <div id="uploadProgress" style="display:none;">
+        <p id="uploadStatus">Uploading...</p>
+        <progress id="uploadBar" value="0" max="100" style="width:100%"></progress>
+      </div>
+
+      <button class="colored-btn" id="uploadSubmitBtn">Upload Video</button>
+      <div class="login-error" id="uploadError"></div>
+    </div>
+  </div>
+</div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase.js" defer></script>
-  <script src="js/auth.js" defer></script>
-
-  <script src="js/cookies.js"></script>
-
   <script src="js/video-hacks.js"></script>
+  <script src="js/auth.js" defer></script>
+  <script src="js/cookies.js"></script>
 </body>
 </html>

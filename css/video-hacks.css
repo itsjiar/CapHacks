@@ -1,5 +1,7 @@
-
-.video-nav-fixed{
+/* ==========================================
+   NAV BUTTONS
+========================================== */
+.video-nav-fixed {
   position: fixed;
   right: 20px;
   top: 50%;
@@ -10,7 +12,7 @@
   z-index: 10;
 }
 
-.video-nav-button{
+.video-nav-button {
   width: 52px;
   height: 52px;
   display: inline-flex;
@@ -24,42 +26,70 @@
   font-size: 18px;
 }
 
-.video-nav-button:hover{
+.video-nav-button:hover {
   background-color: rgba(255, 255, 255, 0.15);
 }
 
-.video-nav-button:disabled{
+.video-nav-button:disabled {
   opacity: 0.35;
   cursor: not-allowed;
 }
 
-.video-hacks-container{
+/* ==========================================
+   SCROLL CONTAINER
+========================================== */
+body#video-hacks-page {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.video-grid {
+  height: 100vh;
+  padding-top: 62px; /* height ng navbar mo */
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  box-sizing: border-box;
+}
+
+.video-grid::-webkit-scrollbar {
+  display: none;
+}
+
+/* ==========================================
+   VIDEO CARD
+========================================== */
+.video-hacks-container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   place-items: center;
   margin: 0 auto;
-  min-height: 880px; 
+  height: 100vh;
   width: 85%;
+  scroll-snap-align: start;
 }
 
-.video-left-position{
+.video-left-position {
   min-height: 100%;
   min-width: 100%;
   display: flex;
   flex-direction: column;
   align-items: end;
   justify-content: end;
-  color: var(--background-color);
+  color: white;
 }
 
-.video-info{
+.video-info {
   background-color: #2b2a2a;
   border-radius: 5px;
   padding: 6px 24px 6px 6px;
-  margin-bottom: 95px;
+  margin-bottom: 180px;
 }
 
-.video-mid-position{
+.video-mid-position {
   min-height: 100%;
   min-width: 100%;
   display: flex;
@@ -67,147 +97,169 @@
   place-items: center;
 }
 
-.video-player{
+.video-player {
   border-radius: 20px;
   height: 850px;
   width: 488px;
-  object-fit: cover;/* to fit the video*/
+  object-fit: cover;
 }
 
-.video-right-position{
+.video-right-position {
   min-height: 100%;
   min-width: 100%;
   display: flex;
   align-items: end;
 }
 
-.action-buttons{
+/* ==========================================
+   ACTION BUTTONS
+========================================== */
+.action-buttons {
   display: flex;
   flex-direction: column;
   row-gap: 20px;
-  margin-bottom: 95px;
+  margin-bottom: 180px;
 }
 
 .rate-button,
-.comment-button{
+.comment-button {
   padding: 12px 12px;
   background-color: #2b2a2a;
   border-color: #2b2a2a;
   border-width: 2px;
   border-style: solid;
-  color: var(--background-color);
+  color: white;
   border-radius: 100%;
   align-items: center;
   cursor: pointer;
 }
 
-.save-button{
+.save-button {
   padding: 12px 14px;
   background-color: #2b2a2a;
   border-color: #2b2a2a;
   border-width: 2px;
   border-style: solid;
-  color: var(--background-color);
+  color: white;
   border-radius: 100%;
   align-items: center;
   cursor: pointer;
 }
 
-i{
+i {
   font-size: 16px;
 }
 
 .rate-button:hover,
 .comment-button:hover,
-.save-button:hover{
+.save-button:hover {
   background-color: #ffffff31;
   border-color: #ffffff00;
 }
 
 .rate-button i.rated {
-    color: var(--secondary-color);
+  color: #ffca2c;
 }
 
-/* para mawala ang scrollbar sa Chrome, Safari, at Opera */
-/* 1. Balik sa original grid structure mo */
-.video-hacks-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    place-items: center;
-    margin: 0 auto;
-    height: 100vh; /* Ginawa nating 100vh para sakto sa screen mo */
-    width: 85%;
-    scroll-snap-align: start;
-}
-
-/* 2. ITINAAS NA TITLE (Dati 95px, ginawa nating 180px) */
-.video-info {
-    background-color: #2b2a2a;
-    border-radius: 5px;
-    padding: 6px 24px 6px 6px;
-    margin-bottom: 180px; /* Dagdagan mo lang 'to kung gusto mo pang itaas */
-}
-
-/* 3. ITINAAS NA BUTTONS (Dati 95px, ginawa nating 180px) */
-.action-buttons {
-    display: flex;
-    flex-direction: column;
-    row-gap: 20px;
-    margin-bottom: 180px; /* Pantay dapat sila nung sa left */
-}
-
-/* 4. Default positions mo */
-.video-left-position {
-    min-height: 100%;
-    min-width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: end;
-    justify-content: end;
-    color: white;
-}
-
-.video-mid-position {
-    min-height: 100%;
-    min-width: 100%;
-    display: flex;
-    place-content: center;
-    place-items: center;
-}
-
-.video-right-position {
-    min-height: 100%;
-    min-width: 100%;
-    display: flex;
-    align-items: end;
-}
-
-/* --- PARA SA CLEAN SCROLL (WALANG BAR) --- */
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    overflow: hidden; 
-}
-
-.video-grid {
-    height: 100vh;
-    overflow-y: scroll;
-    scroll-snap-type: y mandatory;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-.video-grid::-webkit-scrollbar {
-    display: none;
-}
-
-/* Kulay para sa Star kapag na-rate na */
-.rate-button i.rated {
-    color: #ffca2c; /* Yellow/Gold star */
-}
-
-/* Kulay para sa Bookmark kapag na-save na */
 .save-button i.saved {
-    color: #ff2d55; /* Pinkish-red o kahit anong color na gusto mo */
+  color: #ff2d55;
+}
+
+/* ==========================================
+   UPLOAD MODAL
+========================================== */
+#uploadModal .modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 480px;
+  width: 100%;
+}
+
+#uploadModal h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.upload-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+}
+
+.upload-form input[type="text"],
+.upload-form textarea,
+.upload-form select {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.15);
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  background: #f7f7f7;
+  color: #111;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.upload-form input[type="text"]:focus,
+.upload-form textarea:focus,
+.upload-form select:focus {
+  border-color: #ff2d55;
+  background: #fff;
+}
+
+.upload-form textarea {
+  resize: none;
+  min-height: 80px;
+}
+
+.upload-form input[type="file"] {
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px dashed rgba(0,0,0,0.2);
+  background: #f7f7f7;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.upload-form .colored-btn {
+  margin-top: 4px;
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+#uploadProgress {
+  background: #f7f7f7;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+#uploadStatus {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+#uploadBar {
+  width: 100%;
+  height: 6px;
+  border-radius: 10px;
+  accent-color: #ff2d55;
+}
+
+.login-error#uploadError {
+  font-size: 13px;
+  text-align: center;
 }

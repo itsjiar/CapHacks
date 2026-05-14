@@ -18,7 +18,8 @@ function initializeSupabase() {
     const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
     console.log('Supabase client created successfully');
 
-    // Make the client globally available as window.supabase for compatibility
+    // Make the client globally available as window.supabaseClient for compatibility
+    window.supabaseClient = supabaseClient;
     window.supabase = supabaseClient;
 
     console.log("Supabase Connection, GG!", supabaseClient);
