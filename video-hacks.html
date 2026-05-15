@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CapHacks</title>
+  <link rel="icon" type="image/x-icon" href="images/icons/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
@@ -12,6 +13,7 @@
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/video-hacks.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 </head>
 <body id="home" style="background-color: rgba(0, 0, 0, 0.959);">
   <header>
@@ -31,114 +33,188 @@
       </div>
 
       <div class="right-section">
-        <button class="login-btn">Log In</button>
-        <button class="signup-btn">Sign Up</button>
+        <div class="auth-buttons" id="authButtons">
+          <button class="login-btn" id="loginOpenBtn">Log In</button>
+          <button class="signup-btn" id="signupOpenBtn">Sign Up</button>
+        </div>
+        <div class="user-badge" id="userBadge" hidden>
+          <button type="button" class="avatar-btn" id="profileBtn">
+            <span class="avatar-ring" id="profileAvatar"><i class="fa-solid fa-user"></i></span>
+            <span class="profile-name" id="profileName">User</span>
+          </button>
+          <div class="profile-dropdown" id="profileDropdown" hidden>
+            <a href="#" class="dropdown-item" id="myProfileBtn">My Profile</a>
+            <a href="#" class="dropdown-item" id="myVideosBtn">My Videos</a>
+            <button type="button" class="dropdown-item dropdown-signout" id="dropdownSignOutBtn">Sign Out</button>
+          </div>
+        </div>
       </div>
 
       <div class="mobile-menu">
         <div class="mobile-actions">
-          <button class="login-btn">Log In</button>
-          <button class="signup-btn">Sign Up</button>
+          <button class="login-btn" id="loginOpenMobileBtn">Log In</button>
+          <button class="signup-btn" id="signupOpenMobileBtn">Sign Up</button>
+          <div class="mobile-user-badge" id="mobileUserBadge" hidden>
+            <span class="avatar-ring mobile-avatar" id="mobileProfileAvatar"><i class="fa-solid fa-user"></i></span>
+            <span class="profile-name" id="mobileProfileName">User</span>
+            <div class="profile-dropdown mobile-dropdown" id="mobileProfileDropdown" hidden>
+              <a href="#" class="dropdown-item" id="myProfileMobileBtn">My Profile</a>
+              <a href="#" class="dropdown-item" id="myVideosMobileBtn">My Videos</a>
+              <button type="button" class="dropdown-item dropdown-signout" id="mobileDropdownSignOutBtn">Sign Out</button>
+            </div>
+          </div>
         </div>
       </div>
     </nav>
   </header>
 
   <main>
-    <div class="video-grid">
-      <div class="video-hacks-container">
-        <div class="video-left-position">
-          <div class="video-info">
-            <h3 class="video-title">Video Title Video Title</h3>
-            <p class="video-description">video desc video desc video desc</p>
-          </div>
+  <div class="video-grid" id="videoGrid">
+    <!-- dito na papasok ang video cards -->
+  </div>
+</main>
+
+  <div class="modal-overlay" id="authModal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+      <button class="modal-close" type="button" id="authCloseBtn" aria-label="Close">&times;</button>
+      <h2 id="authTitle">Sign In to CapHacks</h2>
+      <p>Welcome back! Sign in or create a new account.</p>
+      <form class="login-form" id="authForm" data-mode="login">
+        <label>
+          <span>Email address</span>
+          <input type="email" name="email" placeholder="you@example.com" required>
+        </label>
+
+        <label>
+          <span>Password</span>
+          <input type="password" name="password" placeholder="Enter your password" required>
+        </label>
+
+        <div class="confirm-password-row" id="confirmPasswordRow" style="display:none;">
+          <label>
+            <span>Confirm password</span>
+            <input type="password" name="confirmPassword" placeholder="Confirm your password">
+          </label>
         </div>
-        <div class="video-mid-position">
-          <video class="video-player" controls>
-            <source src="caphacks-tutorial/01-smooth-velocity.mp4" type="video/mp4">
-            <source src="caphacks-tutorial/01-smooth-velocity.ogg" type="video/ogg">
-            Your browser does not support the video tag.
-          </video>
-        </div>
-        <div class="video-right-position">
-          <div class="action-buttons">
-            <button class="rate-button"><i class="fas fa-star"></i></button>
-            <button class="comment-button"><i class="fas fa-comment"></i></button>
-            <button class="save-button"><i class="fas fa-bookmark"></i></button>
-          </div>
-        </div>
+
+        <button class="colored-btn" type="submit" id="submitAuthBtn">Sign In</button>
+
+        <div class="login-divider"><span>Or sign in with</span></div>
+        <button type="button" class="third-party-btn google-btn" id="googleAuthBtn">Continue with Google</button>
+        <button type="button" class="third-party-btn guest-btn" id="guestAuthBtn">Continue as Guest</button>
+
+        <p class="small-text">Don't have an account? <button type="button" class="link-button" id="switchModeBtn" data-target-mode="signup">Sign Up</button></p>
+        <div class="login-error" id="authError" role="alert" aria-live="assertive"></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="video-nav-fixed">
+    <button class="video-nav-button video-prev-button" aria-label="Previous video"><i class="fas fa-chevron-up"></i></button>
+    <button class="video-nav-button video-next-button" aria-label="Next video"><i class="fas fa-chevron-down"></i></button>
+  </div>
+
+  <!-- Admin Upload Modal -->
+<div class="modal-overlay" id="uploadModal" aria-hidden="true">
+  <div class="modal-content" role="dialog">
+    <button class="modal-close" type="button" id="uploadCloseBtn">&times;</button>
+    <h2>Upload Tutorial</h2>
+
+    <div class="upload-form">
+      <label>
+        <span>Title</span>
+        <input type="text" id="uploadTitle" placeholder="e.g. 01 // Smooth Velocity" required>
+      </label>
+
+      <label>
+        <span>Description</span>
+        <textarea id="uploadDescription" placeholder="Short description ng tutorial..." rows="3"></textarea>
+      </label>
+
+      <label>
+        <span>Category</span>
+        <select id="uploadCategory">
+          <option value="Basic">Basic</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="Advance">Advance</option>
+        </select>
+      </label>
+
+      <label>
+        <span>Video File</span>
+        <input type="file" id="uploadFile" accept="video/mp4,video/mov">
+      </label>
+
+      <div id="uploadProgress" style="display:none;">
+        <p id="uploadStatus">Uploading...</p>
+        <progress id="uploadBar" value="0" max="100" style="width:100%"></progress>
       </div>
 
-      <div class="video-hacks-container">
-        <div class="video-left-position">
-          <div class="video-info">
-            <h3 class="video-title">Video Title Video Title</h3>
-            <p class="video-description">video desc video desc video desc</p>
-          </div>
-        </div>
-        <div class="video-mid-position">
-          <video class="video-player" controls>
-            <source src="caphacks-tutorial/01-smooth-velocity.mp4" type="video/mp4">
-            <source src="caphacks-tutorial/01-smooth-velocity.ogg" type="video/ogg">
-            Your browser does not support the video tag.
-          </video>
-        </div>
-        <div class="video-right-position">
-          <div class="action-buttons">
-            <button class="rate-button"><i class="fas fa-star"></i></button>
-            <button class="comment-button"><i class="fas fa-comment"></i></button>
-            <button class="save-button"><i class="fas fa-bookmark"></i></button>
-          </div>
-        </div>
-      </div>
+      <button class="colored-btn" id="uploadSubmitBtn">Upload Video</button>
+      <div class="login-error" id="uploadError"></div>
+    </div>
+  </div>
+</div>
 
-      <div class="video-hacks-container">
-        <div class="video-left-position">
-          <div class="video-info">
-            <h3 class="video-title">Video Title Video Title</h3>
-            <p class="video-description">video desc video desc video desc</p>
-          </div>
-        </div>
-        <div class="video-mid-position">
-          <video class="video-player" controls>
-            <source src="caphacks-tutorial/01-smooth-velocity.mp4" type="video/mp4">
-            <source src="caphacks-tutorial/01-smooth-velocity.ogg" type="video/ogg">
-            Your browser does not support the video tag.
-          </video>
-        </div>
-        <div class="video-right-position">
-          <div class="action-buttons">
-            <button class="rate-button"><i class="fas fa-star"></i></button>
-            <button class="comment-button"><i class="fas fa-comment"></i></button>
-            <button class="save-button"><i class="fas fa-bookmark"></i></button>
-          </div>
-        </div>
+<!-- Profile Modal -->
+<div class="modal-overlay" id="profileModal" aria-hidden="true">
+  <div class="modal-content profile-modal-content" role="dialog" aria-modal="true">
+    <button class="modal-close" type="button" id="profileCloseBtn">&times;</button>
+    <div class="profile-modal-header">
+      <div class="profile-modal-avatar" id="profileModalAvatar">
+        <i class="fa-solid fa-user"></i>
       </div>
-
-      <div class="video-hacks-container">
-        <div class="video-left-position">
-          <div class="video-info">
-            <h3 class="video-title">Video Title Video Title</h3>
-            <p class="video-description">video desc video desc video desc</p>
-          </div>
-        </div>
-        <div class="video-mid-position">
-          <video class="video-player" controls>
-            <source src="caphacks-tutorial/01-smooth-velocity.mp4" type="video/mp4">
-            <source src="caphacks-tutorial/01-smooth-velocity.ogg" type="video/ogg">
-            Your browser does not support the video tag.
-          </video>
-        </div>
-        <div class="video-right-position">
-          <div class="action-buttons">
-            <button class="rate-button"><i class="fas fa-star"></i></button>
-            <button class="comment-button"><i class="fas fa-comment"></i></button>
-            <button class="save-button"><i class="fas fa-bookmark"></i></button>
-          </div>
-        </div>
+      <div class="profile-modal-info">
+        <h3 id="profileModalName">User</h3>
+        <p id="profileModalEmail"></p>
+        <span class="profile-modal-badge" id="profileModalBadge">Guest</span>
       </div>
     </div>
-  </main>
-  <script src="js/video-hacks.js"></script>
+    <hr class="profile-divider">
+    <div class="profile-modal-stats">
+      <div class="profile-stat">
+        <span class="profile-stat-count" id="statSaved">0</span>
+        <span class="profile-stat-label">Saved</span>
+      </div>
+      <div class="profile-stat">
+        <span class="profile-stat-count" id="statLiked">0</span>
+        <span class="profile-stat-label">Liked</span>
+      </div>
+      <div class="profile-stat">
+        <span class="profile-stat-count" id="statJoined">—</span>
+        <span class="profile-stat-label">Joined</span>
+      </div>
+    </div>
+    <hr class="profile-divider">
+    <div class="profile-modal-actions" id="profileModalActions"></div>
+    <button class="profile-delete-btn" id="profileDeleteBtn">
+      <i class="fas fa-trash-alt"></i> Delete Account Permanently
+    </button>
+  </div>
+</div>
+
+<!-- My Videos Modal -->
+<div class="modal-overlay" id="myVideosModal" aria-hidden="true">
+  <div class="modal-content my-videos-modal-content" role="dialog" aria-modal="true">
+    <button class="modal-close" type="button" id="myVideosCloseBtn">&times;</button>
+    <div class="my-videos-header">
+      <div class="profile-modal-avatar" id="myVideosAvatar">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <h3 id="myVideosName">User</h3>
+    </div>
+    <h2 class="my-videos-title">My Videos</h2>
+    <div class="my-videos-grid" id="myVideosGrid">
+      <!-- dynamic -->
+    </div>
+  </div>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/cookies.js"></script>
+<script src="js/supabase.js" defer></script>
+<script src="js/auth.js" defer></script>
+<script src="js/video-hacks.js" defer></script>
 </body>
 </html>

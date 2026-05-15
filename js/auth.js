@@ -12,6 +12,88 @@ document.addEventListener('DOMContentLoaded', () => {
   const confirmPasswordRow = document.getElementById('confirmPasswordRow');
   const googleAuthBtn = document.getElementById('googleAuthBtn');
   const authTitle = document.getElementById('authTitle');
+  const authButtonsGroup = document.getElementById('authButtons');
+  const userBadge = document.getElementById('userBadge');
+  const profileBtn = document.getElementById('profileBtn');
+  const profileAvatar = document.getElementById('profileAvatar');
+  const profileName = document.getElementById('profileName');
+  const profileDropdown = document.getElementById('profileDropdown');
+  const dropdownSignOutBtn = document.getElementById('dropdownSignOutBtn');
+  const mobileUserBadge = document.getElementById('mobileUserBadge');
+  const mobileProfileAvatar = document.getElementById('mobileProfileAvatar');
+  const mobileProfileName = document.getElementById('mobileProfileName');
+  const mobileProfileDropdown = document.getElementById('mobileProfileDropdown');
+  const mobileDropdownSignOutBtn = document.getElementById('mobileDropdownSignOutBtn');
+
+  function getDisplayName(user, isGuest) {
+    if (isGuest) return '';
+    return user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
+  }
+
+  function getAvatarHtml(user, isGuest) {
+    if (isGuest) {
+      return '<i class="fa-solid fa-user-ghost"></i>';
+    }
+
+    const avatarUrl = user.user_metadata?.avatar_url || user.user_metadata?.picture;
+    if (avatarUrl) {
+      return `<img src="${avatarUrl}" alt="${getDisplayName(user, false)} avatar" />`;
+    }
+    return '<i class="fa-solid fa-user"></i>';
+  }
+
+  function showUserHeader(user, isGuest = false) {
+    if (authButtonsGroup) authButtonsGroup.hidden = true;
+    if (userBadge) userBadge.hidden = false;
+    if (mobileUserBadge) mobileUserBadge.hidden = false;
+    if (profileAvatar) profileAvatar.innerHTML = getAvatarHtml(user, isGuest);
+    if (mobileProfileAvatar) mobileProfileAvatar.innerHTML = getAvatarHtml(user, isGuest);
+    if (profileName) profileName.textContent = '';
+    if (mobileProfileName) mobileProfileName.textContent = '';
+  }
+
+  function hideUserHeader() {
+    if (authButtonsGroup) authButtonsGroup.hidden = false;
+    if (userBadge) userBadge.hidden = true;
+    if (mobileUserBadge) mobileUserBadge.hidden = true;
+    if (profileAvatar) profileAvatar.innerHTML = '<i class="fa-solid fa-user"></i>';
+    if (mobileProfileAvatar) mobileProfileAvatar.innerHTML = '<i class="fa-solid fa-user"></i>';
+    if (profileName) profileName.textContent = isGuest ? 'Guest' : getDisplayName(user, isGuest);
+if (mobileProfileName) mobileProfileName.textContent = isGuest ? 'Guest' : getDisplayName(user, isGuest);
+    if (profileDropdown) profileDropdown.hidden = true;
+    if (mobileProfileDropdown) mobileProfileDropdown.hidden = true;
+  }
+
+  function toggleDropdown(dropdown) {
+    if (!dropdown) return;
+    dropdown.hidden = !dropdown.hidden;
+  }
+
+  function closeDropdowns() {
+    if (profileDropdown) profileDropdown.hidden = true;
+    if (mobileProfileDropdown) mobileProfileDropdown.hidden = true;
+  }
+
+  async function refreshAuthHeader() {
+    if (!window.supabase || !window.supabase.auth) return;
+    const { data } = await window.supabase.auth.getSession();
+    const user = data?.session?.user;
+    if (user) {
+      const isGuest = user.email === null;
+      showUserHeader(user, isGuest);
+    } else {
+      hideUserHeader();
+    }
+  }
+
+  function handleSignOut() {
+    return async () => {
+      if (!window.supabase || !window.supabase.auth) return;
+      await window.supabase.auth.signOut();
+      hideUserHeader();
+      window.location.reload();
+    };
+  }
 
   function setAuthMode(mode) {
     if (!authForm || !submitAuthBtn || !confirmPasswordRow || !authTitle || !switchModeBtn) return;
@@ -65,19 +147,57 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  profileBtn?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    toggleDropdown(profileDropdown);
+    if (mobileProfileDropdown) mobileProfileDropdown.hidden = true;
+  });
+
+  mobileUserBadge?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    toggleDropdown(mobileProfileDropdown);
+    if (profileDropdown) profileDropdown.hidden = true;
+  });
+
+  profileDropdown?.addEventListener('click', (event) => event.stopPropagation());
+  mobileProfileDropdown?.addEventListener('click', (event) => event.stopPropagation());
+
+  document.addEventListener('click', closeDropdowns);
+
+  dropdownSignOutBtn?.addEventListener('click', handleSignOut());
+  mobileDropdownSignOutBtn?.addEventListener('click', handleSignOut());
+
   googleAuthBtn?.addEventListener('click', async () => {
+    console.log('Google login button clicked');
     if (!authError) return;
     authError.textContent = '';
-    if (!window.supabase || !window.supabase.createClient) {
+    console.log('Checking Supabase availability:', !!window.supabase);
+    if (!window.supabase || !window.supabase.auth) {
       authError.textContent = 'Unable to initialize auth service.';
+      console.error('Supabase client not available');
       return;
     }
 
-    const { error } = await window.supabase.auth.signInWithOAuth({ provider: 'google' });
+    console.log('Attempting Google OAuth...');
+    const { error } = await window.supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin }
+    });
     if (error) {
+      console.error('Google OAuth error:', error);
       authError.textContent = error.message;
+    } else {
+      console.log('Google OAuth initiated successfully');
     }
   });
+
+  document.getElementById('guestAuthBtn')?.addEventListener('click', () => {
+  // localStorage lang — walang Supabase anonymous account
+  window.guestSessionId = localStorage.getItem('caphacks_guest_session');
+  closeAuthModal();
+  const fakeGuest = { email: null, user_metadata: {}, app_metadata: {} };
+  showUserHeader(fakeGuest, true);
+});
 
   authForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -93,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    if (!window.supabase || !window.supabase.createClient) {
+    if (!window.supabase || !window.supabase.auth) {
       authError.textContent = 'Unable to initialize auth service.';
       return;
     }
@@ -117,10 +237,12 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (data?.user) {
-        closeAuthModal();
-        window.location.href = 'dashboard.html';
-        return;
-      }
+  closeAuthModal();
+  const guestId = localStorage.getItem('caphacks_guest_session');
+  await migrateGuestData(data.user.id, guestId);
+  await refreshAuthHeader();
+  window.location.href = 'video-hacks.html';
+}
 
       authError.textContent = 'Check your email for confirmation before signing in.';
       return;
@@ -134,8 +256,316 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (data?.user) {
-      closeAuthModal();
-      window.location.href = 'dashboard.html';
-    }
+  closeAuthModal();
+  await migrateGuestData(data.user.id);
+  await refreshAuthHeader();
+  window.location.href = 'video-hacks.html';
+}
   });
+
+  window.supabase.auth.onAuthStateChange(async (_event, session) => {
+  const user = session?.user;
+
+  if (user && user.email !== null) {
+    // Hintayin muna na ready yung guestSessionId
+    const guestId = localStorage.getItem('caphacks_guest_session');
+    if (guestId && guestId.startsWith('guest_')) {
+      await migrateGuestData(user.id, guestId);
+    }
+    window.guestSessionId = user.id;
+    showUserHeader(user, false);
+  } else if (user) {
+    showUserHeader(user, true);
+  } else {
+    hideUserHeader();
+  }
 });
+
+async function migrateGuestData(userId, guestId) {
+  // Kung walang guestId o hindi guest format, wag mag-migrate
+  if (!guestId || !guestId.startsWith('guest_')) return;
+
+  console.log('Migrating guest data from:', guestId, 'to:', userId);
+
+  await window.supabase
+    .from('ratings')
+    .update({ session_id: userId })
+    .eq('session_id', guestId);
+
+  await window.supabase
+    .from('progress')
+    .update({ session_id: userId })
+    .eq('session_id', guestId);
+
+  // Clear yung guest session — hindi na kailangan
+  localStorage.removeItem('caphacks_guest_session');
+  window.guestSessionId = userId;
+
+  console.log('Migration done!');
+}
+
+// ==========================================
+// MY VIDEOS MODAL
+// ==========================================
+const myVideosModal = document.getElementById('myVideosModal');
+const myVideosCloseBtn = document.getElementById('myVideosCloseBtn');
+const myVideosBtn = document.getElementById('myVideosBtn');
+const myVideosMobileBtn = document.getElementById('myVideosMobileBtn');
+
+async function openMyVideosModal() {
+  if (!myVideosModal || !window.supabase) return;
+  closeDropdowns();
+
+  const { data } = await window.supabase.auth.getSession();
+  const user = data?.session?.user;
+
+  // Set avatar + name
+  const avatarEl = document.getElementById('myVideosAvatar');
+  const nameEl = document.getElementById('myVideosName');
+
+  if (user && user.email !== null) {
+    const avatarUrl = user.user_metadata?.avatar_url || user.user_metadata?.picture;
+    avatarEl.innerHTML = avatarUrl
+      ? `<img src="${avatarUrl}" alt="avatar">`
+      : `<i class="fa-solid fa-user"></i>`;
+    nameEl.textContent = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
+  } else {
+    avatarEl.innerHTML = `<i class="fa-solid fa-user-ghost"></i>`;
+    nameEl.textContent = 'Guest';
+  }
+
+  // Fetch saved videos
+  const sessionId = window.guestSessionId;
+  const grid = document.getElementById('myVideosGrid');
+  grid.innerHTML = '<p class="my-videos-empty">Loading...</p>';
+
+  const { data: saved, error } = await window.supabase
+    .from('progress')
+    .select('tutorial_id')
+    .eq('session_id', sessionId);
+
+  if (error || !saved || saved.length === 0) {
+    grid.innerHTML = '<p class="my-videos-empty">No saved videos yet.</p>';
+    myVideosModal.classList.add('active');
+    myVideosModal.setAttribute('aria-hidden', 'false');
+    return;
+  }
+
+  // Get tutorial IDs
+  const tutorialIds = saved.map(s => s.tutorial_id);
+
+  const { data: videos } = await window.supabase
+    .from('tutorials')
+    .select('id, title, video_url')
+    .in('id', tutorialIds);
+
+  if (!videos || videos.length === 0) {
+    grid.innerHTML = '<p class="my-videos-empty">No saved videos yet.</p>';
+  } else {
+    grid.innerHTML = '';
+    videos.forEach((video) => {
+      const card = document.createElement('div');
+      card.classList.add('my-video-card');
+      card.innerHTML = `
+        <video src="${video.video_url}" muted playsinline preload="metadata"></video>
+        <div class="my-video-card-title">${video.title}</div>
+      `;
+
+      // Hover preview
+      card.addEventListener('mouseenter', () => card.querySelector('video').play());
+      card.addEventListener('mouseleave', () => {
+        const v = card.querySelector('video');
+        v.pause();
+        v.currentTime = 0;
+      });
+
+      grid.appendChild(card);
+    });
+  }
+
+  myVideosModal.classList.add('active');
+  myVideosModal.setAttribute('aria-hidden', 'false');
+}
+
+myVideosCloseBtn?.addEventListener('click', () => {
+  myVideosModal.classList.remove('active');
+  myVideosModal.setAttribute('aria-hidden', 'true');
+});
+
+async function handleMyVideosClick(e) {
+  e.preventDefault();
+  closeDropdowns();
+
+  // Guest users — may guestSessionId pero walang Supabase session
+  const hasGuestSession = window.guestSessionId && window.guestSessionId.startsWith('guest_');
+  const { data } = await window.supabase.auth.getSession();
+  const user = data?.session?.user;
+
+  if (!user && !hasGuestSession) {
+    showAuthToast();
+    return;
+  }
+
+  openMyVideosModal();
+}
+
+myVideosBtn?.addEventListener('click', handleMyVideosClick);
+myVideosMobileBtn?.addEventListener('click', handleMyVideosClick);
+
+// ==========================================
+  // COOKIE CONSENT
+  // ==========================================
+  function initCookieBanner() {
+    const banner = document.getElementById('cookieBanner');
+    const acceptBtn = document.getElementById('cookieAcceptBtn');
+    const declineBtn = document.getElementById('cookieDeclineBtn');
+
+    if (!banner) return;
+
+    const consent = localStorage.getItem('caphacks_cookie_consent');
+    if (consent) {
+      banner.classList.add('hidden');
+      return;
+    }
+
+    acceptBtn?.addEventListener('click', () => {
+      localStorage.setItem('caphacks_cookie_consent', 'accepted');
+      banner.classList.add('hidden');
+    });
+
+    declineBtn?.addEventListener('click', () => {
+      banner.classList.add('hidden');
+    });
+  }
+
+  initCookieBanner();
+
+  refreshAuthHeader();
+
+  // ==========================================
+// PROFILE MODAL
+// ==========================================
+const profileModal = document.getElementById('profileModal');
+const profileCloseBtn = document.getElementById('profileCloseBtn');
+const myProfileBtn = document.getElementById('myProfileBtn');
+const myProfileMobileBtn = document.getElementById('myProfileMobileBtn');
+
+async function openProfileModal() {
+  if (!profileModal || !window.supabase) return;
+  closeDropdowns();
+
+  const { data } = await window.supabase.auth.getSession();
+  const user = data?.session?.user;
+  if (!user) return;
+
+  const isGuest = user.email === null;
+  const isGoogle = user.app_metadata?.provider === 'google';
+  const isEmail = !isGuest && !isGoogle;
+
+  // Avatar
+  const avatarEl = document.getElementById('profileModalAvatar');
+  const avatarUrl = user.user_metadata?.avatar_url || user.user_metadata?.picture;
+  avatarEl.innerHTML = avatarUrl
+    ? `<img src="${avatarUrl}" alt="avatar">`
+    : `<i class="fa-solid fa-${isGuest ? 'user-ghost' : 'user'}"></i>`;
+
+  // Name + Email
+  document.getElementById('profileModalName').textContent = isGuest
+    ? 'Guest User'
+    : (user.user_metadata?.full_name || user.email?.split('@')[0] || 'User');
+  document.getElementById('profileModalEmail').textContent = isGuest ? '' : user.email;
+
+  // Badge
+  const badge = document.getElementById('profileModalBadge');
+  badge.textContent = isGuest ? 'Guest' : isGoogle ? 'Google' : 'Email';
+  badge.className = `profile-modal-badge ${isGuest ? 'guest' : isGoogle ? 'google' : 'email'}`;
+
+  // Joined date
+  const joined = new Date(user.created_at);
+  document.getElementById('statJoined').textContent = joined.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+
+  // Stats — saved + liked counts
+  const sessionId = window.guestSessionId || user.id;
+
+  const { count: savedCount } = await window.supabase
+    .from('progress')
+    .select('id', { count: 'exact' })
+    .eq('session_id', sessionId);
+
+  const { count: likedCount } = await window.supabase
+    .from('ratings')
+    .select('id', { count: 'exact' })
+    .eq('session_id', sessionId);
+
+  document.getElementById('statSaved').textContent = savedCount || 0;
+  document.getElementById('statLiked').textContent = likedCount || 0;
+
+  // Reset password button — email users lang
+  const actionsEl = document.getElementById('profileModalActions');
+  actionsEl.innerHTML = isEmail
+    ? `<button class="profile-reset-btn" id="resetPasswordBtn"><i class="fas fa-key"></i> Reset Password</button>`
+    : '';
+
+  if (isEmail) {
+    document.getElementById('resetPasswordBtn')?.addEventListener('click', async () => {
+      const { error } = await window.supabase.auth.resetPasswordForEmail(user.email);
+      if (!error) alert('Password reset email sent!');
+    });
+  }
+
+  // Delete account
+  document.getElementById('profileDeleteBtn')?.addEventListener('click', async () => {
+    const confirm = window.confirm('Are you sure? This cannot be undone.');
+    if (!confirm) return;
+    await window.supabase.auth.admin?.deleteUser(user.id);
+    await window.supabase.auth.signOut();
+    window.location.reload();
+  });
+
+  profileModal.classList.add('active');
+  profileModal.setAttribute('aria-hidden', 'false');
+}
+
+profileCloseBtn?.addEventListener('click', () => {
+  profileModal.classList.remove('active');
+  profileModal.setAttribute('aria-hidden', 'true');
+});
+
+async function handleProfileClick(e) {
+  e.preventDefault();
+  closeDropdowns();
+
+  const { data } = await window.supabase.auth.getSession();
+  const user = data?.session?.user;
+
+  if (!user) {
+    showAuthToast();
+    return;
+  }
+
+  openProfileModal();
+}
+
+function showAuthToast() {
+  const existing = document.getElementById('authToast');
+  if (existing) existing.remove();
+
+  const toast = document.createElement('div');
+  toast.id = 'authToast';
+  toast.innerHTML = `<i class="fas fa-lock"></i> <span>Create an account to access your profile!</span>`;
+  toast.style.cssText = `
+    position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+    background: #1a1a1a; color: white; padding: 14px 24px; border-radius: 10px;
+    z-index: 9999; border: 1px solid rgba(255,255,255,0.1);
+    font-family: 'Inter', sans-serif; font-size: 14px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    display: flex; align-items: center; gap: 10px;
+  `;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+myProfileBtn?.addEventListener('click', handleProfileClick);
+myProfileMobileBtn?.addEventListener('click', handleProfileClick);
+});
+
