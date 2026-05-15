@@ -58,8 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mobileUserBadge) mobileUserBadge.hidden = true;
     if (profileAvatar) profileAvatar.innerHTML = '<i class="fa-solid fa-user"></i>';
     if (mobileProfileAvatar) mobileProfileAvatar.innerHTML = '<i class="fa-solid fa-user"></i>';
-    if (profileName) profileName.textContent = isGuest ? 'Guest' : getDisplayName(user, isGuest);
-if (mobileProfileName) mobileProfileName.textContent = isGuest ? 'Guest' : getDisplayName(user, isGuest);
+    if (profileName) profileName.textContent = 'Guest';
+    if (mobileProfileName) mobileProfileName.textContent = 'Guest';
     if (profileDropdown) profileDropdown.hidden = true;
     if (mobileProfileDropdown) mobileProfileDropdown.hidden = true;
   }
@@ -514,13 +514,24 @@ async function openProfileModal() {
   }
 
   // Delete account
-  document.getElementById('profileDeleteBtn')?.addEventListener('click', async () => {
-    const confirm = window.confirm('Are you sure? This cannot be undone.');
-    if (!confirm) return;
-    await window.supabase.auth.admin?.deleteUser(user.id);
-    await window.supabase.auth.signOut();
-    window.location.reload();
-  });
+  const deleteBtn = document.getElementById('profileDeleteBtn');
+  if (deleteBtn) {
+    if (isGuest) {
+      deleteBtn.style.display = 'none'; // Guests can't delete accounts
+    } else {
+      deleteBtn.style.display = 'block';
+      deleteBtn.onclick = async () => {
+        const confirm = window.confirm('Are you sure? This cannot be undone.');
+        if (!confirm) return;
+        // Use RPC or edge function for non-admin user deletion if needed, but for now we sign out as a fallback
+        if (window.supabase.auth.admin) {
+           await window.supabase.auth.admin.deleteUser(user.id);
+        }
+        await window.supabase.auth.signOut();
+        window.location.reload();
+      };
+    }
+  }
 
   profileModal.classList.add('active');
   profileModal.setAttribute('aria-hidden', 'false');
