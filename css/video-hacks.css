@@ -99,6 +99,8 @@ body#video-hacks-page {
 
 .video-player {
   border-radius: 20px;
+  height: 690px;
+  width: 388px;
   height: 850px;
   width: 488px;
   object-fit: cover;
