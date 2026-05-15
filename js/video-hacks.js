@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
       container.innerHTML = `
         <div class="video-left-position">
           <div class="video-info">
+            <span class="video-category">${video.category || 'Basic'}</span>
             <h3 class="video-title">${video.title}</h3>
             <p class="video-description">${video.description || ''}</p>
           </div>

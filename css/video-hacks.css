@@ -90,6 +90,20 @@ body#video-hacks-page {
   padding: 10px 15px;
   margin-bottom: 60px; /* Leave space for native video controls */
   pointer-events: auto;
+  position: relative;
+}
+
+.video-category {
+  position: absolute;
+  top: -12px;
+  right: 10px;
+  background-color: #56e4f7;
+  color: #000;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
 }
 
 .video-title {
@@ -146,6 +160,15 @@ body#video-hacks-page {
   }
   .video-nav-fixed {
     display: none; /* Hide up/down nav on mobile for a cleaner look */
+  }
+}
+
+/* Large Desktop layout for title/description outside the video */
+@media (min-width: 1440px) {
+  .video-left-position {
+    left: -340px; /* Move it outside the video player on the left */
+    width: 320px; /* Give it a fixed width so it doesn't wrap awkwardly */
+    bottom: 20px; /* Align to the bottom like the buttons */
   }
 }
 
