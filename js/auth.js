@@ -48,8 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mobileUserBadge) mobileUserBadge.hidden = false;
     if (profileAvatar) profileAvatar.innerHTML = getAvatarHtml(user, isGuest);
     if (mobileProfileAvatar) mobileProfileAvatar.innerHTML = getAvatarHtml(user, isGuest);
-    if (profileName) profileName.textContent = isGuest ? '' : getDisplayName(user, isGuest);
-    if (mobileProfileName) mobileProfileName.textContent = isGuest ? '' : getDisplayName(user, isGuest);
+    if (profileName) profileName.textContent = '';
+    if (mobileProfileName) mobileProfileName.textContent = '';
   }
 
   function hideUserHeader() {
@@ -191,6 +191,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  document.getElementById('guestAuthBtn')?.addEventListener('click', () => {
+  // localStorage lang — walang Supabase anonymous account
+  window.guestSessionId = localStorage.getItem('caphacks_guest_session');
+  closeAuthModal();
+  const fakeGuest = { email: null, user_metadata: {}, app_metadata: {} };
+  showUserHeader(fakeGuest, true);
+});
+
   authForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
     if (!authForm || !authError) return;
@@ -230,7 +238,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (data?.user) {
   closeAuthModal();
-  await migrateGuestData(data.user.id);
+  const guestId = localStorage.getItem('caphacks_guest_session');
+  await migrateGuestData(data.user.id, guestId);
   await refreshAuthHeader();
   window.location.href = 'video-hacks.html';
 }
@@ -387,10 +396,12 @@ async function handleMyVideosClick(e) {
   e.preventDefault();
   closeDropdowns();
 
+  // Guest users — may guestSessionId pero walang Supabase session
+  const hasGuestSession = window.guestSessionId && window.guestSessionId.startsWith('guest_');
   const { data } = await window.supabase.auth.getSession();
   const user = data?.session?.user;
 
-  if (!user) {
+  if (!user && !hasGuestSession) {
     showAuthToast();
     return;
   }
@@ -400,6 +411,34 @@ async function handleMyVideosClick(e) {
 
 myVideosBtn?.addEventListener('click', handleMyVideosClick);
 myVideosMobileBtn?.addEventListener('click', handleMyVideosClick);
+
+// ==========================================
+  // COOKIE CONSENT
+  // ==========================================
+  function initCookieBanner() {
+    const banner = document.getElementById('cookieBanner');
+    const acceptBtn = document.getElementById('cookieAcceptBtn');
+    const declineBtn = document.getElementById('cookieDeclineBtn');
+
+    if (!banner) return;
+
+    const consent = localStorage.getItem('caphacks_cookie_consent');
+    if (consent) {
+      banner.classList.add('hidden');
+      return;
+    }
+
+    acceptBtn?.addEventListener('click', () => {
+      localStorage.setItem('caphacks_cookie_consent', 'accepted');
+      banner.classList.add('hidden');
+    });
+
+    declineBtn?.addEventListener('click', () => {
+      banner.classList.add('hidden');
+    });
+  }
+
+  initCookieBanner();
 
   refreshAuthHeader();
 
