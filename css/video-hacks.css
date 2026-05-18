@@ -47,12 +47,16 @@ body#video-hacks-page {
 
 .video-grid {
   height: 100vh;
-  padding-top: 62px; /* height ng navbar mo */
+  padding-top: 62px;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
+  scroll-snap-stop: always;
   scrollbar-width: none;
   -ms-overflow-style: none;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .video-grid::-webkit-scrollbar {
@@ -68,10 +72,11 @@ body#video-hacks-page {
   align-items: center;
   position: relative;
   margin: 0 auto;
-  height: calc(100vh - 62px); /* subtract navbar height */
+  height: calc(100vh - 62px);
   width: 100%;
-  max-width: 450px; /* YouTube Shorts style max width */
+  max-width: 450px;
   scroll-snap-align: start;
+  flex-shrink: 0;
 }
 
 .video-left-position {
@@ -119,20 +124,20 @@ body#video-hacks-page {
 }
 
 .video-mid-position {
-  width: 120%;
-  height: 950px;
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   background: #000;
   border-radius: 12px;
-  overflow: hidden;
-}
+  overflow: hidden; /* ← dito na lang, para sa video lang */
+} 
 
 .video-player {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .video-right-position {

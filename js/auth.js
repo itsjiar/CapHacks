@@ -257,8 +257,12 @@ document.addEventListener('DOMContentLoaded', () => {
   window.supabase.auth.onAuthStateChange(async (_event, session) => {
   const user = session?.user;
 
+  if (_event === 'SIGNED_OUT') {
+    hideUserHeader();
+    return;
+  }
+
   if (user && user.email !== null) {
-    // Hintayin muna na ready yung guestSessionId
     const guestId = localStorage.getItem('caphacks_guest_session');
     if (guestId && guestId.startsWith('guest_')) {
       await migrateGuestData(user.id, guestId);
@@ -267,8 +271,6 @@ document.addEventListener('DOMContentLoaded', () => {
     showUserHeader(user, false);
   } else if (user) {
     showUserHeader(user, true);
-  } else {
-    hideUserHeader();
   }
 });
 
@@ -370,6 +372,11 @@ async function openMyVideosModal() {
         v.currentTime = 0;
       });
 
+      // Click — open saved feed
+      card.addEventListener('click', () => {
+        openSavedFeed(videos, video.id);
+      });
+
       grid.appendChild(card);
     });
   }
@@ -382,6 +389,21 @@ myVideosCloseBtn?.addEventListener('click', () => {
   myVideosModal.classList.remove('active');
   myVideosModal.setAttribute('aria-hidden', 'true');
 });
+
+function openSavedFeed(videos, startId) {
+  // Close My Videos modal
+  myVideosModal.classList.remove('active');
+  myVideosModal.setAttribute('aria-hidden', 'true');
+
+  // Store saved videos sa window para ma-access ng video-hacks.js
+  window.savedFeedVideos = videos;
+  window.savedFeedStartId = startId;
+
+  // Trigger render ng saved feed
+  if (typeof renderSavedFeed === 'function') {
+    renderSavedFeed(videos, startId);
+  }
+}
 
 async function handleMyVideosClick(e) {
   e.preventDefault();
