@@ -14,6 +14,69 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
+    // ==========================================
+// SEARCH
+// ==========================================
+async function searchTutorials(keyword) {
+  if (!window.supabase) return;
+
+  const query = keyword.trim().toLowerCase();
+
+  if (!query) {
+    loadTutorials(); // Kung blank, ibalik lahat
+    return;
+  }
+
+  const { data: videos, error } = await window.supabase
+    .from('tutorials')
+    .select('*')
+    .or(`title.ilike.%${query}%,description.ilike.%${query}%,category.ilike.%${query}%,tags.ilike.%${query}%`)
+    .order('created_at', { ascending: true });
+
+  if (error) return console.error('Search error:', error);
+
+  if (!videos || videos.length === 0) {
+  const grid = document.getElementById('videoGrid');
+  grid.innerHTML = `
+    <div class="search-empty-state">
+      <i class="fas fa-search"></i>
+      <p>No results for "${keyword}"</p>
+    </div>
+  `;
+  return;
+}
+
+  renderVideos(videos);
+}
+
+// Search bar event listener
+const searchInput = document.getElementById('search-input');
+const searchButton = document.querySelector('.search-button');
+
+let searchTimeout;
+
+// Mag-search habang nagta-type (may delay para hindi mabilis)
+searchInput?.addEventListener('input', (e) => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    searchTutorials(e.target.value);
+  }, 400);
+});
+
+// Mag-search pag pinindot ang Enter
+searchInput?.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    clearTimeout(searchTimeout);
+    searchTutorials(e.target.value);
+  }
+});
+
+// Mag-search pag pinindot ang search button
+searchButton?.addEventListener('click', () => {
+  clearTimeout(searchTimeout);
+  searchTutorials(searchInput?.value || '');
+});
+
     const { data: videos, error } = await window.supabase
       .from('tutorials')
       .select('*')
@@ -39,6 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
       container.innerHTML = `
         <div class="video-left-position">
           <div class="video-info">
+            <span class="video-category">${video.category || 'Basic'}</span>
             <h3 class="video-title">${video.title}</h3>
             <p class="video-description">${video.description || ''}</p>
           </div>
@@ -83,6 +147,97 @@ observer.observe(container);
     initNav();
     checkAllInteractions(videos);
   }
+
+  function renderSavedFeed(videos, startId) {
+  const grid = document.getElementById('videoGrid');
+  grid.innerHTML = '';
+
+  // Add back button
+  const backBtn = document.createElement('button');
+  backBtn.id = 'savedFeedBackBtn';
+  backBtn.innerHTML = '<i class="fas fa-arrow-left"></i> Back to All Videos';
+  backBtn.style.cssText = `
+    position: fixed;
+    top: 80px;
+    left: 20px;
+    z-index: 100;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(10px);
+  `;
+  backBtn.addEventListener('click', () => {
+    backBtn.remove();
+    loadTutorials();
+  });
+  document.body.appendChild(backBtn);
+
+  // Render saved videos only
+  videos.forEach((video) => {
+    const container = document.createElement('div');
+    container.classList.add('video-hacks-container');
+    container.dataset.id = video.id;
+
+    container.innerHTML = `
+      <div class="video-left-position">
+        <div class="video-info">
+          <h3 class="video-title">${video.title}</h3>
+          <p class="video-description">${video.description || ''}</p>
+        </div>
+      </div>
+      <div class="video-mid-position">
+        <video class="video-player" controls>
+          <source src="${video.video_url}" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <div class="video-right-position">
+        <div class="action-buttons">
+          <button class="rate-button" data-id="${video.id}"><i class="fas fa-star"></i></button>
+          <button class="comment-button" data-id="${video.id}"><i class="fas fa-comment"></i></button>
+          <button class="save-button" data-id="${video.id}"><i class="fas fa-bookmark"></i></button>
+        </div>
+      </div>
+    `;
+
+    grid.appendChild(container);
+
+    // Auto mute/play observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const videoEl = entry.target.querySelector('.video-player');
+        if (!videoEl) return;
+        if (entry.isIntersecting) {
+          videoEl.muted = false;
+          videoEl.play();
+        } else {
+          videoEl.muted = true;
+          videoEl.pause();
+        }
+      });
+    }, { threshold: 0.6 });
+
+    observer.observe(container);
+  });
+
+  setupAllButtons();
+  checkAllInteractions(videos);
+  initNav();
+
+  // Scroll sa na-click na video
+  setTimeout(() => {
+    const target = document.querySelector(`[data-id="${startId}"]`);
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 100);
+}
 
   // ==========================================
   // 3. BUTTONS — Rate, Comment, Save
@@ -293,6 +448,7 @@ document.getElementById('uploadSubmitBtn')?.addEventListener('click', async () =
   const description = document.getElementById('uploadDescription').value.trim();
   const category = document.getElementById('uploadCategory').value;
   const file = document.getElementById('uploadFile').files[0];
+  const tags = document.getElementById('uploadTags').value.trim();
   const errorEl = document.getElementById('uploadError');
 
   if (!title || !file) {
@@ -328,12 +484,13 @@ document.getElementById('uploadSubmitBtn')?.addEventListener('click', async () =
 
   // Save to tutorials table
   const { error: dbError } = await window.supabase.from('tutorials').insert({
-    title,
-    description,
-    category,
-    video_url: videoUrl,
-    video_filename: fileName,
-  });
+  title,
+  description,
+  category,
+  tags,
+  video_url: videoUrl,
+  video_filename: fileName,
+});
 
   if (dbError) {
     errorEl.textContent = 'DB error: ' + dbError.message;

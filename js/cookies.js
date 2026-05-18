@@ -19,8 +19,10 @@ async function initSessionId() {
   try {
     const { data } = await window.supabase.auth.getSession();
     const user = data?.session?.user;
+
     if (user && user.email !== null) {
       window.guestSessionId = user.id;
+      console.log('Session updated to user ID:', user.id);
     }
   } catch (err) {
     console.warn('Session check failed:', err);

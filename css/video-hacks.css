@@ -47,12 +47,16 @@ body#video-hacks-page {
 
 .video-grid {
   height: 100vh;
-  padding-top: 62px; /* height ng navbar mo */
+  padding-top: 62px;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
+  scroll-snap-stop: always;
   scrollbar-width: none;
   -ms-overflow-style: none;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .video-grid::-webkit-scrollbar {
@@ -68,10 +72,11 @@ body#video-hacks-page {
   align-items: center;
   position: relative;
   margin: 0 auto;
-  height: calc(100vh - 62px); /* subtract navbar height */
+  height: calc(100vh - 62px);
   width: 100%;
-  max-width: 450px; /* YouTube Shorts style max width */
+  max-width: 450px;
   scroll-snap-align: start;
+  flex-shrink: 0;
 }
 
 .video-left-position {
@@ -90,6 +95,20 @@ body#video-hacks-page {
   padding: 10px 15px;
   margin-bottom: 60px; /* Leave space for native video controls */
   pointer-events: auto;
+  position: relative;
+}
+
+.video-category {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  background-color: #56e4f793;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 5px;
+  text-transform: uppercase;
 }
 
 .video-title {
@@ -112,8 +131,8 @@ body#video-hacks-page {
   align-items: center;
   background: #000;
   border-radius: 12px;
-  overflow: hidden;
-}
+  overflow: hidden; /* ← dito na lang, para sa video lang */
+} 
 
 .video-player {
   width: 100%;
@@ -123,8 +142,8 @@ body#video-hacks-page {
 
 .video-right-position {
   position: absolute;
-  bottom: 20px;
-  right: -60px; /* Place buttons outside on desktop */
+  bottom: 80px;
+  right: -70px; /* Place buttons outside on desktop */
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -149,6 +168,15 @@ body#video-hacks-page {
   }
 }
 
+/* Large Desktop layout for title/description outside the video */
+@media (min-width: 1440px) {
+  .video-left-position {
+    left: -340px; /* Move it outside the video player on the left */
+    width: 320px; /* Give it a fixed width so it doesn't wrap awkwardly */
+    bottom: 20px; /* Align to the bottom like the buttons */
+  }
+}
+
 /* ==========================================
    ACTION BUTTONS
 ========================================== */
@@ -161,8 +189,8 @@ body#video-hacks-page {
 
 .rate-button,
 .comment-button {
-  padding: 12px 12px;
-  background-color: rgba(0, 0, 0, 0.4);
+  padding: 26px 26px;
+  background-color: rgba(156, 156, 156, 0.185);
   border: none;
   color: white;
   border-radius: 50%;
@@ -175,8 +203,8 @@ body#video-hacks-page {
 }
 
 .save-button {
-  padding: 12px 12px;
-  background-color: rgba(0, 0, 0, 0.4);
+  padding: 26px 26px;
+  background-color: rgba(156, 156, 156, 0.185);
   border: none;
   color: white;
   border-radius: 50%;
@@ -304,4 +332,26 @@ i {
 .login-error#uploadError {
   font-size: 13px;
   text-align: center;
+}
+
+.search-empty-state {
+  color: white;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.4;
+  grid-column: 1 / -1;
+}
+
+.search-empty-state i {
+  font-size: 40px;
+  margin-bottom: 16px;
+}
+
+.search-empty-state p {
+  font-size: 16px;
 }
