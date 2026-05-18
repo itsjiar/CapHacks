@@ -14,6 +14,69 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
+    // ==========================================
+// SEARCH
+// ==========================================
+async function searchTutorials(keyword) {
+  if (!window.supabase) return;
+
+  const query = keyword.trim().toLowerCase();
+
+  if (!query) {
+    loadTutorials(); // Kung blank, ibalik lahat
+    return;
+  }
+
+  const { data: videos, error } = await window.supabase
+    .from('tutorials')
+    .select('*')
+    .or(`title.ilike.%${query}%,description.ilike.%${query}%,category.ilike.%${query}%,tags.ilike.%${query}%`)
+    .order('created_at', { ascending: true });
+
+  if (error) return console.error('Search error:', error);
+
+  if (!videos || videos.length === 0) {
+  const grid = document.getElementById('videoGrid');
+  grid.innerHTML = `
+    <div class="search-empty-state">
+      <i class="fas fa-search"></i>
+      <p>No results for "${keyword}"</p>
+    </div>
+  `;
+  return;
+}
+
+  renderVideos(videos);
+}
+
+// Search bar event listener
+const searchInput = document.getElementById('search-input');
+const searchButton = document.querySelector('.search-button');
+
+let searchTimeout;
+
+// Mag-search habang nagta-type (may delay para hindi mabilis)
+searchInput?.addEventListener('input', (e) => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    searchTutorials(e.target.value);
+  }, 400);
+});
+
+// Mag-search pag pinindot ang Enter
+searchInput?.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    clearTimeout(searchTimeout);
+    searchTutorials(e.target.value);
+  }
+});
+
+// Mag-search pag pinindot ang search button
+searchButton?.addEventListener('click', () => {
+  clearTimeout(searchTimeout);
+  searchTutorials(searchInput?.value || '');
+});
+
     const { data: videos, error } = await window.supabase
       .from('tutorials')
       .select('*')
@@ -294,6 +357,7 @@ document.getElementById('uploadSubmitBtn')?.addEventListener('click', async () =
   const description = document.getElementById('uploadDescription').value.trim();
   const category = document.getElementById('uploadCategory').value;
   const file = document.getElementById('uploadFile').files[0];
+  const tags = document.getElementById('uploadTags').value.trim();
   const errorEl = document.getElementById('uploadError');
 
   if (!title || !file) {
@@ -329,12 +393,13 @@ document.getElementById('uploadSubmitBtn')?.addEventListener('click', async () =
 
   // Save to tutorials table
   const { error: dbError } = await window.supabase.from('tutorials').insert({
-    title,
-    description,
-    category,
-    video_url: videoUrl,
-    video_filename: fileName,
-  });
+  title,
+  description,
+  category,
+  tags,
+  video_url: videoUrl,
+  video_filename: fileName,
+});
 
   if (dbError) {
     errorEl.textContent = 'DB error: ' + dbError.message;

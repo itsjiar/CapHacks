@@ -95,14 +95,14 @@ body#video-hacks-page {
 
 .video-category {
   position: absolute;
-  top: -12px;
-  right: 10px;
-  background-color: #56e4f7;
-  color: #000;
+  top: 7px;
+  right: 7px;
+  background-color: #56e4f793;
+  color: #ffffff;
   font-size: 11px;
   font-weight: bold;
   padding: 4px 8px;
-  border-radius: 12px;
+  border-radius: 5px;
   text-transform: uppercase;
 }
 
@@ -119,8 +119,8 @@ body#video-hacks-page {
 }
 
 .video-mid-position {
-  width: 100%;
-  height: 100%;
+  width: 120%;
+  height: 950px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -132,7 +132,7 @@ body#video-hacks-page {
 .video-player {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .video-right-position {
@@ -327,4 +327,26 @@ i {
 .login-error#uploadError {
   font-size: 13px;
   text-align: center;
+}
+
+.search-empty-state {
+  color: white;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.4;
+  grid-column: 1 / -1;
+}
+
+.search-empty-state i {
+  font-size: 40px;
+  margin-bottom: 16px;
+}
+
+.search-empty-state p {
+  font-size: 16px;
 }
