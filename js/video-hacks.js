@@ -1,8 +1,3 @@
-const ADMIN_EMAILS = [
-  'jrsabalbero@gmail.com',      // ← palitan mo ng actual email mo
-  'ghercielovealoha16@gmail.com'     // ← palitan mo ng second admin email
-];
-
 document.addEventListener('DOMContentLoaded', function () {
 
   // ==========================================
@@ -389,8 +384,9 @@ async function checkIfAdmin() {
   const user = data?.session?.user;
   if (!user) return;
 
-  const email = user.email;
-  if (ADMIN_EMAILS.includes(email)) {
+  // Role-based authorization: checks app_metadata for 'admin' role.
+  // This requires the Supabase backend to be configured to assign roles to users.
+  if (user.app_metadata?.role === 'admin') {
     showAdminButton();
   }
 }
