@@ -229,10 +229,31 @@ async function checkIfAdmin() {
   const user = data?.session?.user;
   if (!user) return;
 
-  // Role-based authorization: checks app_metadata for 'admin' role.
-  // This requires the Supabase backend to be configured to assign roles to users.
+  // Hashed admin emails for secure identification without plain text exposure
+  const ADMIN_HASHES = [
+    'f2cee62d1318959268a7497bd8a44bc29ad3f96698ed5670b46ec795b75e287a',
+    '7fa42d2710606aae7e3ae729b4915ecdef29e93c6d28010b42180d8523f05b71'
+  ];
+
+  async function sha256(message) {
+    const msgBuffer = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  // 1. Role-based authorization (preferred): checks app_metadata for 'admin' role.
   if (user.app_metadata?.role === 'admin') {
     showAdminButton();
+    return;
+  }
+
+  // 2. Secure email check: checks hashed email to restore functionality without exposing PII.
+  if (user.email) {
+    const emailHash = await sha256(user.email);
+    if (ADMIN_HASHES.includes(emailHash)) {
+      showAdminButton();
+    }
   }
 }
 
