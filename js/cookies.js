@@ -7,14 +7,12 @@ function getOrCreateSessionId() {
   return sessionId;
 }
 
-// Default muna — guest session
-window.guestSessionId = getOrCreateSessionId();
-console.log('Session ID:', window.guestSessionId);
-
-// I-update pag ready na ang Supabase + may logged-in user
+// Update pag may logged-in user
 async function initSessionId() {
-  if (!window.supabase || !window.supabase.auth) {
-    setTimeout(initSessionId, 100);
+  if (typeof window === 'undefined' || !window.supabase || !window.supabase.auth) {
+    if (typeof window !== 'undefined') {
+      setTimeout(initSessionId, 100);
+    }
     return;
   }
 
@@ -31,4 +29,12 @@ async function initSessionId() {
   }
 }
 
-initSessionId();
+if (typeof window !== 'undefined') {
+  window.guestSessionId = getOrCreateSessionId();
+  console.log('Session ID:', window.guestSessionId);
+  initSessionId();
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { getOrCreateSessionId };
+}
