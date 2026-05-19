@@ -215,6 +215,40 @@
   </div>
 </div>
 
+  <!-- Comment Side Panel -->
+<div class="comment-panel" id="commentPanel">
+  <div class="comment-panel-header">
+    <h3>Comments</h3>
+    <button class="comment-panel-close" id="commentPanelClose">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <!-- Comment Input -->
+  <div class="comment-input-area" id="commentInputArea">
+    <textarea 
+      id="commentInput" 
+      placeholder="Write a comment..." 
+      rows="2"
+    ></textarea>
+    <button class="comment-send-btn" id="commentSendBtn">
+      <i class="fas fa-paper-plane"></i> Send
+    </button>
+    <p class="comment-guest-msg" id="commentGuestMsg" style="display:none;">
+      <i class="fas fa-lock"></i> 
+      <a href="#" id="commentLoginLink">Create an account</a> to comment.
+    </p>
+  </div>
+
+  <!-- Comments List -->
+  <div class="comments-list" id="commentsList">
+    <p class="comments-loading">Loading comments...</p>
+  </div>
+</div>
+
+<!-- Panel Overlay -->
+<div class="comment-panel-overlay" id="commentPanelOverlay"></div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/cookies.js"></script>
