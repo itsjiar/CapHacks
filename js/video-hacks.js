@@ -570,28 +570,34 @@ document.addEventListener('DOMContentLoaded', function () {
   }
  
   // Send comment
-  document.getElementById('commentSendBtn')?.addEventListener('click', async () => {
-    const input = document.getElementById('commentInput');
-    const text = input.value.trim();
-    if (!text || !activeTutorialId) return;
- 
-    const { data } = await window.supabase.auth.getSession();
-    const user = data?.session?.user;
-    if (!user) return;
- 
-    const { error } = await window.supabase.from('comments').insert({
-      tutorial_id: activeTutorialId,
-      user_id: user.id,
-      comment_text: text
+  const commentSendBtn = document.getElementById('commentSendBtn');
+  if (commentSendBtn) {
+    commentSendBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('commentInput');
+      const text = input.value.trim();
+      if (!text || !activeTutorialId) return;
+
+      const { data } = await window.supabase.auth.getSession();
+      const user = data?.session?.user;
+      if (!user) return;
+
+      const { error } = await window.supabase.from('comments').insert({
+        tutorial_id: activeTutorialId,
+        user_id: user.id,
+        comment_text: text
+      });
+
+      if (!error) {
+        input.value = '';
+        loadComments(activeTutorialId);
+        const countEl = document.querySelector(`.comment-count[data-id="${activeTutorialId}"]`);
+        if (countEl) countEl.textContent = parseInt(countEl.textContent || 0) + 1;
+      } else {
+        console.error("Error inserting comment:", error);
+      }
     });
- 
-    if (!error) {
-      input.value = '';
-      loadComments(activeTutorialId);
-      const countEl = document.querySelector(`.comment-count[data-id="${activeTutorialId}"]`);
-      if (countEl) countEl.textContent = parseInt(countEl.textContent || 0) + 1;
-    }
-  });
+  }
  
   document.getElementById('commentPanelClose')?.addEventListener('click', closeCommentPanel);
   document.getElementById('commentPanelOverlay')?.addEventListener('click', closeCommentPanel);
