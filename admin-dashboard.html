@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | CapHacks</title>
+  <link rel="icon" type="image/x-icon" href="images/icons/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/general.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body id="admin-dashboard-page" style="background-color: #0f0f0f; color: white; display: flex; height: 100vh; overflow: hidden; margin: 0;">
+
+  <!-- Sidebar -->
+  <aside class="dashboard-sidebar">
+    <div class="sidebar-header">
+      <a href="index.html"><img src="images/caphacks-logo.svg" alt="CapHacks Logo" class="sidebar-logo"></a>
+      <button class="mobile-sidebar-close" id="sidebarCloseBtn"><i class="fas fa-times"></i></button>
+    </div>
+
+    <div class="sidebar-user-info">
+      <div class="avatar" id="dashAvatar"><i class="fas fa-user-shield"></i></div>
+      <div class="info">
+        <h3 id="dashName">Admin</h3>
+        <p id="dashEmail">Loading...</p>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-target="uploadTutorial">
+        <i class="fas fa-upload"></i> Upload Tutorial
+      </button>
+      <button class="nav-item" data-target="manageTutorials">
+        <i class="fas fa-list"></i> Manage Tutorials
+      </button>
+      <button class="nav-item" data-target="manageUserUploads">
+        <i class="fas fa-users-viewfinder"></i> User Uploads
+      </button>
+      <button class="nav-item" data-target="analytics">
+        <i class="fas fa-chart-pie"></i> Analytics
+      </button>
+      <a href="video-hacks.html" class="nav-item back-link">
+        <i class="fas fa-arrow-left"></i> Back to Live Site
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="sign-out-btn" id="dashSignOutBtn"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="dashboard-main">
+    <header class="dashboard-header-mobile">
+      <button class="mobile-sidebar-open" id="sidebarOpenBtn"><i class="fas fa-bars"></i></button>
+      <h2>Admin Dashboard</h2>
+    </header>
+
+    <div class="dashboard-content">
+
+      <!-- Upload Tutorial Section -->
+      <section id="uploadTutorial" class="dashboard-section active">
+        <h2 class="section-title">Upload New Tutorial</h2>
+
+        <div class="admin-form-container">
+          <div class="upload-form" style="max-width: 500px; background: #1a1a1a; padding: 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+            <label>
+              <span style="color:white;">Title</span>
+              <input type="text" id="uploadTitle" placeholder="e.g. 01 // Smooth Velocity" required style="background: rgba(255,255,255,0.05); color:white; border-color: rgba(255,255,255,0.1);">
+            </label>
+
+            <label>
+              <span style="color:white;">Description</span>
+              <textarea id="uploadDescription" placeholder="Short description ng tutorial..." rows="3" style="background: rgba(255,255,255,0.05); color:white; border-color: rgba(255,255,255,0.1);"></textarea>
+            </label>
+
+            <label>
+              <span style="color:white;">Category</span>
+              <select id="uploadCategory" style="background: rgba(255,255,255,0.05); color:white; border-color: rgba(255,255,255,0.1);">
+                <option value="Basic" style="color:black;">Basic</option>
+                <option value="Intermediate" style="color:black;">Intermediate</option>
+                <option value="Advance" style="color:black;">Advance</option>
+              </select>
+            </label>
+
+            <label>
+              <span style="color:white;">Tags <small style="color:#888;">(comma separated)</small></span>
+              <input type="text" id="uploadTags" placeholder="e.g. smooth, velocity, beginner" style="background: rgba(255,255,255,0.05); color:white; border-color: rgba(255,255,255,0.1);">
+           </label>
+
+            <label>
+              <span style="color:white;">Video File</span>
+              <input type="file" id="uploadFile" accept="video/mp4,video/mov" style="background: rgba(255,255,255,0.05); color:white; border-color: rgba(255,255,255,0.1);">
+            </label>
+
+            <div id="uploadProgress" style="display:none; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px;">
+              <p id="uploadStatus" style="color: white; margin: 0 0 10px 0;">Uploading...</p>
+              <progress id="uploadBar" value="0" max="100" style="width:100%"></progress>
+            </div>
+
+            <button class="colored-btn" id="uploadSubmitBtn" style="margin-top: 20px;">Upload Tutorial</button>
+            <div class="login-error" id="uploadError" style="margin-top: 10px;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Manage Tutorials Section -->
+      <section id="manageTutorials" class="dashboard-section">
+        <h2 class="section-title">Manage Tutorials</h2>
+        <div class="grid-container" id="manageGrid">
+          <p class="loading-text">Loading tutorials...</p>
+        </div>
+      </section>
+
+      <!-- Manage User Uploads -->
+      <section id="manageUserUploads" class="dashboard-section">
+        <h2 class="section-title">User Proof of Learning</h2>
+        <div class="grid-container" id="userUploadsGrid">
+          <p class="loading-text">Loading user uploads...</p>
+        </div>
+      </section>
+
+      <!-- Analytics Section -->
+      <section id="analytics" class="dashboard-section">
+        <h2 class="section-title">Analytics Dashboard</h2>
+
+        <div class="analytics-grid">
+          <div class="stat-card">
+            <span class="stat-card-title">Total Tutorials</span>
+            <span class="stat-card-value" id="statTotal">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card-title">Basic</span>
+            <span class="stat-card-value" id="statBasic">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card-title">Intermediate</span>
+            <span class="stat-card-value" id="statIntermediate">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card-title">Advance</span>
+            <span class="stat-card-value" id="statAdvance">0</span>
+          </div>
+          <div class="stat-card" style="border-color: #ff2d55;">
+            <span class="stat-card-title">User Uploads</span>
+            <span class="stat-card-value" id="statUserUploads">0</span>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.js"></script>
+  <script src="js/globals.js"></script>
+  <script src="js/cookies.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/admin-dashboard.js"></script>
+</body>
+</html>
