@@ -482,7 +482,7 @@ document.addEventListener('DOMContentLoaded', function () {
  
     const { data: sessionData } = await window.supabase.auth.getSession();
     const currentUser = sessionData?.session?.user;
-    const isAdmin = currentUser && typeof ADMIN_EMAILS !== 'undefined' && ADMIN_EMAILS.includes(currentUser.email);
+    const isAdmin = currentUser && window.isAdminUser ? window.isAdminUser(currentUser) : false;
  
     list.innerHTML = '';
  
@@ -519,7 +519,7 @@ document.addEventListener('DOMContentLoaded', function () {
           </button>
         `;
       }
-      if (isOwner) {
+      if (isOwner || isAdmin) {
         actionsHtml += `
           <button class="comment-action-btn comment-delete-btn" data-comment-id="${comment.id}" style="color: #ff2d55;">
             <i class="fas fa-trash"></i> Delete
@@ -566,7 +566,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelectorAll('.comment-delete-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
-        if (!confirm("Are you sure you want to delete your comment?")) return;
+        if (!confirm("Are you sure you want to delete this comment?")) return;
         const commentId = btn.dataset.commentId;
         const { error } = await window.supabase.from('comments').delete().eq('id', commentId);
 
@@ -614,7 +614,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const { data } = await window.supabase.auth.getSession();
       const user = data?.session?.user;
-      if (!user) return;
+
+      // Prevent guest users or unauthenticated users from commenting
+      if (!user || user.email === null) {
+        alert("Please log in with an email or Google account to post a comment.");
+        return;
+      }
 
       const { error } = await window.supabase.from('comments').insert({
         tutorial_id: activeTutorialId,
@@ -652,7 +657,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const user = data?.session?.user;
     if (!user) return;
  
-    if (typeof ADMIN_EMAILS !== 'undefined' && ADMIN_EMAILS.includes(user.email)) {
+    if (window.isAdminUser && window.isAdminUser(user)) {
       showAdminButton();
     }
   }

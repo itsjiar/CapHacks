@@ -50,6 +50,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mobileProfileAvatar) mobileProfileAvatar.innerHTML = getAvatarHtml(user, isGuest);
     if (profileName) profileName.textContent = isGuest ? '' : getDisplayName(user, isGuest);
     if (mobileProfileName) mobileProfileName.textContent = isGuest ? '' : getDisplayName(user, isGuest);
+
+    const myDashboardBtn = document.getElementById('myDashboardBtn');
+    if (myDashboardBtn) {
+      myDashboardBtn.style.display = 'inline-block';
+      if (isGuest || user.email === null) {
+        myDashboardBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          alert('You need to log in or create an account to use the dashboard.');
+        });
+      } else {
+        const isAdmin = window.isAdminUser ? window.isAdminUser(user) : false;
+        myDashboardBtn.href = isAdmin ? 'admin-dashboard.html' : 'user-dashboard.html';
+      }
+    }
   }
 
   function hideUserHeader() {
