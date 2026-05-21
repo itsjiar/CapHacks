@@ -482,7 +482,7 @@ document.addEventListener('DOMContentLoaded', function () {
  
     const { data: sessionData } = await window.supabase.auth.getSession();
     const currentUser = sessionData?.session?.user;
-    const isAdmin = currentUser && ADMIN_EMAILS.includes(currentUser.email);
+    const isAdmin = currentUser && typeof ADMIN_EMAILS !== 'undefined' && ADMIN_EMAILS.includes(currentUser.email);
  
     list.innerHTML = '';
  
@@ -509,10 +509,25 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
       `).join('') || '';
  
-      const replyBtnHtml = isAdmin ? `
-        <button class="comment-reply-btn" data-comment-id="${comment.id}">
-          <i class="fas fa-reply"></i> Reply
-        </button>
+      const isOwner = currentUser && currentUser.id === comment.user_id;
+
+      let actionsHtml = '';
+      if (isAdmin) {
+        actionsHtml += `
+          <button class="comment-action-btn comment-reply-btn" data-comment-id="${comment.id}">
+            <i class="fas fa-reply"></i> Reply
+          </button>
+        `;
+      }
+      if (isOwner) {
+        actionsHtml += `
+          <button class="comment-action-btn comment-delete-btn" data-comment-id="${comment.id}" style="color: #ff2d55;">
+            <i class="fas fa-trash"></i> Delete
+          </button>
+        `;
+      }
+
+      const replyInputHtml = isAdmin ? `
         <div class="reply-input-area" id="replyArea-${comment.id}" style="display:none;">
           <textarea class="reply-input" placeholder="Write a reply..." rows="2"></textarea>
           <button class="reply-send-btn" data-comment-id="${comment.id}">Send</button>
@@ -530,7 +545,10 @@ document.addEventListener('DOMContentLoaded', function () {
             <span class="comment-name">${name}</span>
             <span class="comment-date">${date}</span>
             <p class="comment-text">${comment.comment_text}</p>
-            ${replyBtnHtml}
+            <div class="comment-actions">
+              ${actionsHtml}
+            </div>
+            ${replyInputHtml}
           </div>
         </div>
         <div class="comment-replies">${repliesHtml}</div>
@@ -543,6 +561,22 @@ document.addEventListener('DOMContentLoaded', function () {
       btn.addEventListener('click', () => {
         const area = document.getElementById(`replyArea-${btn.dataset.commentId}`);
         area.style.display = area.style.display === 'none' ? 'block' : 'none';
+      });
+    });
+
+    document.querySelectorAll('.comment-delete-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm("Are you sure you want to delete your comment?")) return;
+        const commentId = btn.dataset.commentId;
+        const { error } = await window.supabase.from('comments').delete().eq('id', commentId);
+
+        if (!error) {
+           loadComments(tutorialId);
+           const countEl = document.querySelector(`.comment-count[data-id="${tutorialId}"]`);
+           if (countEl) countEl.textContent = Math.max(0, parseInt(countEl.textContent || 0) - 1);
+        } else {
+           alert("Failed to delete comment. Make sure RLS is configured correctly.");
+        }
       });
     });
  
@@ -618,7 +652,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const user = data?.session?.user;
     if (!user) return;
  
-    if (ADMIN_EMAILS.includes(user.email)) {
+    if (typeof ADMIN_EMAILS !== 'undefined' && ADMIN_EMAILS.includes(user.email)) {
       showAdminButton();
     }
   }
@@ -627,9 +661,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const existing = document.getElementById('adminUploadBtn');
     if (existing) return;
  
-    const btn = document.createElement('button');
+    const btn = document.createElement('a');
     btn.id = 'adminUploadBtn';
-    btn.innerHTML = '<i class="fas fa-plus"></i>';
+    btn.href = 'admin-dashboard.html';
+    btn.innerHTML = '<i class="fas fa-cog"></i>';
     btn.style.cssText = `
       position: fixed; bottom: 40px; right: 90px;
       width: 52px; height: 52px; border-radius: 50%;
@@ -637,8 +672,8 @@ document.addEventListener('DOMContentLoaded', function () {
       font-size: 20px; cursor: pointer; z-index: 100;
       display: flex; align-items: center; justify-content: center;
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      text-decoration: none;
     `;
-    btn.addEventListener('click', openUploadModal);
     document.body.appendChild(btn);
   }
  

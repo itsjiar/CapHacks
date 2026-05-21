@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard | CapHacks</title>
+  <link rel="icon" type="image/x-icon" href="images/icons/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/general.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body id="user-dashboard-page" style="background-color: #0f0f0f; color: white; display: flex; height: 100vh; overflow: hidden; margin: 0;">
+
+  <!-- Sidebar -->
+  <aside class="dashboard-sidebar">
+    <div class="sidebar-header">
+      <a href="index.html"><img src="images/caphacks-logo.svg" alt="CapHacks Logo" class="sidebar-logo"></a>
+      <button class="mobile-sidebar-close" id="sidebarCloseBtn"><i class="fas fa-times"></i></button>
+    </div>
+
+    <div class="sidebar-user-info">
+      <div class="avatar" id="dashAvatar"><i class="fas fa-user"></i></div>
+      <div class="info">
+        <h3 id="dashName">Loading...</h3>
+        <p id="dashEmail"></p>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-target="likedVideos">
+        <i class="fas fa-heart"></i> Liked Videos
+      </button>
+      <button class="nav-item" data-target="savedVideos">
+        <i class="fas fa-bookmark"></i> Saved Videos
+      </button>
+      <button class="nav-item" data-target="myUploads">
+        <i class="fas fa-video"></i> My Uploads
+      </button>
+      <a href="video-hacks.html" class="nav-item back-link">
+        <i class="fas fa-arrow-left"></i> Back to Tutorials
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="sign-out-btn" id="dashSignOutBtn"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="dashboard-main">
+    <header class="dashboard-header-mobile">
+      <button class="mobile-sidebar-open" id="sidebarOpenBtn"><i class="fas fa-bars"></i></button>
+      <h2>User Dashboard</h2>
+    </header>
+
+    <div class="dashboard-content">
+
+      <!-- Liked Videos Section -->
+      <section id="likedVideos" class="dashboard-section active">
+        <h2 class="section-title">Liked Videos</h2>
+        <div class="grid-container" id="likedGrid">
+          <p class="loading-text">Loading liked videos...</p>
+        </div>
+      </section>
+
+      <!-- Saved Videos Section -->
+      <section id="savedVideos" class="dashboard-section">
+        <h2 class="section-title">Saved Videos</h2>
+        <div class="grid-container" id="savedGrid">
+          <p class="loading-text">Loading saved videos...</p>
+        </div>
+      </section>
+
+      <!-- My Uploads Section (Proof of Learning) -->
+      <section id="myUploads" class="dashboard-section">
+        <div class="section-header-row">
+          <h2 class="section-title">My Uploads <span class="badge">Proof of Learning</span></h2>
+          <button class="colored-btn small-btn" id="openUploadProofBtn"><i class="fas fa-plus"></i> Upload Proof</button>
+        </div>
+        <div class="grid-container" id="uploadsGrid">
+          <p class="loading-text">Loading your uploads...</p>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Upload Proof Modal -->
+  <div class="modal-overlay" id="uploadProofModal" aria-hidden="true">
+    <div class="modal-content" role="dialog">
+      <button class="modal-close" type="button" id="closeUploadProofBtn">&times;</button>
+      <h2>Upload Proof of Learning</h2>
+      <p style="font-size: 13px; color: #aaa; margin-bottom: 16px;">Show us what you learned! Link your video to a specific tutorial.</p>
+
+      <div class="upload-form">
+        <label>
+          <span>Learned from Tutorial:</span>
+          <select id="proofTutorialSelect">
+            <option value="">Loading tutorials...</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Your Video File:</span>
+          <input type="file" id="proofFile" accept="video/mp4,video/mov">
+        </label>
+
+        <div id="proofProgress" style="display:none; margin-top: 10px;">
+          <p id="proofStatus" style="font-size: 12px; margin-bottom: 4px;">Uploading...</p>
+          <progress id="proofBar" value="0" max="100" style="width:100%"></progress>
+        </div>
+
+        <button class="colored-btn" id="submitProofBtn" style="margin-top: 15px;">Upload</button>
+        <div class="login-error" id="proofError" style="margin-top: 10px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.js"></script>
+  <script src="js/globals.js"></script>
+  <script src="js/cookies.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/user-dashboard.js"></script>
+</body>
+</html>

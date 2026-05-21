@@ -537,8 +537,14 @@ i {
   line-height: 1.5;
 }
 
-/* Admin reply button */
-.comment-reply-btn {
+/* Comment action buttons */
+.comment-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.comment-action-btn {
   background: transparent;
   border: none;
   color: rgba(255,255,255,0.4);
@@ -551,8 +557,11 @@ i {
   gap: 4px;
 }
 
-.comment-reply-btn:hover {
+.comment-action-btn:hover {
   color: #3ecfea;
+}
+.comment-delete-btn:hover {
+  color: #ff2d55 !important;
 }
 
 .reply-input-area {
