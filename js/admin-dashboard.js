@@ -8,13 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const { data: sessionData } = await window.supabase.auth.getSession();
   const user = sessionData?.session?.user;
 
-  // IMPORTANT: You need to define your ADMIN_EMAILS here or import it if it's shared
-  // const ADMIN_EMAILS = [
-    // 'jrsabalbero@gmail.com',
-    // 'admin@caphacks.com'
-  // ];
-
-  if (!user || typeof ADMIN_EMAILS === 'undefined' || !ADMIN_EMAILS.includes(user.email)) {
+  if (!user || !window.isAdminUser || !window.isAdminUser(user)) {
     alert('Access Denied. Admins only.');
     window.location.href = 'index.html';
     return;

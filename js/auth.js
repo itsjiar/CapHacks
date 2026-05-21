@@ -277,6 +277,19 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (user && user.email !== null) {
+    // Upsert profile so their name shows in comments and other places
+    try {
+        const full_name = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
+        const avatar_url = user.user_metadata?.avatar_url || user.user_metadata?.picture || null;
+        await window.supabase.from('profiles').upsert({
+            id: user.id,
+            full_name: full_name,
+            avatar_url: avatar_url
+        });
+    } catch (e) {
+        console.error("Failed to upsert profile:", e);
+    }
+
     const guestId = localStorage.getItem('caphacks_guest_session');
     if (guestId && guestId.startsWith('guest_')) {
       await migrateGuestData(user.id, guestId);

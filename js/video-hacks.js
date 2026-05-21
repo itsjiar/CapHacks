@@ -487,6 +487,7 @@ document.addEventListener('DOMContentLoaded', function () {
     list.innerHTML = '';
  
     for (const comment of comments) {
+      // In case profiles table insert is delayed or user metadata is missing
       const name = comment.profiles?.full_name || 'User';
       const avatar = comment.profiles?.avatar_url;
       const date = new Date(comment.created_at).toLocaleDateString('en-US', {
