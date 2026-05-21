@@ -259,9 +259,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(!confirm("Are you sure you want to delete this video?")) return;
 
     if (videoUrl) {
-        const filePathMatch = videoUrl.match(/videos\/(.+)$/);
+        const filePathMatch = videoUrl.match(/caphacksVideos\/(.+)$/);
         if (filePathMatch && filePathMatch[1]) {
-            const { error: storageError } = await window.supabase.storage.from('videos').remove([filePathMatch[1]]);
+            const { error: storageError } = await window.supabase.storage.from('caphacksVideos').remove([filePathMatch[1]]);
             if (storageError) {
                 console.error("Failed to delete file from storage:", storageError.message);
             }

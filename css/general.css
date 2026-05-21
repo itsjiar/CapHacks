@@ -453,3 +453,17 @@ body.modal-open {
   padding: 40px 0;
   grid-column: 1 / -1;
 }
+.my-dashboard-btn {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  margin-right: 20px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-color: var(--secondary-color, #ff0050);
+  transition: opacity 0.2s;
+}
+.my-dashboard-btn:hover {
+  opacity: 0.8;
+  color: white;
+}
