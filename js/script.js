@@ -18,3 +18,16 @@ async function loginAsGuest() {
 
 // --- LINK TO YOUR BUTTONS ---
 document.getElementById('guestAuthBtn')?.addEventListener('click', loginAsGuest);
+
+// Scroll animations
+const animatedEls = document.querySelectorAll('[data-animate]');
+const animObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      animObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+
+animatedEls.forEach(el => animObserver.observe(el));
