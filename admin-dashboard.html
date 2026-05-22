@@ -7,7 +7,6 @@
   <link rel="icon" type="image/x-icon" href="images/icons/favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/general.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/dashboard.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -62,50 +61,63 @@
     <div class="dashboard-content">
 
       <!-- Upload Tutorial Section -->
-      <section id="uploadTutorial" class="dashboard-section active">
-        <h2 class="section-title">Upload New Tutorial</h2>
+      <!-- Replace your uploadTutorial section with this -->
+<section id="uploadTutorial" class="dashboard-section active">
+  <h2 class="section-title">Upload New Tutorial</h2>
 
-        <div class="admin-form-container">
-          <div class="upload-form" style="max-width: 500px; background: #1a1a1a; padding: 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
-            <label>
-              <span style="color:white;">Title</span>
-              <input type="text" id="uploadTitle" placeholder="e.g. 01 // Smooth Velocity" required style="background: rgba(255,255,255,0.05); color:white; border-color: rgba(255,255,255,0.1);">
-            </label>
+  <div class="admin-form-container">
+    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px; padding: 28px;">
 
-            <label>
-              <span style="color:white;">Description</span>
-              <textarea id="uploadDescription" placeholder="Short description ng tutorial..." rows="3" style="background: rgba(255,255,255,0.05); color:white; border-color: rgba(255,255,255,0.1);"></textarea>
-            </label>
+      <div class="upload-form">
 
-            <label>
-              <span style="color:white;">Category</span>
-              <select id="uploadCategory" style="background: rgba(255,255,255,0.05); color:white; border-color: rgba(255,255,255,0.1);">
-                <option value="Basic" style="color:black;">Basic</option>
-                <option value="Intermediate" style="color:black;">Intermediate</option>
-                <option value="Advance" style="color:black;">Advance</option>
-              </select>
-            </label>
+        <label>
+          <span>Title *</span>
+          <input type="text" id="uploadTitle" placeholder="e.g. 01 // Smooth Velocity" required>
+        </label>
 
-            <label>
-              <span style="color:white;">Tags <small style="color:#888;">(comma separated)</small></span>
-              <input type="text" id="uploadTags" placeholder="e.g. smooth, velocity, beginner" style="background: rgba(255,255,255,0.05); color:white; border-color: rgba(255,255,255,0.1);">
-           </label>
+        <label>
+          <span>Description</span>
+          <textarea id="uploadDescription" placeholder="Short description of this tutorial..." rows="3"></textarea>
+        </label>
 
-            <label>
-              <span style="color:white;">Video File</span>
-              <input type="file" id="uploadFile" accept="video/mp4,video/mov" style="background: rgba(255,255,255,0.05); color:white; border-color: rgba(255,255,255,0.1);">
-            </label>
+        <div class="form-row">
+          <label>
+            <span>Category *</span>
+            <select id="uploadCategory">
+              <option value="Basic">Basic</option>
+              <option value="Intermediate">Intermediate</option>
+              <option value="Advance">Advance</option>
+            </select>
+          </label>
 
-            <div id="uploadProgress" style="display:none; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px;">
-              <p id="uploadStatus" style="color: white; margin: 0 0 10px 0;">Uploading...</p>
-              <progress id="uploadBar" value="0" max="100" style="width:100%"></progress>
-            </div>
-
-            <button class="colored-btn" id="uploadSubmitBtn" style="margin-top: 20px;">Upload Tutorial</button>
-            <div class="login-error" id="uploadError" style="margin-top: 10px;"></div>
-          </div>
+          <label>
+            <span>Tags <small style="text-transform:none; letter-spacing:0; font-weight:400; color:rgba(255,255,255,0.3);">(comma separated)</small></span>
+            <input type="text" id="uploadTags" placeholder="smooth, velocity, transition">
+          </label>
         </div>
-      </section>
+
+        <label>
+          <span>Video File *</span>
+          <input type="file" id="uploadFile" accept="video/mp4,video/mov">
+        </label>
+
+        <div id="uploadProgress" style="display:none;">
+          <p id="uploadStatus">Uploading...</p>
+          <progress id="uploadBar" value="0" max="100"></progress>
+        </div>
+
+        <div class="login-error" id="uploadError"></div>
+        <p id="uploadSuccess" style="color:#30d158; font-size:13px; text-align:center;"></p>
+
+        <button class="colored-btn" id="uploadSubmitBtn">
+          <i class="fas fa-upload"></i> Upload Tutorial
+        </button>
+
+      </div>
+    </div>
+  </div>
+</section>
 
       <!-- Manage Tutorials Section -->
       <section id="manageTutorials" class="dashboard-section">
