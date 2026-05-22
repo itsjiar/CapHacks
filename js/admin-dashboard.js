@@ -16,6 +16,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // 2. Setup Sidebar UI
   document.getElementById('dashEmail').textContent = user.email;
+  const dashName = document.getElementById('dashName');
+  if (dashName) {
+    dashName.textContent = user.user_metadata?.full_name || 'Admin';
+  }
+  const dashAvatar = document.getElementById('dashAvatar');
+  const avatarUrl = user.user_metadata?.avatar_url || user.user_metadata?.picture;
+  if (avatarUrl && dashAvatar) {
+    dashAvatar.innerHTML = `<img src="${avatarUrl}" alt="avatar" style="width: 100%; height: 100%; object-fit: cover;">`;
+  }
+
 
   // Sidebar Navigation Logic
   const navItems = document.querySelectorAll('.nav-item[data-target]');
@@ -171,6 +181,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     loadManageTutorials();
+    loadAnalytics();
   };
 
   // 5. Manage User Uploads
@@ -221,6 +232,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         await window.supabase.storage.from('caphacksVideos').remove([filename]);
     }
     loadManageUserUploads();
+    loadAnalytics();
   }
 
 
