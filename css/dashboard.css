@@ -32,7 +32,10 @@ body[id$="-dashboard-page"] {
 }
 
 .sidebar-logo {
-  height: 30px;
+  height: 220px;
+  object-fit: cover;
+  margin-bottom: -80px;
+  margin-top: -80px;
 }
 
 .mobile-sidebar-close {
