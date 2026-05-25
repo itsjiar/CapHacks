@@ -1,3 +1,4 @@
+if (typeof document !== 'undefined') {
 document.addEventListener('DOMContentLoaded', () => {
   const authModal = document.getElementById('authModal');
   const loginOpenBtn = document.getElementById('loginOpenBtn');
@@ -24,11 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const mobileProfileName = document.getElementById('mobileProfileName');
   const mobileProfileDropdown = document.getElementById('mobileProfileDropdown');
   const mobileDropdownSignOutBtn = document.getElementById('mobileDropdownSignOutBtn');
-
-  function getDisplayName(user, isGuest) {
-    if (isGuest) return '';
-    return user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
-  }
 
   function getAvatarHtml(user, isGuest) {
     if (isGuest) {
@@ -589,4 +585,16 @@ function showAuthToast() {
 myProfileBtn?.addEventListener('click', handleProfileClick);
 myProfileMobileBtn?.addEventListener('click', handleProfileClick);
 });
+}
+
+function getDisplayName(user, isGuest) {
+  if (isGuest) return '';
+  return user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    getDisplayName
+  };
+}
 
