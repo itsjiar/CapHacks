@@ -1,8 +1,14 @@
-const supabaseUrl = 'https://wtgrqxwaahavoiwrbdrg.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind0Z3JxeHdhYWhhdm9pd3JiZHJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwOTQzNTEsImV4cCI6MjA5MTY3MDM1MX0.z2QWpBR7cZWX8bxN9D9OUAuF-E2ohAKr00B1Tu-SVn8';
+// Get keys from environment config (js/config.js)
+const supabaseUrl = window.ENV?.SUPABASE_URL || '';
+const supabaseKey = window.ENV?.SUPABASE_KEY || '';
 
 // Wait for Supabase library to load
 function initializeSupabase() {
+  if (!supabaseUrl || !supabaseKey) {
+    console.error('Supabase URL or Key is missing. Check js/config.js');
+    return;
+  }
+
   console.log('Initializing Supabase...');
   console.log('window.supabase available:', !!window.supabase);
   console.log('window.supabase.createClient available:', !!(window.supabase && window.supabase.createClient));
