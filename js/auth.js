@@ -220,48 +220,58 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    if (mode === 'signup') {
-      const confirmPassword = formData.get('confirmPassword')?.toString();
-      if (!confirmPassword) {
-        authError.textContent = 'Please confirm your password.';
-        return;
-      }
-      if (password !== confirmPassword) {
-        authError.textContent = 'Passwords do not match.';
+    try {
+      if (mode === 'signup') {
+        const confirmPassword = formData.get('confirmPassword')?.toString();
+        if (!confirmPassword) {
+          authError.textContent = 'Please confirm your password.';
+          return;
+        }
+        if (password !== confirmPassword) {
+          authError.textContent = 'Passwords do not match.';
+          return;
+        }
+
+        authError.textContent = 'Signing up...';
+        const { data, error } = await window.supabase.auth.signUp({ email, password });
+        if (error) {
+          authError.textContent = error.message;
+          return;
+        }
+
+        if (data?.user) {
+          closeAuthModal();
+          const guestId = localStorage.getItem('caphacks_guest_session');
+          await migrateGuestData(data.user.id, guestId);
+          await refreshAuthHeader();
+          window.location.href = 'video-hacks.html';
+          return;
+        }
+
+        authError.textContent = 'Check your email for confirmation before signing in.';
         return;
       }
 
-      authError.textContent = 'Signing up...';
-      const { data, error } = await window.supabase.auth.signUp({ email, password });
+      authError.textContent = 'Signing in...';
+      const { data, error } = await window.supabase.auth.signInWithPassword({ email, password });
       if (error) {
         authError.textContent = error.message;
         return;
       }
 
       if (data?.user) {
-  closeAuthModal();
-  await migrateGuestData(data.user.id);
-  await refreshAuthHeader();
-  window.location.href = 'video-hacks.html';
-}
-
-      authError.textContent = 'Check your email for confirmation before signing in.';
-      return;
+        closeAuthModal();
+        const guestId = localStorage.getItem('caphacks_guest_session');
+        await migrateGuestData(data.user.id, guestId);
+        await refreshAuthHeader();
+        window.location.href = 'video-hacks.html';
+      } else {
+        authError.textContent = 'Sign in failed. Please try again.';
+      }
+    } catch (err) {
+      console.error('Auth error:', err);
+      authError.textContent = err.message || 'An unexpected error occurred.';
     }
-
-    authError.textContent = 'Signing in...';
-    const { data, error } = await window.supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      authError.textContent = error.message;
-      return;
-    }
-
-    if (data?.user) {
-  closeAuthModal();
-  await migrateGuestData(data.user.id);
-  await refreshAuthHeader();
-  window.location.href = 'video-hacks.html';
-}
   });
 
   window.supabase.auth.onAuthStateChange(async (_event, session) => {
