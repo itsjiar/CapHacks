@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
           </div>
         </div>
         <div class="video-mid-position">
-          <video class="video-player" controls>
+          <video class="video-player" controls playsinline>
             <source src="${video.video_url}" type="video/mp4">
             Your browser does not support the video tag.
           </video>
@@ -136,7 +136,13 @@ document.addEventListener('DOMContentLoaded', function () {
           if (!videoEl) return;
           if (entry.isIntersecting) {
             videoEl.muted = false;
-            videoEl.play();
+            let playPromise = videoEl.play();
+            if (playPromise !== undefined) {
+              playPromise.catch(error => {
+                videoEl.muted = true;
+                videoEl.play();
+              });
+            }
           } else {
             videoEl.muted = true;
             videoEl.pause();
@@ -191,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function () {
           </div>
         </div>
         <div class="video-mid-position">
-          <video class="video-player" controls>
+          <video class="video-player" controls playsinline>
             <source src="${video.video_url}" type="video/mp4">
             Your browser does not support the video tag.
           </video>
@@ -227,7 +233,13 @@ document.addEventListener('DOMContentLoaded', function () {
           if (!videoEl) return;
           if (entry.isIntersecting) {
             videoEl.muted = false;
-            videoEl.play();
+            let playPromise = videoEl.play();
+            if (playPromise !== undefined) {
+              playPromise.catch(error => {
+                videoEl.muted = true;
+                videoEl.play();
+              });
+            }
           } else {
             videoEl.muted = true;
             videoEl.pause();
