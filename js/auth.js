@@ -31,7 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return '<i class="fa-solid fa-user-ghost"></i>';
     }
 
-    const avatarUrl = user.user_metadata?.avatar_url || user.user_metadata?.picture;
+    const metadata = user.user_metadata || user.raw_user_meta_data || {};
+    const avatarUrl = metadata.avatar_url || metadata.picture;
     if (avatarUrl) {
       return `<img src="${avatarUrl}" alt="${getDisplayName(user, false)} avatar" />`;
     }
@@ -285,8 +286,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (user && user.email !== null) {
     // Upsert profile so their name shows in comments and other places
     try {
-        const full_name = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
-        const avatar_url = user.user_metadata?.avatar_url || user.user_metadata?.picture || null;
+        const metadata = user.user_metadata || user.raw_user_meta_data || {};
+        const full_name = metadata.full_name || metadata.name || user.email?.split('@')[0] || 'User';
+        const avatar_url = metadata.avatar_url || metadata.picture || null;
         await window.supabase.from('profiles').upsert({
             id: user.id,
             full_name: full_name,
@@ -599,7 +601,9 @@ myProfileMobileBtn?.addEventListener('click', handleProfileClick);
 
 function getDisplayName(user, isGuest) {
   if (isGuest) return '';
-  return user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
+  // Try taking the name from raw_user_meta_data if user_metadata is missing
+  const metadata = user.user_metadata || user.raw_user_meta_data || {};
+  return metadata.full_name || metadata.name || user.email?.split('@')[0] || 'User';
 }
 
 if (typeof module !== 'undefined' && module.exports) {
