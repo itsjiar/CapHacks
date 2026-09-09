@@ -5,19 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard | CapHacks</title>
   <link rel="icon" type="image/x-icon" href="images/icons/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/general.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/dashboard.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body id="admin-dashboard-page" style="background-color: #0f0f0f; color: white; display: flex; height: 100vh; overflow: hidden; margin: 0;">
 
+<body id="admin-dashboard-page">
   <!-- Sidebar -->
   <aside class="dashboard-sidebar">
     <div class="sidebar-header">
-      <a href="index.html"><img src="images/footer-logo.png" alt="CapHacks Logo" class="sidebar-logo"></a>
-      <button class="mobile-sidebar-close" id="sidebarCloseBtn"><i class="fas fa-times"></i></button>
+      <a href="index.html"><img src="images/caphacks-logo.svg" alt="CapHacks Logo" class="sidebar-logo"></a>
+      <button class="mobile-sidebar-close" id="sidebarCloseBtn" aria-label="Close sidebar"><i class="fas fa-times"></i></button>
     </div>
 
     <div class="sidebar-user-info">
@@ -30,19 +32,19 @@
 
     <nav class="sidebar-nav">
       <button class="nav-item active" data-target="uploadTutorial">
-        <i class="fas fa-upload"></i> Upload Tutorial
+        <i class="fas fa-cloud-arrow-up"></i> Upload Tutorial
       </button>
       <button class="nav-item" data-target="manageTutorials">
-        <i class="fas fa-list"></i> Manage Tutorials
+        <i class="fas fa-film"></i> Manage Tutorials
       </button>
       <button class="nav-item" data-target="manageUserUploads">
-        <i class="fas fa-users-viewfinder"></i> User Uploads
+        <i class="fas fa-users-viewfinder"></i> User Edits
       </button>
       <button class="nav-item" data-target="analytics">
         <i class="fas fa-chart-pie"></i> Analytics
       </button>
       <a href="video-hacks.html" class="nav-item back-link">
-        <i class="fas fa-arrow-left"></i> Back to Live Site
+        <i class="fas fa-arrow-left"></i> Back to Live Feed
       </a>
     </nav>
 
@@ -51,93 +53,87 @@
     </div>
   </aside>
 
-  <!-- Main Content -->
+  <!-- Main Content Area -->
   <main class="dashboard-main">
     <header class="dashboard-header-mobile">
-      <button class="mobile-sidebar-open" id="sidebarOpenBtn"><i class="fas fa-bars"></i></button>
-      <h2>Admin Dashboard</h2>
+      <button class="mobile-sidebar-open" id="sidebarOpenBtn" aria-label="Open sidebar"><i class="fas fa-bars"></i></button>
+      <h2>Admin Control Center</h2>
     </header>
 
     <div class="dashboard-content">
+      <!-- Section 1: Upload Tutorial -->
+      <section id="uploadTutorial" class="dashboard-section active">
+        <h2 class="section-title"><i class="fas fa-cloud-arrow-up" style="color: var(--primary-color);"></i> Upload New CapCut Hack</h2>
 
-      <!-- Upload Tutorial Section -->
-      <!-- Replace your uploadTutorial section with this -->
-<section id="uploadTutorial" class="dashboard-section active">
-  <h2 class="section-title">Upload New Tutorial</h2>
+        <div class="admin-form-container">
+          <div class="upload-card-box">
+            <form class="upload-form" id="adminUploadForm">
+              <label>
+                <span>Tutorial Title *</span>
+                <input type="text" id="uploadTitle" placeholder="e.g. 01 // Smooth 3D Velocity Transition" required>
+              </label>
 
-  <div class="admin-form-container">
-    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px; padding: 28px;">
+              <label>
+                <span>Description</span>
+                <textarea id="uploadDescription" placeholder="Step-by-step notes, keyframes, or CapCut tools used in this tutorial..." rows="3"></textarea>
+              </label>
 
-      <div class="upload-form">
+              <div class="form-row">
+                <label>
+                  <span>Category Level *</span>
+                  <select id="uploadCategory">
+                    <option value="Basic">Basic</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advance">Advance</option>
+                  </select>
+                </label>
 
-        <label>
-          <span>Title *</span>
-          <input type="text" id="uploadTitle" placeholder="e.g. 01 // Smooth Velocity" required>
-        </label>
+                <label>
+                  <span>Tags (comma-separated)</span>
+                  <input type="text" id="uploadTags" placeholder="velocity, 3d, transition, zoom">
+                </label>
+              </div>
 
-        <label>
-          <span>Description</span>
-          <textarea id="uploadDescription" placeholder="Short description of this tutorial..." rows="3"></textarea>
-        </label>
+              <label>
+                <span>Video File (MP4/MOV) *</span>
+                <input type="file" id="uploadFile" accept="video/mp4,video/quicktime,video/mov" required>
+              </label>
 
-        <div class="form-row">
-          <label>
-            <span>Category *</span>
-            <select id="uploadCategory">
-              <option value="Basic">Basic</option>
-              <option value="Intermediate">Intermediate</option>
-              <option value="Advance">Advance</option>
-            </select>
-          </label>
+              <div id="uploadProgress" style="display:none;">
+                <p id="uploadStatus" style="font-size: 13px; margin-bottom: 6px; color: var(--primary-color);">Uploading video...</p>
+                <progress id="uploadBar" value="0" max="100"></progress>
+              </div>
 
-          <label>
-            <span>Tags <small style="text-transform:none; letter-spacing:0; font-weight:400; color:rgba(255,255,255,0.3);">(comma separated)</small></span>
-            <input type="text" id="uploadTags" placeholder="smooth, velocity, transition">
-          </label>
+              <div class="login-error" id="uploadError"></div>
+              <p id="uploadSuccess" style="color: var(--accent-green); font-size: 13px; text-align: center; font-weight: 600;"></p>
+
+              <button class="colored-btn" id="uploadSubmitBtn" type="submit" style="width: 100%;">
+                <i class="fas fa-upload"></i> Publish Video Hack
+              </button>
+            </form>
+          </div>
         </div>
+      </section>
 
-        <label>
-          <span>Video File *</span>
-          <input type="file" id="uploadFile" accept="video/mp4,video/mov">
-        </label>
-
-        <div id="uploadProgress" style="display:none;">
-          <p id="uploadStatus">Uploading...</p>
-          <progress id="uploadBar" value="0" max="100"></progress>
-        </div>
-
-        <div class="login-error" id="uploadError"></div>
-        <p id="uploadSuccess" style="color:#30d158; font-size:13px; text-align:center;"></p>
-
-        <button class="colored-btn" id="uploadSubmitBtn">
-          <i class="fas fa-upload"></i> Upload Tutorial
-        </button>
-
-      </div>
-    </div>
-  </div>
-</section>
-
-      <!-- Manage Tutorials Section -->
+      <!-- Section 2: Manage Tutorials -->
       <section id="manageTutorials" class="dashboard-section">
-        <h2 class="section-title">Manage Tutorials</h2>
+        <h2 class="section-title"><i class="fas fa-film" style="color: var(--secondary-color);"></i> Manage Published Tutorials</h2>
         <div class="grid-container" id="manageGrid">
-          <p class="loading-text">Loading tutorials...</p>
+          <p class="loading-text">Loading tutorial library...</p>
         </div>
       </section>
 
-      <!-- Manage User Uploads -->
+      <!-- Section 3: Manage User Uploads -->
       <section id="manageUserUploads" class="dashboard-section">
-        <h2 class="section-title">User Proof of Learning</h2>
+        <h2 class="section-title"><i class="fas fa-users-viewfinder" style="color: var(--accent-yellow);"></i> User Proof of Learning Edits</h2>
         <div class="grid-container" id="userUploadsGrid">
-          <p class="loading-text">Loading user uploads...</p>
+          <p class="loading-text">Loading creator submissions...</p>
         </div>
       </section>
 
-      <!-- Analytics Section -->
+      <!-- Section 4: Analytics -->
       <section id="analytics" class="dashboard-section">
-        <h2 class="section-title">Analytics Dashboard</h2>
+        <h2 class="section-title"><i class="fas fa-chart-pie" style="color: var(--accent-green);"></i> Analytics & Overview</h2>
 
         <div class="analytics-grid">
           <div class="stat-card">
@@ -145,31 +141,38 @@
             <span class="stat-card-value" id="statTotal">0</span>
           </div>
           <div class="stat-card">
-            <span class="stat-card-title">Basic</span>
-            <span class="stat-card-value" id="statBasic">0</span>
+            <span class="stat-card-title">Basic Hacks</span>
+            <span class="stat-card-value" id="statBasic" style="color: var(--accent-green);">0</span>
           </div>
           <div class="stat-card">
             <span class="stat-card-title">Intermediate</span>
-            <span class="stat-card-value" id="statIntermediate">0</span>
+            <span class="stat-card-value" id="statIntermediate" style="color: var(--accent-yellow);">0</span>
           </div>
           <div class="stat-card">
-            <span class="stat-card-title">Advance</span>
-            <span class="stat-card-value" id="statAdvance">0</span>
+            <span class="stat-card-title">Advance VFX</span>
+            <span class="stat-card-value" id="statAdvance" style="color: var(--secondary-color);">0</span>
           </div>
-          <div class="stat-card" style="border-color: #ff2d55;">
-            <span class="stat-card-title">User Uploads</span>
-            <span class="stat-card-value" id="statUserUploads">0</span>
+          <div class="stat-card">
+            <span class="stat-card-title">User Proofs</span>
+            <span class="stat-card-value" id="statUserUploads" style="color: var(--primary-color);">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card-title">Total Stars</span>
+            <span class="stat-card-value" id="statRatings">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card-title">Comments</span>
+            <span class="stat-card-value" id="statComments">0</span>
           </div>
         </div>
       </section>
-
     </div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
   <script src="js/globals.js"></script>
   <script src="js/cookies.js"></script>
-  <script src="js/config.js"></script>
   <script src="js/supabase.js"></script>
   <script src="js/admin-dashboard.js"></script>
 </body>

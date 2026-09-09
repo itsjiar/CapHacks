@@ -1,33 +1,41 @@
-// --- GUEST LOGIN ---
-async function loginAsGuest() {
-    if (!window.supabase) {
-        alert("Authentication service not available. Please try again.");
-        return;
-    }
+// Landing Page Script - CapHacks
+document.addEventListener('DOMContentLoaded', () => {
+  // Intersection Observer for Scroll Animations
+  const animatedEls = document.querySelectorAll('[data-animate]');
+  
+  if ('IntersectionObserver' in window) {
+    const animObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          animObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 
-    const { data, error } = await window.supabase.auth.signInAnonymously();
-    if (data) {
-        alert("Logged in as Guest!");
-        window.location.href = "video-hacks.html"; // Redirect to your video page
-    }
-    if (error) {
-        alert("Guest login failed: " + error.message);
-        console.error("Error:", error.message);
-    }
-}
+    animatedEls.forEach(el => animObserver.observe(el));
+  } else {
+    // Fallback for older browsers
+    animatedEls.forEach(el => el.classList.add('visible'));
+  }
 
-// --- LINK TO YOUR BUTTONS ---
-document.getElementById('guestAuthBtn')?.addEventListener('click', loginAsGuest);
-
-// Scroll animations
-const animatedEls = document.querySelectorAll('[data-animate]');
-const animObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      animObserver.unobserve(entry.target);
-    }
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      const targetId = this.getAttribute('href');
+      if (targetId && targetId !== '#') {
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          e.preventDefault();
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+          // Close mobile menu if open
+          const navToggle = document.getElementById('nav-toggle');
+          if (navToggle) navToggle.checked = false;
+        }
+      }
+    });
   });
-}, { threshold: 0.15 });
-
-animatedEls.forEach(el => animObserver.observe(el));
+});

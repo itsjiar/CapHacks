@@ -3,31 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CapHacks</title>
+  <title>CapHacks - Step-by-Step CapCut Hacks, Tutorials & AI Masterclasses</title>
+  <meta name="description" content="Master CapCut video editing techniques for TikTok, Reels, and Shorts. Free step-by-step video hacks, AI tool breakdowns, and community edits.">
   <link rel="icon" type="image/x-icon" href="images/icons/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/general.css">
   <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
 
 <body id="home">
+  <!-- Top Navigation Bar -->
   <header>
-    <nav class="navbar">
+    <nav class="navbar" aria-label="Main Navigation">
       <div class="left-section">
-        <img class="logo-image" src="images/caphacks-logo.svg" alt="CapHacks Logo">
+        <a href="index.html" aria-label="CapHacks Home">
+          <img class="logo-image" src="images/caphacks-logo.svg" alt="CapHacks Logo">
+        </a>
       </div>
 
-      <input type="checkbox" id="nav-toggle" class="nav-toggle"   aria-label="Toggle navigation">
-      <label for="nav-toggle" class="nav-toggle-label">
+      <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">
+      <label for="nav-toggle" class="nav-toggle-label" aria-hidden="true">
         <span></span>
       </label>
 
       <div class="middle-section">
         <ul class="nav-links">
-          <li><a href="#home">Home</a></li>
+          <li><a href="#home" class="active">Home</a></li>
           <li><a href="video-hacks.html">Tips & Tricks</a></li>
           <li><a href="#about">About Us</a></li>
           <li><a href="#contact">Contact</a></li>
@@ -35,25 +40,31 @@
       </div>
 
       <div class="right-section">
-        <a href="#" id="myDashboardBtn" class="my-dashboard-btn" style="display: none;">My Dashboard</a>
+        <a href="#" id="myDashboardBtn" class="my-dashboard-btn" style="display: none;">
+          <i class="fas fa-gauge"></i> My Dashboard
+        </a>
+        
         <div class="auth-buttons" id="authButtons">
           <button class="login-btn" id="loginOpenBtn">Log In</button>
           <button class="signup-btn" id="signupOpenBtn">Sign Up</button>
         </div>
-        <div class="user-badge" id="userBadge" hidden>
-          <button type="button" class="avatar-btn" id="profileBtn">
+
+        <div class="user-badge" id="userBadge" hidden style="display: none;">
+          <button type="button" class="avatar-btn" id="profileBtn" aria-label="User Profile">
             <span class="avatar-ring" id="profileAvatar"><i class="fa-solid fa-user"></i></span>
             <span class="profile-name" id="profileName">User</span>
+            <i class="fas fa-chevron-down" style="font-size: 10px; color: var(--text-muted);"></i>
           </button>
           <div class="profile-dropdown" id="profileDropdown" hidden>
-            <a href="user-dashboard.html" class="dropdown-item" id="myProfileBtn">My Profile</a>
-            <a href="#" class="dropdown-item" id="myVideosBtn">My Videos</a>
-            <button type="button" class="dropdown-item dropdown-signout" id="dropdownSignOutBtn">Sign Out</button>
+            <button type="button" class="dropdown-item" id="myProfileBtn"><i class="fas fa-user-circle"></i> My Profile</button>
+            <button type="button" class="dropdown-item" id="myVideosBtn"><i class="fas fa-bookmark"></i> Saved Videos</button>
+            <button type="button" class="dropdown-item dropdown-signout" id="dropdownSignOutBtn"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
           </div>
         </div>
       </div>
 
-      <div class="mobile-menu">
+      <!-- Mobile Drawer Menu -->
+      <div class="mobile-menu" id="mobileMenu">
         <ul class="mobile-links">
           <li><a href="#home">Home</a></li>
           <li><a href="video-hacks.html">Tips & Tricks</a></li>
@@ -63,370 +74,405 @@
         <div class="mobile-actions">
           <button class="login-btn" id="loginOpenMobileBtn">Log In</button>
           <button class="signup-btn" id="signupOpenMobileBtn">Sign Up</button>
-          <div class="mobile-user-badge" id="mobileUserBadge" hidden>
-            <span class="avatar-ring mobile-avatar" id="mobileProfileAvatar"><i class="fa-solid fa-user"></i></span>
-            <span class="profile-name" id="mobileProfileName">User</span>
-            <div class="profile-dropdown mobile-dropdown" id="mobileProfileDropdown" hidden>
-              <a href="user-dashboard.html" class="dropdown-item" id="myProfileMobileBtn">My Profile</a>
-              <a href="#" class="dropdown-item" id="myVideosMobileBtn">My Videos</a>
-              <button type="button" class="dropdown-item dropdown-signout" id="mobileDropdownSignOutBtn">Sign Out</button>
+          <div class="mobile-user-badge" id="mobileUserBadge" hidden style="display: none;">
+            <button type="button" class="avatar-btn" style="width: 100%; justify-content: flex-start;">
+              <span class="avatar-ring" id="mobileProfileAvatar"><i class="fa-solid fa-user"></i></span>
+              <span class="profile-name" id="mobileProfileName">User</span>
+            </button>
+            <div class="profile-dropdown mobile-dropdown" id="mobileProfileDropdown">
+              <button type="button" class="dropdown-item" id="myProfileMobileBtn"><i class="fas fa-user-circle"></i> My Profile</button>
+              <button type="button" class="dropdown-item" id="myVideosMobileBtn"><i class="fas fa-bookmark"></i> Saved Videos</button>
+              <button type="button" class="dropdown-item dropdown-signout" id="mobileDropdownSignOutBtn"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
             </div>
           </div>
         </div>
       </div>
     </nav>
   </header>
-  
+
   <main>
-      <div class="background-im">
-        <section class="hero-section">
-          <div class="hero-content">
-            <h1 class="hero-title">
-              Your Free <span class="lowlight">Step-by-Step</span> Guide to
-              <span class="highlight">CapCut Mastery</span>
-            </h1>
-            <p class="hero-description">
-              From basic cuts to viral transitions — CapHacks teaches you the exact editing techniques used by top creators. Free. Simple. Effective.
-            </p>
+    <!-- HERO SECTION -->
+    <div class="hero-wrapper">
+      <section class="hero-section">
+        <div class="hero-badge">
+          <i class="fas fa-bolt"></i> 100% Free CapCut Video Tutorials & Hacks
+        </div>
+        <div class="hero-content">
+          <h1 class="hero-title">
+            Your Free <span class="lowlight">Step-by-Step</span> Guide to
+            <span class="highlight">CapCut Mastery</span>
+          </h1>
+          <p class="hero-description">
+            From viral velocity transitions to advanced AI keyframing — learn the exact editing hacks top TikTok & Reels creators use daily.
+          </p>
+        </div>
+        <div class="cta-buttons">
+          <a href="video-hacks.html" class="colored-btn" id="heroStartBtn">
+            <i class="fas fa-play"></i> Start Learning Free
+          </a>
+          <a href="https://www.capcut.com/activity/download_pc" target="_blank" rel="noopener noreferrer" class="noBg-btn">
+            <i class="fas fa-download"></i> Download CapCut App
+          </a>
+        </div>
+
+        <div class="hero-metrics">
+          <div class="metric-item">
+            <span class="metric-num">50+</span>
+            <span class="metric-label">Pro Video Hacks</span>
           </div>
-          <div class="cta-buttons">
-            <a href="video-hacks.html">
-              <button class="colored-btn">Get Started Now!</button>
-            </a>
-            <a href="https://www.capcut.com/activity/download_pc" target="_blank" rel="noopener noreferrer">
-              <button class="noBg-btn">Download App</button>
-            </a>
+          <div class="metric-item">
+            <span class="metric-num">3 Skill</span>
+            <span class="metric-label">Levels (Basic-Adv)</span>
           </div>
-        </section>
+          <div class="metric-item">
+            <span class="metric-num">0&#36;</span>
+            <span class="metric-label">No Paywall Ever</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- WHAT IS CAPHACKS SECTION -->
+    <section class="what-is-section">
+      <div class="what-is-inner">
+        <div class="what-is-text" data-animate="fade-left">
+          <span class="what-is-tag">What is CapHacks?</span>
+          <h2 class="what-is-title">We Turn CapCut Confusion Into <span class="highlight">Creative Confidence</span></h2>
+          <p class="what-is-description">
+            CapHacks is a free, short-form tutorial platform built specifically for video editors — from beginners cutting their first clip to advanced editors producing viral social content.
+          </p>
+          
+          <div class="what-is-features">
+            <div class="what-is-feature">
+              <div class="feature-dot cyan"></div>
+              <p><strong>Short-form vertical video tutorials</strong> — no fluff, straight to the editing steps</p>
+            </div>
+            <div class="what-is-feature">
+              <div class="feature-dot red"></div>
+              <p><strong>Categorized by skill level</strong> — Basic cuts, Intermediate transitions, and Advance VFX</p>
+            </div>
+            <div class="what-is-feature">
+              <div class="feature-dot yellow"></div>
+              <p><strong>Proof of Learning uploads</strong> — practice the hack and upload your edit to your dashboard</p>
+            </div>
+            <div class="what-is-feature">
+              <div class="feature-dot green"></div>
+              <p><strong>Zero barrier to entry</strong> — watch instantly as guest or create an account to save & rate</p>
+            </div>
+          </div>
+
+          <a href="video-hacks.html" class="colored-btn" style="width: fit-content;">
+            <i class="fas fa-graduation-cap"></i> Explore Video Hacks
+          </a>
+        </div>
+
+        <div class="what-is-cards" data-animate="fade-right">
+          <div class="what-is-card card-1">
+            <div class="card-icon"><i class="fas fa-play-circle"></i></div>
+            <h4>1. Watch & Learn</h4>
+            <p>Browse short CapCut tutorials on desktop or mobile with zero friction.</p>
+          </div>
+          <div class="what-is-card card-2">
+            <div class="card-icon"><i class="fas fa-star"></i></div>
+            <h4>2. Rate & Bookmark</h4>
+            <p>Star your favorite techniques and bookmark them into your personal library.</p>
+          </div>
+          <div class="what-is-card card-3">
+            <div class="card-icon"><i class="fas fa-cloud-arrow-up"></i></div>
+            <h4>3. Upload Your Edit</h4>
+            <p>Showcase your edit as "Proof of Learning" linked directly to the tutorial.</p>
+          </div>
+          <div class="what-is-card card-4">
+            <div class="card-icon"><i class="fas fa-comments"></i></div>
+            <h4>4. Ask & Connect</h4>
+            <p>Join creator conversations, ask editing questions, and get feedback.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CAPCUT FEATURES & AI TOOLS -->
+    <section class="capcut-features-container">
+      <div class="section-title-container" data-animate="fade-up">
+        <span class="what-is-tag">CapCut Capabilities</span>
+        <h2 class="features-title">Powerful Built-In AI Tools</h2>
+        <p class="features-description">CapCut's cutting-edge AI engine automates complex keyframing, masking, and video generation so you can edit at 10x speed.</p>
       </div>
 
-            <!-- WHAT IS CAPHACKS SECTION -->
-      <section class="what-is-section">
-        <div class="what-is-inner">
+      <div class="features-row" data-animate="fade-up">
+        <div class="text-content">
+          <span class="text-content-tag"><i class="fas fa-magic"></i> Creative Suite</span>
+          <h3 class="text-content-title">What is CapCut?</h3>
+          <p>CapCut has evolved into a comprehensive creative suite across mobile, desktop, and web. It bridges the gap between casual social media editing and professional production with advanced timeline workflows, multi-layer VFX, and neural AI tools.</p>
+        </div>
+        <div class="image-content">
+          <img src="images/whatIsCapcut.image" alt="CapCut Workspace Interface" loading="lazy" decoding="async">
+        </div>
+      </div>
 
-          <div class="what-is-text" data-animate="fade-left">
-            <span class="what-is-tag">What is CapHacks?</span>
-            <h2 class="what-is-title">We Turn CapCut Confusion Into <span class="highlight">Creative Confidence</span></h2>
-            <p class="what-is-description">
-              CapHacks is a free tutorial platform built specifically for CapCut users — from complete beginners to advanced editors. We break down complex editing techniques into short, easy-to-follow video tutorials that you can apply immediately.
-            </p>
-            <div class="what-is-features">
-              <div class="what-is-feature">
-                <div class="feature-dot cyan"></div>
-                <p>Short-form video tutorials — no fluff, straight to the point</p>
-              </div>
-              <div class="what-is-feature">
-                <div class="feature-dot red"></div>
-                <p>Categorized by skill level — Basic, Intermediate, and Advance</p>
-              </div>
-              <div class="what-is-feature">
-                <div class="feature-dot yellow"></div>
-                <p>Community-driven — like, save, and upload your own edits as proof of learning</p>
-              </div>
-              <div class="what-is-feature">
-                <div class="feature-dot green"></div>
-                <p>No account required to watch — just open and learn</p>
-              </div>
+      <div class="features-row-reverse" data-animate="fade-up">
+        <div class="text-content">
+          <span class="text-content-tag"><i class="fas fa-user-astronaut"></i> AI Presenters</span>
+          <h3 class="text-content-title">OmniHuman AI Avatars</h3>
+          <p>Turn a single portrait into a photorealistic digital presenter. Natural breathing, eye contact, and precise lip-syncing bring scripts to life without needing expensive studio equipment.</p>
+        </div>
+        <div class="image-content">
+          <img src="images/omniHumanAI-image.png" alt="CapCut OmniHuman AI Feature" loading="lazy" decoding="async">
+        </div>
+      </div>
+
+      <div class="features-row" data-animate="fade-up">
+        <div class="text-content">
+          <span class="text-content-tag"><i class="fas fa-film"></i> Generative Video</span>
+          <h3 class="text-content-title">Seedance 2.0 Video Engine</h3>
+          <p>Generate high-definition cinematic video clips from text prompts or reference images with consistent lighting, realistic physics, and cinematic camera pans.</p>
+        </div>
+        <div class="image-content">
+          <img src="images/seedance-image.png" alt="Seedance Video Generation Interface" loading="lazy" decoding="async">
+        </div>
+      </div>
+
+      <div class="features-row-reverse" data-animate="fade-up">
+        <div class="text-content">
+          <span class="text-content-tag"><i class="fas fa-scissors"></i> Viral Repurposing</span>
+          <h3 class="text-content-title">AI Clipper (Long-to-Shorts)</h3>
+          <p>Scan long-form podcasts, gameplay, or interviews to automatically detect the most engaging moments, reframe for vertical 9:16 viewing, and apply dynamic animated subtitles.</p>
+        </div>
+        <div class="image-content">
+          <img src="images/aiClipper-img.png" alt="CapCut AI Clipper Tool" loading="lazy" decoding="async">
+        </div>
+      </div>
+
+      <div class="features-row" data-animate="fade-up">
+        <div class="text-content">
+          <span class="text-content-tag"><i class="fas fa-closed-captioning"></i> Dynamic Captions</span>
+          <h3 class="text-content-title">Auto-Captions & Scene Mood Detection</h3>
+          <p>Instant speech-to-text with scene-aware font stylings, animated karaoke highlights, and multi-language translation tailored for maximum retention on TikTok & Reels.</p>
+        </div>
+        <div class="image-content">
+          <img src="images/autoCaption.image" alt="CapCut Auto Caption Feature" loading="lazy" decoding="async">
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT US SECTION -->
+    <section class="about-us-section" id="about">
+      <div class="section-title-container" data-animate="fade-up">
+        <span class="what-is-tag">Our Story</span>
+        <h2 class="section-title">Built by Creators, for Creators</h2>
+        <p class="section-description">High-quality video production shouldn't require thousands in software or a film degree.</p>
+      </div>
+
+      <div class="about-us-container">
+        <div class="about-us-info" data-animate="fade-left">
+          <h3 class="about-us-title">Better Edits, Faster Workflow</h3>
+          <p class="about-us-description">
+            We started CapHacks because we know how frustrating it can be to have great video concepts but get stuck trying to recreate trending effects.
+            <br><br>
+            CapHacks breaks down viral transitions, 3D tracking, and velocity curves into repeatable, bite-sized hacks. Spend less time wrestling with settings and more time creating standout content.
+          </p>
+          <div class="about-us-button">
+            <div class="btn-group">
+              <a href="video-hacks.html" class="colored-btn">
+                <i class="fas fa-play"></i> Watch Tutorials
+              </a>
+              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="noBg-btn">
+                <i class="fa-brands fa-youtube" style="color: #ff0000;"></i> Visit YouTube Channel
+              </a>
             </div>
-            <a href="video-hacks.html">
-              <button class="colored-btn">Start Learning Free</button>
-            </a>
-          </div>
-
-          <div class="what-is-cards" data-animate="fade-right">
-            <div class="what-is-card card-1">
-              <div class="card-icon"><i class="fas fa-play-circle"></i></div>
-              <h4>Watch</h4>
-              <p>Browse our library of short CapCut tutorials anytime, anywhere — no signup needed.</p>
-            </div>
-            <div class="what-is-card card-2">
-              <div class="card-icon"><i class="fas fa-star"></i></div>
-              <h4>Rate & Save</h4>
-              <p>Like the tutorials you love and bookmark them for later — your activity is saved automatically.</p>
-            </div>
-            <div class="what-is-card card-3">
-              <div class="card-icon"><i class="fas fa-upload"></i></div>
-              <h4>Upload Your Edit</h4>
-              <p>After you've learned a technique, upload your own edit as proof — show the community what you made!</p>
-            </div>
-            <div class="what-is-card card-4">
-              <div class="card-icon"><i class="fas fa-comments"></i></div>
-              <h4>Comment & Connect</h4>
-              <p>Create an account to leave comments and connect with other CapCut creators in the community.</p>
+            
+            <div class="social-links" style="padding: 0;">
+              <a href="https://facebook.com" class="social-icon facebook" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+              <a href="https://instagram.com" class="social-icon instagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+              <a href="https://youtube.com" class="social-icon youtube" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+              <a href="https://tiktok.com" class="social-icon tiktok" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
             </div>
           </div>
+        </div>
 
+        <div class="about-us-image" data-animate="fade-right">
+          <img class="abt-us-img" src="images/about-us-image.png" alt="CapHacks Community & Team" loading="lazy" decoding="async">
         </div>
-      </section>
-
-      <section class="capcut-features-container"> <!-- about capcut and its features -->
-        <div class="section-title-container">
-          <h2 class="features-title">Powerful AI Tools</h2>
-          <p class="features-description">CapCut's AI tools are designed to make your video editing process faster and more efficient.</p>
-        </div>
-        <div class="features-row">
-          <div class="text-content">
-            <h2 class="text-content-title">What is CapCut?</h2>
-            <p>CapCut has transformed into a comprehensive, multi-platform creative suite (available on mobile, desktop, and web) that bridges the gap between casual social media editing and professional-grade production. Its core strength is efficiency—leveraging advanced AI to automate complex tasks like masking and keyframing that previously took hours.</p>
-          </div>
-          <div class="image-content">
-            <img src="images/whatIsCapcut.image" alt="CapCut Interface">
-          </div>
-        </div>
-        <div class="features-row-reverse">
-          <div class="text-content">
-            <h2 class="text-content-title">OmniHuman AI Avatars</h2>
-            <p>Users can turn a simple portrait into a realistic digital presenter. Unlike basic lip-syncing tools, these avatars simulate natural breathing, blinking, and body language to deliver scripts realistically.</p>
-          </div>
-          <div class="image-content">
-            <img src="images/omniHumanAI-image.png" alt="CapCut Interface">
-          </div>
-        </div>
-        <div class="features-row">
-          <div class="text-content">
-            <h2 class="text-content-title">Seedance 2.0 Video Generation</h2>
-            <p>With the integration of the Seedance 2.0 engine, CapCut now supports high-end text-to-video and image-to-video generation. This allows users to create cinematic clips from scratch with improved lighting, physics, and visual consistency.</p>
-          </div>
-          <div class="image-content">
-            <img src="images/seedance-image.png" alt="CapCut Interface">
-          </div>
-        </div>
-        <div class="features-row-reverse">
-          <div class="text-content">
-            <h2 class="text-content-title">AI Clipper (Long-to-Shorts)</h2>
-            <p>Perfect for social media managers, this tool scans long-form content (like podcasts or interviews) to find the most viral-worthy moments. It automatically reframes the footage for vertical viewing and generates synchronized captions.</p>
-          </div>
-          <div class="image-content">
-            <img src="images/aiClipper-img.png" alt="CapCut Interface">
-          </div>
-        </div>
-        <div class="features-row">
-          <div class="text-content">
-            <h2 class="text-content-title">Auto-Captions with Scene Detection</h2>
-            <p>Not just subtitles, but dynamic captions that change style based on the mood of the scene.</p>
-          </div>
-          <div class="image-content">
-            <img src="images/autoCaption.image" alt="CapCut Interface">
-          </div>
-        </div>
-      </section>
-
-      <!--about us section-->
-      <section class="about-us-section">
-        <div id="about" class="section-title-container">
-          <h2 class="section-title">About Us</h2>
-          <p class="section-description">Who we are and what we stand for.</p>
-        </div>
-        <div class="about-us-container">
-          <div class="about-us-info">
-              <h2 class="about-us-title">Better Edits, Faster</h2>
-              <p class="about-us-description">High-quality video shouldn't require expensive software or a film degree. As students ourselves, we know you have ideas but might not have the time to learn complex tools. 
-              <br><br>CapHacks was built to bridge that gap. We deconstruct popular editing trends and turn them into simple, repeatable hacks for the CapCut community. We’re here to help you stop struggling with the interface and start expressing your creativity.</p>
-              <div class="about-us-button">
-                <a href="video-hacks.html"><button class="colored-btn">Get Started Now!</button></a>
-                <button class="noBg-btn">Visit Our Youtube</button>
-                <div class="social-links">
-                  <a href="https://facebook.com" class="social-icon facebook">
-                      <i class="fa-brands fa-facebook"></i>
-                  </a>
-
-                  <a href="https://instagram.com" class="social-icon instagram">
-                      <i class="fa-brands fa-instagram"></i>
-                  </a>
-
-                  <a href="https://youtube.com" class="social-icon youtube">
-                      <i class="fa-brands fa-youtube"></i>
-                  </a>
-
-                  <a href="https://tiktok.com" class="social-icon tiktok">
-                      <i class="fa-brands fa-tiktok"></i>
-                  </a>
-                </div>  
-              </div>
-            </div>
-          <div class="about-us-image">
-            <img class="abt-us-img" src="images/about-us-image.png" alt="About Us">
-          </div>
-        </div>
-      </section>
+      </div>
+    </section>
   </main>
 
+  <!-- Auth Modal (Sign In / Sign Up) -->
   <div class="modal-overlay" id="authModal" aria-hidden="true">
     <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="authTitle">
-      <button class="modal-close" type="button" id="authCloseBtn" aria-label="Close">&times;</button>
+      <button class="modal-close" type="button" id="authCloseBtn" aria-label="Close modal">&times;</button>
       <h2 id="authTitle">Sign In to CapHacks</h2>
-      <p>Welcome back! Sign in or create a new account.</p>
+      <p>Welcome back! Sign in or create a free creator account.</p>
+      
       <form class="login-form" id="authForm" data-mode="login">
         <label>
           <span>Email address</span>
-          <input type="email" name="email" placeholder="you@example.com" required>
+          <input type="email" name="email" placeholder="you@example.com" required autocomplete="email">
         </label>
 
         <label>
           <span>Password</span>
-          <input type="password" name="password" placeholder="Enter your password" required>
+          <input type="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
         </label>
 
         <div class="confirm-password-row" id="confirmPasswordRow" style="display:none;">
           <label>
             <span>Confirm password</span>
-            <input type="password" name="confirmPassword" placeholder="Confirm your password">
+            <input type="password" name="confirmPassword" placeholder="Confirm your password" autocomplete="new-password">
           </label>
         </div>
 
         <button class="colored-btn" type="submit" id="submitAuthBtn">Sign In</button>
 
-        <div class="login-divider"><span>Or sign in with</span></div>
-        <button type="button" class="third-party-btn google-btn" id="googleAuthBtn">Continue with Google</button>
-        <button type="button" class="third-party-btn guest-btn" id="guestAuthBtn">Continue as Guest</button>
+        <div class="login-divider"><span>Or continue with</span></div>
+        <button type="button" class="third-party-btn google-btn" id="googleAuthBtn">
+          <i class="fa-brands fa-google" style="color: #4285f4;"></i> Continue with Google
+        </button>
+        <button type="button" class="third-party-btn guest-btn" id="guestAuthBtn">
+          <i class="fas fa-user-astronaut"></i> Continue as Guest
+        </button>
 
-        <p class="small-text">Don't have an account? <button type="button" class="link-button" id="switchModeBtn" data-target-mode="signup">Sign Up</button></p>
+        <p class="small-text">
+          <span id="authModePrompt">Don't have an account?</span> 
+          <button type="button" class="link-button" id="switchModeBtn" data-target-mode="signup">Sign Up</button>
+        </p>
         <div class="login-error" id="authError" role="alert" aria-live="assertive"></div>
       </form>
     </div>
   </div>
 
   <!-- Profile Modal -->
-<div class="modal-overlay" id="profileModal" aria-hidden="true">
-  <div class="modal-content profile-modal-content" role="dialog" aria-modal="true">
-    <button class="modal-close" type="button" id="profileCloseBtn">&times;</button>
+  <div class="modal-overlay" id="profileModal" aria-hidden="true">
+    <div class="modal-content profile-modal-content" role="dialog" aria-modal="true" aria-labelledby="profileModalName">
+      <button class="modal-close" type="button" id="profileCloseBtn" aria-label="Close modal">&times;</button>
 
-    <!-- Header -->
-    <div class="profile-modal-header">
-      <div class="profile-modal-avatar" id="profileModalAvatar">
-        <i class="fa-solid fa-user"></i>
+      <div class="profile-modal-header">
+        <div class="profile-modal-avatar" id="profileModalAvatar">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <div class="profile-modal-info">
+          <h3 id="profileModalName">User</h3>
+          <p id="profileModalEmail">user@example.com</p>
+          <span class="profile-modal-badge" id="profileModalBadge">Guest</span>
+        </div>
       </div>
-      <div class="profile-modal-info">
-        <h3 id="profileModalName">User</h3>
-        <p id="profileModalEmail"></p>
-        <span class="profile-modal-badge" id="profileModalBadge">Guest</span>
+
+      <hr class="profile-divider">
+
+      <div class="profile-modal-stats">
+        <div class="profile-stat">
+          <span class="profile-stat-count" id="statSaved">0</span>
+          <span class="profile-stat-label">Saved</span>
+        </div>
+        <div class="profile-stat">
+          <span class="profile-stat-count" id="statLiked">0</span>
+          <span class="profile-stat-label">Liked</span>
+        </div>
+        <div class="profile-stat">
+          <span class="profile-stat-count" id="statJoined">—</span>
+          <span class="profile-stat-label">Joined</span>
+        </div>
       </div>
-    </div>
 
-    <hr class="profile-divider">
+      <hr class="profile-divider">
 
-    <!-- Stats -->
-    <div class="profile-modal-stats">
-      <div class="profile-stat">
-        <span class="profile-stat-count" id="statSaved">0</span>
-        <span class="profile-stat-label">Saved</span>
-      </div>
-      <div class="profile-stat">
-        <span class="profile-stat-count" id="statLiked">0</span>
-        <span class="profile-stat-label">Liked</span>
-      </div>
-      <div class="profile-stat">
-        <span class="profile-stat-count" id="statJoined">—</span>
-        <span class="profile-stat-label">Joined</span>
-      </div>
-    </div>
+      <div class="profile-modal-actions" id="profileModalActions"></div>
 
-    <hr class="profile-divider">
-
-    <!-- Actions -->
-    <div class="profile-modal-actions" id="profileModalActions">
-      <!-- Reset password — email users lang, injected via JS -->
-    </div>
-
-    <!-- Delete Account -->
-    <button class="profile-delete-btn" id="profileDeleteBtn">
-      <i class="fas fa-trash-alt"></i> Delete Account Permanently
-    </button>
-
-  </div>
-</div>
-
-<!-- My Videos Modal -->
-<div class="modal-overlay" id="myVideosModal" aria-hidden="true">
-  <div class="modal-content my-videos-modal-content" role="dialog" aria-modal="true">
-    <button class="modal-close" type="button" id="myVideosCloseBtn">&times;</button>
-    <div class="my-videos-header">
-      <div class="profile-modal-avatar" id="myVideosAvatar">
-        <i class="fa-solid fa-user"></i>
-      </div>
-      <h3 id="myVideosName">User</h3>
-    </div>
-    <h2 class="my-videos-title">My Videos</h2>
-    <div class="my-videos-grid" id="myVideosGrid">
-      <!-- dynamic -->
+      <button class="profile-delete-btn" id="profileDeleteBtn" type="button">
+        <i class="fas fa-sign-out-alt"></i> Sign Out of Account
+      </button>
     </div>
   </div>
-</div>
 
+  <!-- My Videos Modal -->
+  <div class="modal-overlay" id="myVideosModal" aria-hidden="true">
+    <div class="modal-content my-videos-modal-content" role="dialog" aria-modal="true">
+      <button class="modal-close" type="button" id="myVideosCloseBtn" aria-label="Close modal">&times;</button>
+      <div class="my-videos-header">
+        <div class="profile-modal-avatar" id="myVideosAvatar" style="width: 44px; height: 44px;">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <div>
+          <h3 id="myVideosName">My Saved Hacks</h3>
+          <p style="font-size: 12px; color: var(--text-muted); margin: 0;">Quick access to your bookmarked tutorials</p>
+        </div>
+      </div>
+      <div class="my-videos-grid" id="myVideosGrid">
+        <!-- Dynamic saved cards -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
   <footer id="contact">
-  <div class="footer-wrapper">
+    <div class="footer-wrapper">
+      <!-- Column 1: Brand -->
+      <div class="footer-col footer-brand">
+        <img src="images/footer-logo.png" alt="CapHacks Logo" class="footer-logo">
+        <p class="footer-tagline">Turn your raw footage into viral hits with CapCut — simple hacks, real creator results.</p>
+        <div class="social-links">
+          <a href="https://facebook.com" class="social-icon facebook" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+          <a href="https://instagram.com" class="social-icon instagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://youtube.com" class="social-icon youtube" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          <a href="https://tiktok.com" class="social-icon tiktok" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+        </div>
+      </div>
 
-    <!-- Column 1: Brand -->
-    <div class="footer-col footer-brand">
-      <img src="images/footer-logo.png" alt="CapHacks Logo" class="footer-logo">
-      <p class="footer-tagline">Turn your raw footage into viral hits using CapCut — simple hacks, real results.</p>
-      <div class="social-links">
-        <a href="https://facebook.com" class="social-icon facebook"><i class="fa-brands fa-facebook"></i></a>
-        <a href="https://instagram.com" class="social-icon instagram"><i class="fa-brands fa-instagram"></i></a>
-        <a href="https://youtube.com" class="social-icon youtube"><i class="fa-brands fa-youtube"></i></a>
-        <a href="https://tiktok.com" class="social-icon tiktok"><i class="fa-brands fa-tiktok"></i></a>
+      <!-- Column 2: Quick Links -->
+      <div class="footer-col">
+        <h4 class="footer-col-title">Navigation</h4>
+        <ul class="footer-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="video-hacks.html">Tips & Tricks</a></li>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 3: Tutorials -->
+      <div class="footer-col">
+        <h4 class="footer-col-title">Categories</h4>
+        <ul class="footer-links">
+          <li><a href="video-hacks.html?cat=Basic">Basic Hacks</a></li>
+          <li><a href="video-hacks.html?cat=Intermediate">Intermediate Transitions</a></li>
+          <li><a href="video-hacks.html?cat=Advance">Advance Effects</a></li>
+          <li><a href="video-hacks.html">All Video Tutorials</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 4: Contact -->
+      <div class="footer-col">
+        <h4 class="footer-col-title">Get in Touch</h4>
+        <ul class="footer-contact-list">
+          <li>
+            <i class="fa-regular fa-envelope"></i>
+            <a href="mailto:support@caphacks.com">support@caphacks.com</a>
+          </li>
+          <li>
+            <i class="fa-solid fa-phone"></i>
+            <a href="tel:+639171234567">+63 917 123 4567</a>
+          </li>
+          <li>
+            <i class="fa-solid fa-location-dot"></i>
+            <span>Philippines</span>
+          </li>
+        </ul>
       </div>
     </div>
 
-    <!-- Column 2: Quick Links -->
-    <div class="footer-col">
-      <h4 class="footer-col-title">Quick Links</h4>
-      <ul class="footer-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="video-hacks.html">Tips & Tricks</a></li>
-        <li><a href="#about">About Us</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
+    <div class="footer-bottom">
+      <p>&copy; 2026 CapHacks. All rights reserved.</p>
+      <p>Made with <i class="fas fa-heart" style="color: var(--secondary-color);"></i> for CapCut video editors worldwide</p>
     </div>
+  </footer>
 
-    <!-- Column 3: Tutorials -->
-    <div class="footer-col">
-      <h4 class="footer-col-title">Tutorials</h4>
-      <ul class="footer-links">
-        <li><a href="video-hacks.html">Basic</a></li>
-        <li><a href="video-hacks.html">Intermediate</a></li>
-        <li><a href="video-hacks.html">Advance</a></li>
-        <li><a href="video-hacks.html">All Videos</a></li>
-      </ul>
-    </div>
-
-    <!-- Column 4: Contact -->
-    <div class="footer-col">
-      <h4 class="footer-col-title">Contact Us</h4>
-      <ul class="footer-contact-list">
-        <li>
-          <i class="fa-regular fa-envelope"></i>
-          <a href="mailto:support@caphacks.com">support@caphacks.com</a>
-        </li>
-        <li>
-          <i class="fa-solid fa-phone"></i>
-          <a href="tel:+639171234567">+63 917 1234567</a>
-        </li>
-        <li>
-          <i class="fa-solid fa-location-dot"></i>
-          <span>Philippines</span>
-        </li>
-      </ul>
-    </div>
-
-  </div>
-
-  <!-- Bottom bar -->
-  <div class="footer-bottom">
-    <p>&copy; 2026 CapHacks. All rights reserved.</p>
-    <p>Made with <i class="fas fa-heart" style="color: #ff2d55;"></i> for CapCut creators</p>
-  </div>
-</footer> 
-
-
-
-<!-- JavaScript files -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/globals.js"></script>
+  <!-- Core Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/globals.js"></script>
   <script src="js/cookies.js"></script>
-<script src="js/config.js"></script>
-<script src="js/supabase.js" defer></script>
-<script src="js/auth.js" defer></script>
-<script src="js/script.js" defer></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/script.js"></script>
 </body>
 </html>

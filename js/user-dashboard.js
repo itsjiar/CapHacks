@@ -1,42 +1,35 @@
-const BUCKET_NAME_USER = 'caphacksVideos'; // ← palitan kung iba yung bucket name mo
+// User Dashboard Engine - CapHacks
+const BUCKET_NAME_USER = 'caphacksVideos';
 
 document.addEventListener('DOMContentLoaded', async () => {
-
-  // ==========================================
-  // 1. WAIT FOR SUPABASE + AUTH CHECK
-  // ==========================================
   function waitForSupabase(callback) {
     if (window.supabase && window.supabase.auth) {
       callback();
     } else {
-      setTimeout(() => waitForSupabase(callback), 100);
+      setTimeout(() => waitForSupabase(callback), 80);
     }
   }
 
   waitForSupabase(async () => {
-    const { data: sessionData } = await window.supabase.auth.getSession();
-    const user = sessionData?.session?.user;
+    try {
+      const { data: sessionData } = await window.supabase.auth.getSession();
+      const user = sessionData?.session?.user;
 
-    if (!user) {
+      if (!user || user.email === null) {
+        alert('Please log in or create an account to access the creator dashboard.');
+        window.location.href = 'index.html';
+        return;
+      }
+
+      initUserDashboard(user);
+    } catch (e) {
+      console.error('User dashboard init error:', e);
       window.location.href = 'index.html';
-      return;
     }
-
-    // Guest users — redirect to home, dashboard is for accounts only
-    if (user.email === null) {
-      alert('Please create an account to access your dashboard.');
-      window.location.href = 'index.html';
-      return;
-    }
-
-    initUserDashboard(user);
   });
 
   async function initUserDashboard(user) {
-
-    // ==========================================
-    // 2. SIDEBAR USER INFO
-    // ==========================================
+    // 1. Sidebar User Info
     const dashName = document.getElementById('dashName');
     const dashEmail = document.getElementById('dashEmail');
     const dashAvatar = document.getElementById('dashAvatar');
@@ -47,13 +40,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const avatarUrl = user.user_metadata?.avatar_url || user.user_metadata?.picture;
     if (dashAvatar) {
       dashAvatar.innerHTML = avatarUrl
-        ? `<img src="${avatarUrl}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+        ? `<img src="${avatarUrl}" alt="avatar">`
         : `<i class="fas fa-user"></i>`;
     }
 
-    // ==========================================
-    // 3. SIDEBAR NAVIGATION
-    // ==========================================
+    // 2. Sidebar Navigation Tabs
     const navItems = document.querySelectorAll('.nav-item[data-target]');
     const sections = document.querySelectorAll('.dashboard-section');
 
@@ -75,7 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     });
 
-    // Mobile sidebar
+    // Mobile Sidebar Toggles
     document.getElementById('sidebarOpenBtn')?.addEventListener('click', () => {
       document.querySelector('.dashboard-sidebar')?.classList.add('active');
     });
@@ -83,28 +74,26 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.querySelector('.dashboard-sidebar')?.classList.remove('active');
     });
 
-    // Sign out
+    // Sign Out
     document.getElementById('dashSignOutBtn')?.addEventListener('click', async () => {
       await window.supabase.auth.signOut();
       window.location.href = 'index.html';
     });
 
-    // ==========================================
-    // 4. UPLOAD PROOF MODAL
-    // ==========================================
+    // 3. Upload Proof Modal Logic
     const uploadProofModal = document.getElementById('uploadProofModal');
     const openUploadProofBtn = document.getElementById('openUploadProofBtn');
     const closeUploadProofBtn = document.getElementById('closeUploadProofBtn');
     const proofTutorialSelect = document.getElementById('proofTutorialSelect');
 
     openUploadProofBtn?.addEventListener('click', async () => {
-      // Populate tutorials dropdown
-      const { data: tutorials } = await window.supabase
-        .from('tutorials')
-        .select('id, title')
-        .order('created_at', { ascending: false });
-
       if (proofTutorialSelect) {
+        proofTutorialSelect.innerHTML = '<option value="">Loading tutorials...</option>';
+        const { data: tutorials } = await window.supabase
+          .from('tutorials')
+          .select('id, title')
+          .order('created_at', { ascending: false });
+
         proofTutorialSelect.innerHTML = '<option value="">Select a tutorial...</option>';
         if (tutorials) {
           tutorials.forEach(t => {
@@ -116,17 +105,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
       }
 
-      if (uploadProofModal) {
-        uploadProofModal.classList.add('active');
-        uploadProofModal.setAttribute('aria-hidden', 'false');
-      }
+      uploadProofModal?.classList.add('active');
     });
 
     function closeProofModal() {
-      if (uploadProofModal) {
-        uploadProofModal.classList.remove('active');
-        uploadProofModal.setAttribute('aria-hidden', 'true');
-      }
+      uploadProofModal?.classList.remove('active');
       const proofError = document.getElementById('proofError');
       const proofProgress = document.getElementById('proofProgress');
       const proofBar = document.getElementById('proofBar');
@@ -136,14 +119,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     closeUploadProofBtn?.addEventListener('click', closeProofModal);
-
-    // Click outside to close
     uploadProofModal?.addEventListener('click', (e) => {
       if (e.target === uploadProofModal) closeProofModal();
     });
 
-    // Submit proof upload
-    document.getElementById('submitProofBtn')?.addEventListener('click', async () => {
+    // Submit Proof of Learning Upload
+    document.getElementById('submitProofBtn')?.addEventListener('click', async (e) => {
+      e.preventDefault();
       const tutId = proofTutorialSelect?.value;
       const fileInput = document.getElementById('proofFile');
       const file = fileInput?.files[0];
@@ -158,10 +140,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (!file) { if (errorEl) errorEl.textContent = 'Please select a video file.'; return; }
 
       if (progressEl) progressEl.style.display = 'block';
-      if (statusEl) statusEl.textContent = 'Uploading your video...';
-      if (progressBar) progressBar.value = 20;
+      if (statusEl) statusEl.textContent = 'Uploading your video edit...';
+      if (progressBar) progressBar.value = 25;
 
-      // Upload to storage
       const fileName = `user-${user.id}-${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
       const { error: storageError } = await window.supabase.storage
         .from(BUCKET_NAME_USER)
@@ -173,14 +154,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
       }
 
-      if (progressBar) progressBar.value = 70;
-      if (statusEl) statusEl.textContent = 'Saving to database...';
+      if (progressBar) progressBar.value = 75;
+      if (statusEl) statusEl.textContent = 'Saving edit details...';
 
       const { data: urlData } = window.supabase.storage
         .from(BUCKET_NAME_USER)
         .getPublicUrl(fileName);
 
-      // Insert to user_videos table
       const { error: dbError } = await window.supabase.from('user_videos').insert({
         user_id: user.id,
         tutorial_id: tutId,
@@ -196,46 +176,41 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
 
       if (progressBar) progressBar.value = 100;
-      if (statusEl) statusEl.textContent = 'Uploaded successfully!';
+      if (statusEl) statusEl.textContent = 'Upload complete! Well done!';
 
       setTimeout(() => {
         closeProofModal();
         loadMyUploads(user.id);
-      }, 1200);
+      }, 1000);
     });
 
-    // ==========================================
-    // 5. INITIAL LOAD
-    // ==========================================
+    // 4. Initial Section Load
     loadLikedVideos(user.id);
 
-    // ==========================================
-    // 6. DATA LOADERS
-    // ==========================================
+    // 5. Data Loaders
     async function loadLikedVideos(userId) {
       const grid = document.getElementById('likedGrid');
       if (!grid) return;
-      grid.innerHTML = '<p class="loading-text">Loading liked videos...</p>';
+      grid.innerHTML = '<p class="loading-text">Loading liked hacks...</p>';
 
-      // session_id for logged-in users = their user.id (set by cookies.js migration)
       const { data: likes, error } = await window.supabase
         .from('ratings')
         .select('tutorial_id')
         .eq('session_id', userId);
 
       if (error) {
-        grid.innerHTML = `<p class="empty-state">Error loading liked videos.</p>`;
+        grid.innerHTML = `<p class="empty-state">Error loading liked videos: ${error.message}</p>`;
         return;
       }
 
       if (!likes || likes.length === 0) {
-        grid.innerHTML = '<p class="empty-state">No liked videos yet. Go watch some tutorials!</p>';
+        grid.innerHTML = '<p class="empty-state">No liked hacks yet. Explore the feed and star your favorites!</p>';
         return;
       }
 
       const tutorialIds = [...new Set(likes.map(l => l.tutorial_id).filter(Boolean))];
       if (tutorialIds.length === 0) {
-        grid.innerHTML = '<p class="empty-state">No liked videos yet.</p>';
+        grid.innerHTML = '<p class="empty-state">No liked hacks yet.</p>';
         return;
       }
 
@@ -244,13 +219,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         .select('*')
         .in('id', tutorialIds);
 
-      renderVideoGrid(grid, videos, false);
+      renderVideoCards(grid, videos);
     }
 
     async function loadSavedVideos(userId) {
       const grid = document.getElementById('savedGrid');
       if (!grid) return;
-      grid.innerHTML = '<p class="loading-text">Loading saved videos...</p>';
+      grid.innerHTML = '<p class="loading-text">Loading saved hacks...</p>';
 
       const { data: saves, error } = await window.supabase
         .from('progress')
@@ -258,18 +233,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         .eq('session_id', userId);
 
       if (error) {
-        grid.innerHTML = `<p class="empty-state">Error loading saved videos.</p>`;
+        grid.innerHTML = `<p class="empty-state">Error loading saved videos: ${error.message}</p>`;
         return;
       }
 
       if (!saves || saves.length === 0) {
-        grid.innerHTML = '<p class="empty-state">No saved videos yet. Bookmark something from the feed!</p>';
+        grid.innerHTML = '<p class="empty-state">No saved hacks yet. Bookmark tutorials from the feed!</p>';
         return;
       }
 
       const tutorialIds = [...new Set(saves.map(s => s.tutorial_id).filter(Boolean))];
       if (tutorialIds.length === 0) {
-        grid.innerHTML = '<p class="empty-state">No saved videos yet.</p>';
+        grid.innerHTML = '<p class="empty-state">No saved hacks yet.</p>';
         return;
       }
 
@@ -278,13 +253,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         .select('*')
         .in('id', tutorialIds);
 
-      renderVideoGrid(grid, videos, false);
+      renderVideoCards(grid, videos);
     }
 
     async function loadMyUploads(userId) {
       const grid = document.getElementById('uploadsGrid');
       if (!grid) return;
-      grid.innerHTML = '<p class="loading-text">Loading your uploads...</p>';
+      grid.innerHTML = '<p class="loading-text">Loading your proof uploads...</p>';
 
       const { data: uploads, error } = await window.supabase
         .from('user_videos')
@@ -299,10 +274,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       if (!uploads || uploads.length === 0) {
         grid.innerHTML = `
-          <div class="empty-state" style="grid-column:1/-1; text-align:center; padding:40px; color:#aaa;">
-            <i class="fas fa-video" style="font-size:32px; margin-bottom:12px; display:block; opacity:0.4;"></i>
+          <div class="empty-state">
+            <i class="fas fa-video" style="font-size:36px; margin-bottom:12px; display:block; opacity:0.4;"></i>
             <p>You haven't uploaded any proof of learning yet.</p>
-            <p style="font-size:13px; margin-top:8px;">Watch a tutorial, practice the technique, then upload your edit!</p>
+            <p style="font-size:13px; margin-top:6px; color:var(--text-muted);">Watch a tutorial, practice the hack in CapCut, then click "Upload Proof"!</p>
           </div>
         `;
         return;
@@ -312,51 +287,37 @@ document.addEventListener('DOMContentLoaded', async () => {
       uploads.forEach(upload => {
         const card = document.createElement('div');
         card.className = 'video-card';
-        const tutTitle = upload.tutorials?.title || 'Unknown Tutorial';
+        const tutTitle = upload.tutorials?.title || 'Tutorial Hack';
         const date = new Date(upload.created_at).toLocaleDateString('en-US', {
           month: 'short', day: 'numeric', year: 'numeric'
         });
 
         card.innerHTML = `
-          <div class="video-card-thumbnail" style="aspect-ratio:9/16; background:#000; overflow:hidden;">
-            <video src="${upload.video_url}" muted playsinline preload="metadata"
-              style="width:100%; height:100%; object-fit:cover;"></video>
+          <div class="video-card-thumbnail">
+            <video src="${upload.video_url}" muted playsinline preload="metadata"></video>
           </div>
           <div class="video-card-info">
-            <h3 class="video-card-title" style="font-size:13px; margin-bottom:4px;">
-              Proof for: <span style="color:#3ecfea;">${tutTitle}</span>
-            </h3>
-            <div class="video-card-meta">
-              <span style="color:#888; font-size:11px;">${date}</span>
-            </div>
-            <div class="video-card-actions" style="margin-top:10px;">
-              <button class="card-btn danger"
-                style="width:100%; padding:8px; background:rgba(255,45,85,0.15);
-                border:1px solid rgba(255,45,85,0.3); color:#ff2d55; border-radius:6px;
-                cursor:pointer; font-size:12px; font-family:'Inter',sans-serif;"
-                onclick="deleteMyUpload('${upload.id}', '${upload.video_filename || ''}', '${userId}')">
-                <i class="fas fa-trash"></i> Delete
+            <h3 class="video-card-title">Proof for: <span style="color:var(--primary-color);">${tutTitle}</span></h3>
+            <div class="video-card-meta"><span>${date}</span></div>
+            <div class="video-card-actions">
+              <button class="card-btn danger" onclick="deleteMyUpload('${upload.id}', '${upload.video_filename || ''}')">
+                <i class="fas fa-trash"></i> Delete Edit
               </button>
             </div>
           </div>
         `;
 
         const videoEl = card.querySelector('video');
-        card.addEventListener('mouseenter', () => videoEl.play().catch(e => e));
-        card.addEventListener('mouseleave', () => { videoEl.pause(); videoEl.currentTime = 0; });
+        card.addEventListener('mouseenter', () => videoEl?.play().catch(() => {}));
+        card.addEventListener('mouseleave', () => {
+          if (videoEl) { videoEl.pause(); videoEl.currentTime = 0; }
+        });
 
         grid.appendChild(card);
       });
     }
 
-    // Make loadMyUploads accessible globally for delete
-    window._loadMyUploads = loadMyUploads;
-    window._userId = user.id;
-
-    // ==========================================
-    // RENDER VIDEO GRID (Liked & Saved)
-    // ==========================================
-    function renderVideoGrid(gridElement, videos) {
+    function renderVideoCards(gridElement, videos) {
       if (!videos || videos.length === 0) {
         gridElement.innerHTML = '<p class="empty-state">No videos found.</p>';
         return;
@@ -371,59 +332,49 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         card.innerHTML = `
-          <div class="video-card-thumbnail" style="aspect-ratio:9/16; background:#000; overflow:hidden; position:relative;">
-            <video src="${video.video_url}" muted playsinline preload="metadata"
-              style="width:100%; height:100%; object-fit:cover;"></video>
-            <span style="position:absolute; top:8px; left:8px; background:rgba(0,0,0,0.7);
-              color:white; font-size:10px; padding:3px 8px; border-radius:4px; font-weight:600;">
-              ${video.category || 'Basic'}
-            </span>
+          <div class="video-card-thumbnail">
+            <video src="${video.video_url}" muted playsinline preload="metadata"></video>
           </div>
           <div class="video-card-info">
             <h3 class="video-card-title">${video.title}</h3>
-            <div class="video-card-meta">
-              <span style="color:#888; font-size:11px;">${date}</span>
-            </div>
-            <div class="video-card-actions" style="margin-top:10px;">
-              <a href="video-hacks.html"
-                style="display:block; text-align:center; padding:8px; background:rgba(255,255,255,0.08);
-                border:none; border-radius:6px; color:white; font-size:12px;
-                font-family:'Inter',sans-serif; text-decoration:none; transition:background 0.2s;"
-                onmouseover="this.style.background='rgba(255,255,255,0.15)'"
-                onmouseout="this.style.background='rgba(255,255,255,0.08)'">
-                <i class="fas fa-play"></i> Watch Again
+            <div class="video-card-meta"><span>${date}</span></div>
+            <div class="video-card-actions">
+              <a href="video-hacks.html?video=${video.id}" class="card-btn">
+                <i class="fas fa-play"></i> Watch Hack
               </a>
             </div>
           </div>
         `;
 
         const videoEl = card.querySelector('video');
-        card.addEventListener('mouseenter', () => videoEl.play().catch(e => e));
-        card.addEventListener('mouseleave', () => { videoEl.pause(); videoEl.currentTime = 0; });
+        card.addEventListener('mouseenter', () => videoEl?.play().catch(() => {}));
+        card.addEventListener('mouseleave', () => {
+          if (videoEl) { videoEl.pause(); videoEl.currentTime = 0; }
+        });
 
         gridElement.appendChild(card);
       });
     }
+
+    window._loadMyUploads = loadMyUploads;
+    window._userId = user.id;
   }
 
-  // ==========================================
-  // GLOBAL DELETE USER UPLOAD
-  // ==========================================
-  window.deleteMyUpload = async function(uploadId, videoFilename, userId) {
-    if (!confirm('Delete this upload? This cannot be undone.')) return;
+  window.deleteMyUpload = async function (uploadId, videoFilename) {
+    if (!confirm('Are you sure you want to delete this edit? This action cannot be undone.')) return;
 
-    // Remove from storage
     if (videoFilename) {
       await window.supabase.storage.from(BUCKET_NAME_USER).remove([videoFilename]);
     }
 
     const { error } = await window.supabase.from('user_videos').delete().eq('id', uploadId);
-    if (error) { alert('Error: ' + error.message); return; }
+    if (error) {
+      alert('Error deleting: ' + error.message);
+      return;
+    }
 
-    // Reload uploads
     if (window._loadMyUploads && window._userId) {
       window._loadMyUploads(window._userId);
     }
   };
-
 });

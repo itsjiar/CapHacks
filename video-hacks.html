@@ -3,65 +3,86 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CapHacks</title>
+  <title>Video Hacks & Tutorials | CapHacks</title>
+  <meta name="description" content="Explore vertical video tutorials and step-by-step CapCut hacks categorized by skill level. Rate, bookmark, and upload your own edits.">
   <link rel="icon" type="image/x-icon" href="images/icons/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/general.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/video-hacks.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
 </head>
-<body id="home" style="background-color: rgba(0, 0, 0, 0.959);">
+
+<body id="video-hacks-page">
+  <!-- Top Navigation Header -->
   <header>
-    <nav class="navbar">
+    <nav class="navbar" aria-label="Tutorials Navigation">
       <div class="left-section">
-        <a href="index.html"><img class="logo-image" src="images/caphacks-logo.svg" alt="CapHacks Logo"></a>
+        <a href="index.html" aria-label="Back to CapHacks Home">
+          <img class="logo-image" src="images/caphacks-logo.svg" alt="CapHacks Logo">
+        </a>
       </div>
 
       <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">
-      <label for="nav-toggle" class="nav-toggle-label">
+      <label for="nav-toggle" class="nav-toggle-label" aria-hidden="true">
         <span></span>
       </label>
 
+      <!-- Search in Navbar -->
       <div class="middle-section">
-        <input class="search-bar" type="search" placeholder="Want to learn something?" id="search-input">
-        <button class="search-button"><i class="fas fa-search"></i></button>
+        <div class="search-container">
+          <input class="search-bar" type="search" placeholder="Search hacks, transitions, tags..." id="search-input" aria-label="Search tutorials">
+          <button class="search-button" id="searchBtn" aria-label="Submit search"><i class="fas fa-search"></i></button>
+        </div>
       </div>
 
       <div class="right-section">
-        <a href="#" id="myDashboardBtn" class="my-dashboard-btn" style="display: none;">My Dashboard</a>
+        <a href="#" id="myDashboardBtn" class="my-dashboard-btn" style="display: none;">
+          <i class="fas fa-gauge"></i> My Dashboard
+        </a>
         <div class="auth-buttons" id="authButtons">
           <button class="login-btn" id="loginOpenBtn">Log In</button>
           <button class="signup-btn" id="signupOpenBtn">Sign Up</button>
         </div>
-        <div class="user-badge" id="userBadge" hidden>
-          <button type="button" class="avatar-btn" id="profileBtn">
+        <div class="user-badge" id="userBadge" hidden style="display: none;">
+          <button type="button" class="avatar-btn" id="profileBtn" aria-label="User Profile">
             <span class="avatar-ring" id="profileAvatar"><i class="fa-solid fa-user"></i></span>
             <span class="profile-name" id="profileName">User</span>
+            <i class="fas fa-chevron-down" style="font-size: 10px; color: var(--text-muted);"></i>
           </button>
           <div class="profile-dropdown" id="profileDropdown" hidden>
-            <a href="user-dashboard.html" class="dropdown-item" id="myProfileBtn">My Profile</a>
-            <a href="#" class="dropdown-item" id="myVideosBtn">My Videos</a>
-            <button type="button" class="dropdown-item dropdown-signout" id="dropdownSignOutBtn">Sign Out</button>
+            <button type="button" class="dropdown-item" id="myProfileBtn"><i class="fas fa-user-circle"></i> My Profile</button>
+            <button type="button" class="dropdown-item" id="myVideosBtn"><i class="fas fa-bookmark"></i> Saved Videos</button>
+            <button type="button" class="dropdown-item dropdown-signout" id="dropdownSignOutBtn"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
           </div>
         </div>
       </div>
 
-      <div class="mobile-menu">
+      <!-- Mobile Menu -->
+      <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-search" style="margin-bottom: 10px;">
+          <input class="search-bar" type="search" placeholder="Search tutorials..." id="search-input-mobile" style="width: 100%;">
+        </div>
+        <ul class="mobile-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="video-hacks.html" class="active">Tips & Tricks</a></li>
+          <li><a href="index.html#about">About Us</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
         <div class="mobile-actions">
           <button class="login-btn" id="loginOpenMobileBtn">Log In</button>
           <button class="signup-btn" id="signupOpenMobileBtn">Sign Up</button>
-          <div class="mobile-user-badge" id="mobileUserBadge" hidden>
-            <span class="avatar-ring mobile-avatar" id="mobileProfileAvatar"><i class="fa-solid fa-user"></i></span>
-            <span class="profile-name" id="mobileProfileName">User</span>
-            <div class="profile-dropdown mobile-dropdown" id="mobileProfileDropdown" hidden>
-              <a href="user-dashboard.html" class="dropdown-item" id="myProfileMobileBtn">My Profile</a>
-              <a href="#" class="dropdown-item" id="myVideosMobileBtn">My Videos</a>
-              <button type="button" class="dropdown-item dropdown-signout" id="mobileDropdownSignOutBtn">Sign Out</button>
+          <div class="mobile-user-badge" id="mobileUserBadge" hidden style="display: none;">
+            <button type="button" class="avatar-btn" style="width: 100%; justify-content: flex-start;">
+              <span class="avatar-ring" id="mobileProfileAvatar"><i class="fa-solid fa-user"></i></span>
+              <span class="profile-name" id="mobileProfileName">User</span>
+            </button>
+            <div class="profile-dropdown mobile-dropdown" id="mobileProfileDropdown">
+              <button type="button" class="dropdown-item" id="myProfileMobileBtn"><i class="fas fa-user-circle"></i> My Profile</button>
+              <button type="button" class="dropdown-item" id="myVideosMobileBtn"><i class="fas fa-bookmark"></i> Saved Videos</button>
+              <button type="button" class="dropdown-item dropdown-signout" id="mobileDropdownSignOutBtn"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
             </div>
           </div>
         </div>
@@ -69,193 +90,173 @@
     </nav>
   </header>
 
-  <main>
-  <div class="video-grid" id="videoGrid">
-    <!-- dito na papasok ang video cards -->
+  <!-- Category Pills Filter Bar -->
+  <div class="category-filter-bar" id="categoryFilterBar">
+    <button class="cat-pill active" data-category="all"><i class="fas fa-layer-group"></i> All Hacks</button>
+    <button class="cat-pill" data-category="Basic"><i class="fas fa-seedling"></i> Basic</button>
+    <button class="cat-pill" data-category="Intermediate"><i class="fas fa-bolt"></i> Intermediate</button>
+    <button class="cat-pill" data-category="Advance"><i class="fas fa-wand-magic-sparkles"></i> Advance</button>
   </div>
-</main>
 
+  <!-- Global Sound Control Indicator -->
+  <button class="global-sound-toggle" id="globalSoundToggle" aria-label="Toggle Sound">
+    <i class="fas fa-volume-xmark" id="soundIcon"></i>
+    <span id="soundLabel">Sound Off</span>
+  </button>
+
+  <!-- Main Fullscreen Vertical Video Feed -->
+  <main class="video-feed-main">
+    <div class="video-grid" id="videoGrid">
+      <div class="video-loading-state">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Loading CapCut masterclass tutorials...</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Fixed Chevrons Navigation for Desktop -->
+  <div class="video-nav-fixed">
+    <button class="video-nav-button video-prev-button" id="prevVideoBtn" aria-label="Previous video"><i class="fas fa-chevron-up"></i></button>
+    <button class="video-nav-button video-next-button" id="nextVideoBtn" aria-label="Next video"><i class="fas fa-chevron-down"></i></button>
+  </div>
+
+  <!-- Slide-In Comment Panel -->
+  <div class="comment-panel" id="commentPanel">
+    <div class="comment-panel-header">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <i class="fas fa-comments" style="color: var(--primary-color);"></i>
+        <h3>Creator Comments</h3>
+      </div>
+      <button class="comment-panel-close" id="commentPanelClose" aria-label="Close comments">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Comment Input -->
+    <div class="comment-input-area" id="commentInputArea">
+      <textarea id="commentInput" placeholder="Share your thoughts or ask editing questions..." rows="2"></textarea>
+      <button class="comment-send-btn" id="commentSendBtn" type="button">
+        <i class="fas fa-paper-plane"></i> Post
+      </button>
+      <div class="comment-guest-msg" id="commentGuestMsg" style="display: none;">
+        <i class="fas fa-lock"></i> 
+        <a href="#" id="commentLoginLink">Sign in or create account</a> to post comments.
+      </div>
+    </div>
+
+    <!-- Comments List -->
+    <div class="comments-list" id="commentsList">
+      <p class="comments-loading">Loading creator discussion...</p>
+    </div>
+  </div>
+
+  <!-- Panel Overlay -->
+  <div class="comment-panel-overlay" id="commentPanelOverlay"></div>
+
+  <!-- Auth Modal -->
   <div class="modal-overlay" id="authModal" aria-hidden="true">
     <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="authTitle">
-      <button class="modal-close" type="button" id="authCloseBtn" aria-label="Close">&times;</button>
+      <button class="modal-close" type="button" id="authCloseBtn" aria-label="Close modal">&times;</button>
       <h2 id="authTitle">Sign In to CapHacks</h2>
       <p>Welcome back! Sign in or create a new account.</p>
       <form class="login-form" id="authForm" data-mode="login">
         <label>
           <span>Email address</span>
-          <input type="email" name="email" placeholder="you@example.com" required>
+          <input type="email" name="email" placeholder="you@example.com" required autocomplete="email">
         </label>
 
         <label>
           <span>Password</span>
-          <input type="password" name="password" placeholder="Enter your password" required>
+          <input type="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
         </label>
 
         <div class="confirm-password-row" id="confirmPasswordRow" style="display:none;">
           <label>
             <span>Confirm password</span>
-            <input type="password" name="confirmPassword" placeholder="Confirm your password">
+            <input type="password" name="confirmPassword" placeholder="Confirm your password" autocomplete="new-password">
           </label>
         </div>
 
         <button class="colored-btn" type="submit" id="submitAuthBtn">Sign In</button>
 
-        <div class="login-divider"><span>Or sign in with</span></div>
-        <button type="button" class="third-party-btn google-btn" id="googleAuthBtn">Continue with Google</button>
-        <button type="button" class="third-party-btn guest-btn" id="guestAuthBtn">Continue as Guest</button>
+        <div class="login-divider"><span>Or continue with</span></div>
+        <button type="button" class="third-party-btn google-btn" id="googleAuthBtn">
+          <i class="fa-brands fa-google" style="color: #4285f4;"></i> Continue with Google
+        </button>
+        <button type="button" class="third-party-btn guest-btn" id="guestAuthBtn">
+          <i class="fas fa-user-astronaut"></i> Continue as Guest
+        </button>
 
-        <p class="small-text">Don't have an account? <button type="button" class="link-button" id="switchModeBtn" data-target-mode="signup">Sign Up</button></p>
+        <p class="small-text">
+          <span id="authModePrompt">Don't have an account?</span> 
+          <button type="button" class="link-button" id="switchModeBtn" data-target-mode="signup">Sign Up</button>
+        </p>
         <div class="login-error" id="authError" role="alert" aria-live="assertive"></div>
       </form>
     </div>
   </div>
 
-  <div class="video-nav-fixed">
-    <button class="video-nav-button video-prev-button" aria-label="Previous video"><i class="fas fa-chevron-up"></i></button>
-    <button class="video-nav-button video-next-button" aria-label="Next video"><i class="fas fa-chevron-down"></i></button>
-  </div>
-
-  <!-- Admin Upload Modal -->
-<div class="modal-overlay" id="uploadModal" aria-hidden="true">
-  <div class="modal-content" role="dialog">
-    <button class="modal-close" type="button" id="uploadCloseBtn">&times;</button>
-    <h2>Upload Tutorial</h2>
-
-    <div class="upload-form">
-      <label>
-        <span>Title</span>
-        <input type="text" id="uploadTitle" placeholder="e.g. 01 // Smooth Velocity" required>
-      </label>
-
-      <label>
-        <span>Description</span>
-        <textarea id="uploadDescription" placeholder="Short description ng tutorial..." rows="3"></textarea>
-      </label>
-
-      <label>
-        <span>Category</span>
-        <select id="uploadCategory">
-          <option value="Basic">Basic</option>
-          <option value="Intermediate">Intermediate</option>
-          <option value="Advance">Advance</option>
-        </select>
-      </label>
-
-      <label>
-        <span>Tags <small style="color:#888;">(comma separated, e.g. smooth, velocity, transition)</small></span>
-        <input type="text" id="uploadTags" placeholder="e.g. smooth, velocity, beginner">
-     </label>
-
-      <label>
-        <span>Video File</span>
-        <input type="file" id="uploadFile" accept="video/mp4,video/mov">
-      </label>
-
-      <div id="uploadProgress" style="display:none;">
-        <p id="uploadStatus">Uploading...</p>
-        <progress id="uploadBar" value="0" max="100" style="width:100%"></progress>
+  <!-- Profile Modal -->
+  <div class="modal-overlay" id="profileModal" aria-hidden="true">
+    <div class="modal-content profile-modal-content" role="dialog" aria-modal="true">
+      <button class="modal-close" type="button" id="profileCloseBtn" aria-label="Close modal">&times;</button>
+      <div class="profile-modal-header">
+        <div class="profile-modal-avatar" id="profileModalAvatar">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <div class="profile-modal-info">
+          <h3 id="profileModalName">User</h3>
+          <p id="profileModalEmail"></p>
+          <span class="profile-modal-badge" id="profileModalBadge">Guest</span>
+        </div>
       </div>
-
-      <button class="colored-btn" id="uploadSubmitBtn">Upload Video</button>
-      <div class="login-error" id="uploadError"></div>
+      <hr class="profile-divider">
+      <div class="profile-modal-stats">
+        <div class="profile-stat">
+          <span class="profile-stat-count" id="statSaved">0</span>
+          <span class="profile-stat-label">Saved</span>
+        </div>
+        <div class="profile-stat">
+          <span class="profile-stat-count" id="statLiked">0</span>
+          <span class="profile-stat-label">Liked</span>
+        </div>
+        <div class="profile-stat">
+          <span class="profile-stat-count" id="statJoined">—</span>
+          <span class="profile-stat-label">Joined</span>
+        </div>
+      </div>
+      <hr class="profile-divider">
+      <div class="profile-modal-actions" id="profileModalActions"></div>
+      <button class="profile-delete-btn" id="profileDeleteBtn">
+        <i class="fas fa-sign-out-alt"></i> Sign Out
+      </button>
     </div>
   </div>
-</div>
 
-<!-- Profile Modal -->
-<div class="modal-overlay" id="profileModal" aria-hidden="true">
-  <div class="modal-content profile-modal-content" role="dialog" aria-modal="true">
-    <button class="modal-close" type="button" id="profileCloseBtn">&times;</button>
-    <div class="profile-modal-header">
-      <div class="profile-modal-avatar" id="profileModalAvatar">
-        <i class="fa-solid fa-user"></i>
+  <!-- My Videos Modal -->
+  <div class="modal-overlay" id="myVideosModal" aria-hidden="true">
+    <div class="modal-content my-videos-modal-content" role="dialog" aria-modal="true">
+      <button class="modal-close" type="button" id="myVideosCloseBtn" aria-label="Close modal">&times;</button>
+      <div class="my-videos-header">
+        <div class="profile-modal-avatar" id="myVideosAvatar" style="width: 44px; height: 44px;">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <div>
+          <h3 id="myVideosName">My Saved Hacks</h3>
+          <p style="font-size: 12px; color: var(--text-muted); margin: 0;">Quick access to your bookmarked tutorials</p>
+        </div>
       </div>
-      <div class="profile-modal-info">
-        <h3 id="profileModalName">User</h3>
-        <p id="profileModalEmail"></p>
-        <span class="profile-modal-badge" id="profileModalBadge">Guest</span>
-      </div>
-    </div>
-    <hr class="profile-divider">
-    <div class="profile-modal-stats">
-      <div class="profile-stat">
-        <span class="profile-stat-count" id="statSaved">0</span>
-        <span class="profile-stat-label">Saved</span>
-      </div>
-      <div class="profile-stat">
-        <span class="profile-stat-count" id="statLiked">0</span>
-        <span class="profile-stat-label">Liked</span>
-      </div>
-      <div class="profile-stat">
-        <span class="profile-stat-count" id="statJoined">—</span>
-        <span class="profile-stat-label">Joined</span>
-      </div>
-    </div>
-    <hr class="profile-divider">
-    <div class="profile-modal-actions" id="profileModalActions"></div>
-    <button class="profile-delete-btn" id="profileDeleteBtn">
-      <i class="fas fa-trash-alt"></i> Delete Account Permanently
-    </button>
-  </div>
-</div>
-
-<!-- My Videos Modal -->
-<div class="modal-overlay" id="myVideosModal" aria-hidden="true">
-  <div class="modal-content my-videos-modal-content" role="dialog" aria-modal="true">
-    <button class="modal-close" type="button" id="myVideosCloseBtn">&times;</button>
-    <div class="my-videos-header">
-      <div class="profile-modal-avatar" id="myVideosAvatar">
-        <i class="fa-solid fa-user"></i>
-      </div>
-      <h3 id="myVideosName">User</h3>
-    </div>
-    <h2 class="my-videos-title">My Videos</h2>
-    <div class="my-videos-grid" id="myVideosGrid">
-      <!-- dynamic -->
+      <div class="my-videos-grid" id="myVideosGrid"></div>
     </div>
   </div>
-</div>
 
-  <!-- Comment Side Panel -->
-<div class="comment-panel" id="commentPanel">
-  <div class="comment-panel-header">
-    <h3>Comments</h3>
-    <button class="comment-panel-close" id="commentPanelClose">
-      <i class="fas fa-times"></i>
-    </button>
-  </div>
-
-  <!-- Comment Input -->
-  <div class="comment-input-area" id="commentInputArea">
-    <textarea 
-      id="commentInput" 
-      placeholder="Write a comment..." 
-      rows="2"
-    ></textarea>
-    <button class="comment-send-btn" id="commentSendBtn">
-      <i class="fas fa-paper-plane"></i> Send
-    </button>
-    <p class="comment-guest-msg" id="commentGuestMsg" style="display:none;">
-      <i class="fas fa-lock"></i> 
-      <a href="#" id="commentLoginLink">Create an account</a> to comment.
-    </p>
-  </div>
-
-  <!-- Comments List -->
-  <div class="comments-list" id="commentsList">
-    <p class="comments-loading">Loading comments...</p>
-  </div>
-</div>
-
-<!-- Panel Overlay -->
-<div class="comment-panel-overlay" id="commentPanelOverlay"></div>
-
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/globals.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/globals.js"></script>
   <script src="js/cookies.js"></script>
-<script src="js/config.js"></script>
-<script src="js/supabase.js" defer></script>
-<script src="js/auth.js" defer></script>
-<script src="js/video-hacks.js" defer></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/video-hacks.js"></script>
 </body>
 </html>

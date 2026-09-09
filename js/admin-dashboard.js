@@ -1,57 +1,52 @@
-// ==========================================
-// ADMIN EMAILS — palitan ng actual emails ninyo
-
-
-const BUCKET_NAME = 'caphacksVideos'; // ← palitan kung iba yung bucket name mo
+// Admin Dashboard Engine - CapHacks
+const BUCKET_NAME = 'caphacksVideos';
 
 document.addEventListener('DOMContentLoaded', async () => {
-
-  // ==========================================
-  // 1. AUTH CHECK — Admin only
-  // ==========================================
   function waitForSupabase(callback) {
     if (window.supabase && window.supabase.auth) {
       callback();
     } else {
-      setTimeout(() => waitForSupabase(callback), 100);
+      setTimeout(() => waitForSupabase(callback), 80);
     }
   }
 
   waitForSupabase(async () => {
-    const { data: sessionData } = await window.supabase.auth.getSession();
-    const user = sessionData?.session?.user;
+    try {
+      const { data: sessionData } = await window.supabase.auth.getSession();
+      const user = sessionData?.session?.user;
 
-    if (!user || !ADMIN_EMAILS.includes(user.email)) {
-      alert('Access denied. Admins only.');
+      const isAdmin = window.isAdminUser ? window.isAdminUser(user) : false;
+
+      if (!user || !isAdmin) {
+        alert('Access denied. Administrator privileges required.');
+        window.location.href = 'index.html';
+        return;
+      }
+
+      initAdminDashboard(user);
+    } catch (e) {
+      console.error('Admin auth check error:', e);
       window.location.href = 'index.html';
-      return;
     }
-
-    initDashboard(user);
   });
 
-  async function initDashboard(user) {
-
-    // ==========================================
-    // 2. SIDEBAR USER INFO
-    // ==========================================
+  async function initAdminDashboard(user) {
+    // 1. Sidebar User Info
     const dashName = document.getElementById('dashName');
     const dashEmail = document.getElementById('dashEmail');
     const dashAvatar = document.getElementById('dashAvatar');
 
-    if (dashName) dashName.textContent = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Admin';
+    if (dashName) dashName.textContent = user.user_metadata?.full_name || 'Admin';
     if (dashEmail) dashEmail.textContent = user.email;
 
     const avatarUrl = user.user_metadata?.avatar_url || user.user_metadata?.picture;
     if (dashAvatar) {
       dashAvatar.innerHTML = avatarUrl
-        ? `<img src="${avatarUrl}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+        ? `<img src="${avatarUrl}" alt="avatar">`
         : `<i class="fas fa-user-shield"></i>`;
     }
 
-    // ==========================================
-    // 3. SIDEBAR NAVIGATION
-    // ==========================================
+    // 2. Sidebar Navigation Tabs
     const navItems = document.querySelectorAll('.nav-item[data-target]');
     const sections = document.querySelectorAll('.dashboard-section');
 
@@ -73,7 +68,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     });
 
-    // Mobile sidebar
+    // Mobile Sidebar Toggles
     document.getElementById('sidebarOpenBtn')?.addEventListener('click', () => {
       document.querySelector('.dashboard-sidebar')?.classList.add('active');
     });
@@ -81,98 +76,70 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.querySelector('.dashboard-sidebar')?.classList.remove('active');
     });
 
-    // Sign out
+    // Sign Out
     document.getElementById('dashSignOutBtn')?.addEventListener('click', async () => {
       await window.supabase.auth.signOut();
       window.location.href = 'index.html';
     });
 
-    // ==========================================
-    // 4. UPLOAD TUTORIAL
-    // ==========================================
+    // 3. Upload Form Submission
     const uploadForm = document.getElementById('adminUploadForm');
-    const uploadSubmitBtn = document.getElementById('uploadSubmitBtn');
+    uploadForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await handleTutorialUpload(user);
+    });
 
-    // File input label update
-    const fileInput = document.getElementById('uploadFile') || document.getElementById('aFile');
-    if (fileInput) {
-      fileInput.addEventListener('change', () => {
-        const fileNameEl = document.getElementById('fileName');
-        if (fileNameEl && fileInput.files[0]) {
-          fileNameEl.textContent = `Selected: ${fileInput.files[0].name}`;
-        }
-      });
-    }
-
-    if (uploadSubmitBtn) {
-      uploadSubmitBtn.addEventListener('click', async (e) => {
-        e.preventDefault();
-        await handleUpload(user);
-      });
-    }
-
-    if (uploadForm) {
-      uploadForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        await handleUpload(user);
-      });
-    }
-
-    // Load initial section
+    // 4. Initial Section Load
     loadManageTutorials();
   }
 
   // ==========================================
-  // UPLOAD HANDLER
+  // TUTORIAL UPLOAD HANDLER
   // ==========================================
-  async function handleUpload(user) {
-    const title = (document.getElementById('uploadTitle') || document.getElementById('aTitle'))?.value.trim();
-    const description = (document.getElementById('uploadDescription') || document.getElementById('aDescription'))?.value.trim();
-    const category = (document.getElementById('uploadCategory') || document.getElementById('aCategory'))?.value;
-    const tags = (document.getElementById('uploadTags') || document.getElementById('aTags'))?.value.trim();
-    const fileInput = document.getElementById('uploadFile') || document.getElementById('aFile');
+  async function handleTutorialUpload(user) {
+    const title = document.getElementById('uploadTitle')?.value.trim();
+    const description = document.getElementById('uploadDescription')?.value.trim();
+    const category = document.getElementById('uploadCategory')?.value;
+    const tags = document.getElementById('uploadTags')?.value.trim();
+    const fileInput = document.getElementById('uploadFile');
     const file = fileInput?.files[0];
 
     const errorEl = document.getElementById('uploadError');
     const successEl = document.getElementById('uploadSuccess');
     const progressEl = document.getElementById('uploadProgress');
-    const progressFill = document.getElementById('progressFill');
-    const progressLabel = document.getElementById('progressLabel') || document.getElementById('uploadStatus');
+    const progressBar = document.getElementById('uploadBar');
+    const progressStatus = document.getElementById('uploadStatus');
+    const submitBtn = document.getElementById('uploadSubmitBtn');
 
     if (errorEl) errorEl.textContent = '';
     if (successEl) successEl.textContent = '';
 
-    if (!title) { if (errorEl) errorEl.textContent = 'Title is required.'; return; }
+    if (!title) { if (errorEl) errorEl.textContent = 'Tutorial title is required.'; return; }
     if (!file) { if (errorEl) errorEl.textContent = 'Please select a video file.'; return; }
 
-    const submitBtn = document.getElementById('uploadSubmitBtn');
-    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Uploading...'; }
-
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...'; }
     if (progressEl) progressEl.style.display = 'block';
-    if (progressLabel) progressLabel.textContent = 'Uploading video to storage...';
-    if (progressFill) progressFill.style.width = '30%';
+    if (progressStatus) progressStatus.textContent = 'Uploading video to storage...';
+    if (progressBar) progressBar.value = 30;
 
-    // Upload to Supabase Storage
-    const fileName = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
+    const fileName = `tut-${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
     const { error: storageError } = await window.supabase.storage
       .from(BUCKET_NAME)
       .upload(fileName, file);
 
     if (storageError) {
-      if (errorEl) errorEl.textContent = 'Upload failed: ' + storageError.message;
+      if (errorEl) errorEl.textContent = 'Storage upload failed: ' + storageError.message;
       if (progressEl) progressEl.style.display = 'none';
-      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Upload Tutorial'; }
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fas fa-upload"></i> Publish Video Hack'; }
       return;
     }
 
-    if (progressFill) progressFill.style.width = '70%';
-    if (progressLabel) progressLabel.textContent = 'Saving to database...';
+    if (progressBar) progressBar.value = 75;
+    if (progressStatus) progressStatus.textContent = 'Saving tutorial metadata...';
 
-    // Get public URL
     const { data: urlData } = window.supabase.storage.from(BUCKET_NAME).getPublicUrl(fileName);
     const videoUrl = urlData.publicUrl;
 
-    // Insert to tutorials table
     const { error: dbError } = await window.supabase.from('tutorials').insert({
       title,
       description: description || '',
@@ -183,26 +150,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     if (dbError) {
-      if (errorEl) errorEl.textContent = 'Database error: ' + dbError.message;
+      if (errorEl) errorEl.textContent = 'Database record failed: ' + dbError.message;
       if (progressEl) progressEl.style.display = 'none';
-      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Upload Tutorial'; }
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fas fa-upload"></i> Publish Video Hack'; }
       return;
     }
 
-    if (progressFill) progressFill.style.width = '100%';
-    if (progressLabel) progressLabel.textContent = 'Upload complete!';
-    if (successEl) successEl.textContent = `✅ "${title}" uploaded successfully!`;
+    if (progressBar) progressBar.value = 100;
+    if (progressStatus) progressStatus.textContent = 'Upload Complete!';
+    if (successEl) successEl.textContent = `✅ "${title}" published successfully!`;
 
-    // Reset form
     setTimeout(() => {
       document.getElementById('adminUploadForm')?.reset();
-      const fileNameEl = document.getElementById('fileName');
-      if (fileNameEl) fileNameEl.textContent = '';
       if (progressEl) progressEl.style.display = 'none';
-      if (progressFill) progressFill.style.width = '0%';
-      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Upload Tutorial'; }
+      if (progressBar) progressBar.value = 0;
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fas fa-upload"></i> Publish Video Hack'; }
       if (successEl) successEl.textContent = '';
-    }, 2500);
+      loadManageTutorials();
+    }, 1800);
   }
 
   // ==========================================
@@ -210,18 +175,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   // ==========================================
   async function loadManageTutorials() {
     const grid = document.getElementById('manageGrid');
-    const tableBody = document.getElementById('tutorialsTableBody');
-    const tableEl = document.getElementById('tutorialsTable');
-    const loadingEl = document.getElementById('tutorialsLoading');
-    const emptyEl = document.getElementById('tutorialsEmpty');
-
-    // Support both grid and table layout
-    const container = grid || tableBody;
-    if (!container) return;
-
-    if (grid) grid.innerHTML = '<p class="loading-text">Loading tutorials...</p>';
-    if (loadingEl) loadingEl.style.display = 'block';
-    if (tableEl) tableEl.style.display = 'none';
+    if (!grid) return;
+    grid.innerHTML = '<p class="loading-text">Loading tutorial library...</p>';
 
     const { data: tutorials, error } = await window.supabase
       .from('tutorials')
@@ -229,126 +184,75 @@ document.addEventListener('DOMContentLoaded', async () => {
       .order('created_at', { ascending: false });
 
     if (error) {
-      if (grid) grid.innerHTML = `<p class="loading-text">Error loading tutorials: ${error.message}</p>`;
-      if (loadingEl) loadingEl.textContent = 'Error: ' + error.message;
+      grid.innerHTML = `<p class="empty-state">Error loading tutorials: ${error.message}</p>`;
       return;
     }
 
     if (!tutorials || tutorials.length === 0) {
-      if (grid) grid.innerHTML = '<p class="empty-state">No tutorials yet. Upload your first one!</p>';
-      if (loadingEl) loadingEl.style.display = 'none';
-      if (emptyEl) emptyEl.style.display = 'flex';
+      grid.innerHTML = '<p class="empty-state">No tutorials published yet. Upload your first one above!</p>';
       return;
     }
 
-    // If using grid layout
-    if (grid) {
-      grid.innerHTML = '';
-      tutorials.forEach(tutorial => {
-        const card = createTutorialCard(tutorial);
-        grid.appendChild(card);
+    grid.innerHTML = '';
+    tutorials.forEach(tutorial => {
+      const card = document.createElement('div');
+      card.className = 'video-card';
+      const date = new Date(tutorial.created_at).toLocaleDateString('en-US', {
+        month: 'short', day: 'numeric', year: 'numeric'
       });
-      return;
-    }
 
-    // If using table layout
-    if (tableBody && tableEl) {
-      if (loadingEl) loadingEl.style.display = 'none';
-      tableEl.style.display = 'table';
-      tableBody.innerHTML = '';
-
-      for (const tutorial of tutorials) {
-        const { count: rateCount } = await window.supabase
-          .from('ratings').select('id', { count: 'exact' }).eq('tutorial_id', tutorial.id);
-        const { count: commentCount } = await window.supabase
-          .from('comments').select('id', { count: 'exact' }).eq('tutorial_id', tutorial.id);
-
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${tutorial.title}</td>
-          <td><span class="category-badge ${tutorial.category?.toLowerCase()}">${tutorial.category}</span></td>
-          <td>${rateCount || 0}</td>
-          <td>${commentCount || 0}</td>
-          <td>${new Date(tutorial.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
-          <td>
-            <button class="card-btn danger" onclick="deleteTutorial('${tutorial.id}', '${tutorial.title}', '${tutorial.video_filename || ''}')">
+      card.innerHTML = `
+        <div class="video-card-thumbnail">
+          <video src="${tutorial.video_url}" muted playsinline preload="metadata"></video>
+        </div>
+        <div class="video-card-info">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <span class="badge" style="font-size:10px;">${tutorial.category || 'Basic'}</span>
+            <span style="font-size:11px; color:var(--text-muted);">${date}</span>
+          </div>
+          <h3 class="video-card-title">${tutorial.title}</h3>
+          <div class="video-card-actions">
+            <button class="card-btn danger" onclick="deleteTutorial('${tutorial.id}', '${tutorial.title.replace(/'/g, "\\'")}', '${tutorial.video_filename || ''}')">
               <i class="fas fa-trash"></i> Delete
             </button>
-          </td>
-        `;
-        tableBody.appendChild(row);
-      }
-    }
-  }
+          </div>
+        </div>
+      `;
 
-  function createTutorialCard(tutorial) {
-    const card = document.createElement('div');
-    card.className = 'video-card';
-    const date = new Date(tutorial.created_at).toLocaleDateString('en-US', {
-      month: 'short', day: 'numeric', year: 'numeric'
+      const videoEl = card.querySelector('video');
+      card.addEventListener('mouseenter', () => videoEl?.play().catch(() => {}));
+      card.addEventListener('mouseleave', () => {
+        if (videoEl) { videoEl.pause(); videoEl.currentTime = 0; }
+      });
+
+      grid.appendChild(card);
     });
-
-    card.innerHTML = `
-      <div class="video-card-thumbnail" style="aspect-ratio: 9/16; background:#000; position:relative; overflow:hidden;">
-        <video src="${tutorial.video_url}" muted playsinline preload="metadata"
-          style="width:100%; height:100%; object-fit:cover;"></video>
-        <span style="position:absolute; top:8px; left:8px; background:rgba(0,0,0,0.7);
-          color:white; font-size:10px; padding:3px 8px; border-radius:4px; font-weight:600;">
-          ${tutorial.category || 'Basic'}
-        </span>
-      </div>
-      <div class="video-card-info">
-        <h3 class="video-card-title">${tutorial.title}</h3>
-        <div class="video-card-meta">
-          <span style="color:#aaa; font-size:12px;">${date}</span>
-        </div>
-        <div class="video-card-actions" style="margin-top:10px; display:flex; gap:8px;">
-          <button class="card-btn danger" style="flex:1; padding:8px; background:rgba(255,45,85,0.15);
-            border:1px solid rgba(255,45,85,0.3); color:#ff2d55; border-radius:6px;
-            cursor:pointer; font-size:12px; font-family:'Inter',sans-serif;"
-            onclick="deleteTutorial('${tutorial.id}', '${tutorial.title.replace(/'/g, "\\'")}', '${tutorial.video_filename || ''}')">
-            <i class="fas fa-trash"></i> Delete
-          </button>
-        </div>
-      </div>
-    `;
-
-    // Hover preview
-    const videoEl = card.querySelector('video');
-    card.addEventListener('mouseenter', () => videoEl.play().catch(e => e));
-    card.addEventListener('mouseleave', () => { videoEl.pause(); videoEl.currentTime = 0; });
-
-    return card;
   }
 
-  // Global delete tutorial function
-  window.deleteTutorial = async function(tutorialId, tutorialTitle, videoFilename) {
-    if (!confirm(`Delete "${tutorialTitle}"? This will also remove all ratings, comments, and saves. Cannot be undone.`)) return;
+  // Global Delete Tutorial Function
+  window.deleteTutorial = async function (tutorialId, tutorialTitle, videoFilename) {
+    if (!confirm(`Delete tutorial "${tutorialTitle}"? This will also remove ratings and comments. This cannot be undone.`)) return;
 
-    // Delete from storage if filename exists
     if (videoFilename) {
       await window.supabase.storage.from(BUCKET_NAME).remove([videoFilename]);
     }
 
     const { error } = await window.supabase.from('tutorials').delete().eq('id', tutorialId);
-
     if (error) {
       alert('Delete failed: ' + error.message);
       return;
     }
 
-    showToast('Tutorial deleted successfully.');
     loadManageTutorials();
   };
 
   // ==========================================
-  // USER UPLOADS (Proof of Learning)
+  // MANAGE USER UPLOADS
   // ==========================================
   async function loadUserUploads() {
     const grid = document.getElementById('userUploadsGrid');
     if (!grid) return;
-
-    grid.innerHTML = '<p class="loading-text">Loading user uploads...</p>';
+    grid.innerHTML = '<p class="loading-text">Loading creator submissions...</p>';
 
     const { data: uploads, error } = await window.supabase
       .from('user_videos')
@@ -356,12 +260,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       .order('created_at', { ascending: false });
 
     if (error) {
-      grid.innerHTML = `<p class="loading-text">Error: ${error.message}</p>`;
+      grid.innerHTML = `<p class="empty-state">Error: ${error.message}</p>`;
       return;
     }
 
     if (!uploads || uploads.length === 0) {
-      grid.innerHTML = '<p class="empty-state">No user uploads yet.</p>';
+      grid.innerHTML = '<p class="empty-state">No creator proof edits uploaded yet.</p>';
       return;
     }
 
@@ -370,29 +274,21 @@ document.addEventListener('DOMContentLoaded', async () => {
       const card = document.createElement('div');
       card.className = 'video-card';
       const tutTitle = upload.tutorials?.title || 'Unknown Tutorial';
-      const userName = upload.profiles?.full_name || 'User';
+      const userName = upload.profiles?.full_name || 'Creator';
       const date = new Date(upload.created_at).toLocaleDateString('en-US', {
         month: 'short', day: 'numeric', year: 'numeric'
       });
 
       card.innerHTML = `
-        <div class="video-card-thumbnail" style="aspect-ratio:9/16; background:#000; overflow:hidden;">
-          <video src="${upload.video_url}" muted playsinline preload="metadata"
-            style="width:100%; height:100%; object-fit:cover;"></video>
+        <div class="video-card-thumbnail">
+          <video src="${upload.video_url}" muted playsinline preload="metadata"></video>
         </div>
         <div class="video-card-info">
-          <h3 class="video-card-title" style="font-size:13px;">
-            <span style="color:#3ecfea;">${userName}</span> — Proof for:
-          </h3>
-          <p style="font-size:12px; color:#aaa; margin:4px 0;">${tutTitle}</p>
-          <div class="video-card-meta">
-            <span style="color:#888; font-size:11px;">${date}</span>
-          </div>
-          <div class="video-card-actions" style="margin-top:10px;">
-            <button class="card-btn danger" style="width:100%; padding:8px;
-              background:rgba(255,45,85,0.15); border:1px solid rgba(255,45,85,0.3);
-              color:#ff2d55; border-radius:6px; cursor:pointer; font-size:12px; font-family:'Inter',sans-serif;"
-              onclick="adminDeleteUpload('${upload.id}', '${upload.video_filename || ''}')">
+          <h3 class="video-card-title"><span style="color:var(--primary-color);">${userName}</span></h3>
+          <p style="font-size:12px; color:var(--text-secondary); margin:2px 0;">For: ${tutTitle}</p>
+          <div class="video-card-meta"><span>${date}</span></div>
+          <div class="video-card-actions">
+            <button class="card-btn danger" onclick="adminDeleteUpload('${upload.id}', '${upload.video_filename || ''}')">
               <i class="fas fa-trash"></i> Remove
             </button>
           </div>
@@ -400,29 +296,33 @@ document.addEventListener('DOMContentLoaded', async () => {
       `;
 
       const videoEl = card.querySelector('video');
-      card.addEventListener('mouseenter', () => videoEl.play().catch(e => e));
-      card.addEventListener('mouseleave', () => { videoEl.pause(); videoEl.currentTime = 0; });
+      card.addEventListener('mouseenter', () => videoEl?.play().catch(() => {}));
+      card.addEventListener('mouseleave', () => {
+        if (videoEl) { videoEl.pause(); videoEl.currentTime = 0; }
+      });
 
       grid.appendChild(card);
     });
   }
 
-  window.adminDeleteUpload = async function(uploadId, videoFilename) {
-    if (!confirm('Remove this user upload?')) return;
+  window.adminDeleteUpload = async function (uploadId, videoFilename) {
+    if (!confirm('Remove this user proof edit?')) return;
 
     if (videoFilename) {
       await window.supabase.storage.from(BUCKET_NAME).remove([videoFilename]);
     }
 
     const { error } = await window.supabase.from('user_videos').delete().eq('id', uploadId);
-    if (error) { alert('Error: ' + error.message); return; }
+    if (error) {
+      alert('Error removing upload: ' + error.message);
+      return;
+    }
 
-    showToast('Upload removed.');
     loadUserUploads();
   };
 
   // ==========================================
-  // ANALYTICS
+  // REAL-TIME ANALYTICS
   // ==========================================
   async function loadAnalytics() {
     const statTotal = document.getElementById('statTotal');
@@ -430,58 +330,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     const statIntermediate = document.getElementById('statIntermediate');
     const statAdvance = document.getElementById('statAdvance');
     const statUserUploads = document.getElementById('statUserUploads');
-    const statUsers = document.getElementById('statUsers');
     const statRatings = document.getElementById('statRatings');
     const statComments = document.getElementById('statComments');
 
-    // Total tutorials
-    const { count: total } = await window.supabase.from('tutorials').select('id', { count: 'exact' });
-    if (statTotal) statTotal.textContent = total || 0;
+    try {
+      const { count: total } = await window.supabase.from('tutorials').select('id', { count: 'exact' });
+      if (statTotal) statTotal.textContent = total || 0;
 
-    // Per category
-    const { count: basic } = await window.supabase.from('tutorials').select('id', { count: 'exact' }).eq('category', 'Basic');
-    if (statBasic) statBasic.textContent = basic || 0;
+      const { count: basic } = await window.supabase.from('tutorials').select('id', { count: 'exact' }).eq('category', 'Basic');
+      if (statBasic) statBasic.textContent = basic || 0;
 
-    const { count: intermediate } = await window.supabase.from('tutorials').select('id', { count: 'exact' }).eq('category', 'Intermediate');
-    if (statIntermediate) statIntermediate.textContent = intermediate || 0;
+      const { count: intermediate } = await window.supabase.from('tutorials').select('id', { count: 'exact' }).eq('category', 'Intermediate');
+      if (statIntermediate) statIntermediate.textContent = intermediate || 0;
 
-    const { count: advance } = await window.supabase.from('tutorials').select('id', { count: 'exact' }).eq('category', 'Advance');
-    if (statAdvance) statAdvance.textContent = advance || 0;
+      const { count: advance } = await window.supabase.from('tutorials').select('id', { count: 'exact' }).eq('category', 'Advance');
+      if (statAdvance) statAdvance.textContent = advance || 0;
 
-    // User uploads
-    const { count: userUploadsCount } = await window.supabase.from('user_videos').select('id', { count: 'exact' });
-    if (statUserUploads) statUserUploads.textContent = userUploadsCount || 0;
+      const { count: userProofs } = await window.supabase.from('user_videos').select('id', { count: 'exact' });
+      if (statUserUploads) statUserUploads.textContent = userProofs || 0;
 
-    // Total ratings
-    const { count: ratingsCount } = await window.supabase.from('ratings').select('id', { count: 'exact' });
-    if (statRatings) statRatings.textContent = ratingsCount || 0;
+      const { count: ratingsCount } = await window.supabase.from('ratings').select('id', { count: 'exact' });
+      if (statRatings) statRatings.textContent = ratingsCount || 0;
 
-    // Total comments
-    const { count: commentsCount } = await window.supabase.from('comments').select('id', { count: 'exact' });
-    if (statComments) statComments.textContent = commentsCount || 0;
+      const { count: commentsCount } = await window.supabase.from('comments').select('id', { count: 'exact' });
+      if (statComments) statComments.textContent = commentsCount || 0;
+    } catch (e) {
+      console.error('Analytics error:', e);
+    }
   }
-
-  // ==========================================
-  // TOAST
-  // ==========================================
-  function showToast(message) {
-    const toast = document.createElement('div');
-    toast.textContent = message;
-    toast.style.cssText = `
-      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-      background: #1a1a1a; color: white; padding: 12px 24px; border-radius: 8px;
-      z-index: 9999; border: 1px solid rgba(255,255,255,0.1); font-family: 'Inter', sans-serif;
-      font-size: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-      animation: fadeInOut 3s forwards;
-    `;
-    const style = document.createElement('style');
-    style.textContent = `@keyframes fadeInOut {
-      0%{opacity:0;bottom:20px} 15%{opacity:1;bottom:30px}
-      85%{opacity:1;bottom:30px} 100%{opacity:0;bottom:20px}
-    }`;
-    document.head.appendChild(style);
-    document.body.appendChild(toast);
-    setTimeout(() => { toast.remove(); style.remove(); }, 3000);
-  }
-
 });
